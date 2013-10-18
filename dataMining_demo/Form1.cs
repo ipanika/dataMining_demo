@@ -87,7 +87,30 @@ namespace dataMining_demo
                 {
                     MessageBox.Show("Error: Could not read file" + ex.Message);
                 }
-            } 
+            }
+
+            // Create server object and connect
+            svr = new Server();
+            svr.Connect("localhost");
+
+            Database db = CreateDatabase();
+
+            CreateDataAccessObjects(db, dataGridView1);
+            AddNewDataAccessObjects(db);
+            MiningStructure ms = CreateMiningStructure(db);
+
+            CreateModels(ms);
+
+            ProcessDatabase(db);
+
+
+            db = svr.Databases["demo_DM"];
+            db.Update(UpdateOptions.ExpandFull);
+            SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
+
+            // Disconnect from the server
+            svr.Disconnect();
+
         }//DataGridView processed
 
        //create database for SSAS
@@ -110,37 +133,12 @@ namespace dataMining_demo
             return db;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            // Create server object and connect
-            svr = new Server();
-            svr.Connect("localhost");
-
-            Database db = CreateDatabase();
-
-            CreateDataAccessObjects(db);
-            AddNewDataAccessObjects(db);
-            MiningStructure ms = CreateMiningStructure(db);
-
-            CreateModels(ms);
-
-            ProcessDatabase(db);
-
-
-            db = svr.Databases["demo_DM"];
-            db.Update(UpdateOptions.ExpandFull);
-            SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
-
-            // Disconnect from the server
-            svr.Disconnect();
-        }
-
-        void CreateDataAccessObjects(Database db)
+        void CreateDataAccessObjects(Database db, DataGridView dtGrd)
         {
             // Create a relational data source
             // by specifying the name and the id
-            RelationalDataSource ds = new RelationalDataSource("MovieClick", Utils.GetSyntacticallyValidID("MovieClick", typeof(Database)));
-            ds.ConnectionString = "Provider=SQLNCLI10.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=Chapter 16";
+            RelationalDataSource ds = new RelationalDataSource("excel_file", "excel_file");
+            ds.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"C:\\Users\\user\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\123.xlsx\";Extended Properties=\"Excel 12.0 Xml;HDR=YES\";";
             db.DataSources.Add(ds);
 
             // Create connection to datasource cto extract schema to a dataset
