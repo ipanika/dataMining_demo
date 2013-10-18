@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.AnalysisServices;
+using Excel;
 
 namespace dataMining_demo
 {
@@ -23,25 +24,33 @@ namespace dataMining_demo
         {
             InitializeComponent();
         }
-
-        private Microsoft.Office.Interop.Excel.Application objExcel;
-        private Microsoft.Office.Interop.Excel.Workbook objWorkBook;
-        private Microsoft.Office.Interop.Excel.Worksheet objWorkSheet;
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
-            Stream myStream = null;
+            openFileDialog1.ShowDialog();
+            String fileName = openFileDialog1.FileName; // = "C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\123_reduce.xls";//openFileDialog1.FileName;
 
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Filter = "excel files (.xls,.xlsx)|*.xlsx;*.xls|All files|*.*";
-            openFileDialog1.FilterIndex = 1;
-            openFileDialog1.RestoreDirectory = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            while (!File.Exists(fileName))
             {
-                try
-                {
+                MessageBox.Show("Файл не найден или поврежден!");
+                continue;
+            }
+            DataSet dataSet;
+            using (var file = File.OpenRead(fileName))
+            using (var reader = ExcelReaderFactory.CreateBinaryReader(file))//CreateOpenXmlReader(file))//
+            {
+                reader.IsFirstRowAsColumnNames = true;
+                dataSet = reader.AsDataSet();
+            }
+
+           
+           dataGridView1.AutoGenerateColumns = true;
+           dataGridView1.DataSource = dataSet.Tables[0];
+
+              
+
+                    /*
                     if ((myStream = openFileDialog1.OpenFile()) != null)
                     {
                         using (myStream)
@@ -81,22 +90,20 @@ namespace dataMining_demo
 
 
                         }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: Could not read file" + ex.Message);
-                }
-            }
 
+                    }*/
+                
+            
+        
             // Create server object and connect
             svr = new Server();
             svr.Connect("localhost");
 
             Database db = CreateDatabase();
 
-            CreateDataAccessObjects(db, dataGridView1);
-            AddNewDataAccessObjects(db);
+
+            CreateDataAccessObjects(db, fileName, dataSet );
+            //AddNewDataAccessObjects(db);
             MiningStructure ms = CreateMiningStructure(db);
 
             CreateModels(ms);
@@ -108,12 +115,14 @@ namespace dataMining_demo
             db.Update(UpdateOptions.ExpandFull);
             SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
 
-            // Disconnect from the server
+            //// Disconnect from the server
             svr.Disconnect();
 
-        }//DataGridView processed
+            MessageBox.Show("OK");           
+             
+        } 
 
-       //create database for SSAS
+        //create database for SSAS
         Database CreateDatabase()
         {
             // Create a database and set the properties
@@ -129,41 +138,28 @@ namespace dataMining_demo
                 db = svr.Databases.Add("demo_DM");
                 db.Update();
             }
-           
+
+
             return db;
         }
 
-        void CreateDataAccessObjects(Database db, DataGridView dtGrd)
+        void CreateDataAccessObjects(Database db, String filePath, DataSet dst)
         {
             // Create a relational data source
             // by specifying the name and the id
-            RelationalDataSource ds = new RelationalDataSource("excel_file", "excel_file");
-            ds.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"C:\\Users\\user\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\123.xlsx\";Extended Properties=\"Excel 12.0 Xml;HDR=YES\";";
+            RelationalDataSource ds = new RelationalDataSource("demo_ds", Utils.GetSyntacticallyValidID("demo_ds", typeof(Database)));
+            ds.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1;\"";
+            //Provider=Microsoft.ACE.OLEDB.12.0
+            //Provider=Microsoft.Jet.OLEDB.4.0
+			
             db.DataSources.Add(ds);
 
-            // Create connection to datasource cto extract schema to a dataset
-            DataSet dset = new DataSet();
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=Chapter 16; Integrated Security=true");
-
-            // Create data adapters from database tables and load schemas
-            SqlDataAdapter daCustomers = new SqlDataAdapter("SELECT * FROM Customers", cn);
-            daCustomers.FillSchema(dset, SchemaType.Mapped, "Customers");
-
-            SqlDataAdapter daChannels = new SqlDataAdapter("SELECT * FROM Channels", cn);
-            daChannels.FillSchema(dset, SchemaType.Mapped, "Channels");
-
-            // Add relationship between Customers and Channels
-            DataRelation drCustomerChannels = new DataRelation(
-                                                    "Customer_Channels",
-                                                    dset.Tables["Customers"].Columns["SurveyTakenID"],
-                                                    dset.Tables["Channels"].Columns["SurveyTakenID"]);
-            dset.Relations.Add(drCustomerChannels);
-
-            // Create the DSV, ad the dataset and add to the database
-            DataSourceView dsv = new DataSourceView("SimpleMovieClick", "SimpleMovieClick");
-            dsv.DataSourceID = "MovieClick";
-            dsv.Schema = dset.Clone();
+            //// Create the DSV, ad the dataset and add to the database
+            DataSourceView dsv = new DataSourceView("demo_ds", "demo_ds");
+            dsv.DataSourceID = "demo_ds";
+            dsv.Schema = dst.Clone();
             db.DataSourceViews.Add(dsv);
+            db.DataSourceViews[0].ID = dsv.ID;
 
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
@@ -234,44 +230,131 @@ namespace dataMining_demo
         MiningStructure CreateMiningStructure(Database db)
         {
             // Initialize a new mining structure
-            MiningStructure ms = new MiningStructure("PayChannelAnalysis", "PayChannelAnalysis");
-            ms.Source = new DataSourceViewBinding("MovieClick");
+            MiningStructure ms = new MiningStructure("demo_structure", "demo_structure");
+            ms.Source = new DataSourceViewBinding(db.DataSourceViews[0].ID);
 
             // Create the columns of the mining structure 
             // setting the type, content and data binding
 
-            // User Id column
-            ScalarMiningStructureColumn UserID = new ScalarMiningStructureColumn("UserId", "UserId");
-            UserID.Type = MiningStructureColumnTypes.Long;
-            UserID.Content = MiningStructureColumnContents.Key;
-            UserID.IsKey = true;
+            //// User Id column
+            ScalarMiningStructureColumn col1 = new ScalarMiningStructureColumn("ID", "ID");
+            col1.Type = MiningStructureColumnTypes.Long;
+            col1.Content = MiningStructureColumnContents.Key;
+            col1.IsKey = true;
+            //// Add data binding to the column
+            col1.KeyColumns.Add("Table1", "ID", System.Data.OleDb.OleDbType.Integer);
+            //// Add the column to the mining structure
+            ms.Columns.Add(col1);
+
+            //// Generation column
+            ScalarMiningStructureColumn col2 = new ScalarMiningStructureColumn("Marital Status", "Marital Status");
+            col2.Type = MiningStructureColumnTypes.Text;
+            col2.Content = MiningStructureColumnContents.Discrete;
             // Add data binding to the column
-            UserID.KeyColumns.Add("Customers", "SurveyTakenID", System.Data.OleDb.OleDbType.Integer);
+            col2.KeyColumns.Add("Table1", "Marital Status", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
-            ms.Columns.Add(UserID);
+            ms.Columns.Add(col2);
 
-            // Generation column
-            ScalarMiningStructureColumn Generation = new ScalarMiningStructureColumn("Generation", "Generation");
-            Generation.Type = MiningStructureColumnTypes.Text;
-            Generation.Content = MiningStructureColumnContents.Discrete;
-            // Add data binding to the column
-            Generation.KeyColumns.Add("Customers", "Generation", System.Data.OleDb.OleDbType.WChar);
+            ScalarMiningStructureColumn col3 = new ScalarMiningStructureColumn("Gender", "Gender");
+            col3.Type = MiningStructureColumnTypes.Text;
+            col3.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col3.KeyColumns.Add("Table1", "Gender", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
-            ms.Columns.Add(Generation);
+            ms.Columns.Add(col3);
 
-            // Add Nested table by creating a table column and adding
-            // a key column to the nested table
-            TableMiningStructureColumn PayChannels = new TableMiningStructureColumn("PayChannels", "PayChannels");
-            PayChannels.ForeignKeyColumns.Add("PayChannels", "SurveyTakenID", System.Data.OleDb.OleDbType.Integer);
+            ScalarMiningStructureColumn col4 = new ScalarMiningStructureColumn("Yearly Income", "Yearly Income");
+            col4.Type = MiningStructureColumnTypes.Long;
+            col4.Content = MiningStructureColumnContents.Discretized;
+            // col3 data binding to the column
+            col4.KeyColumns.Add("Table1", "Yearly Income", System.Data.OleDb.OleDbType.Integer);
+            // Add the column to the mining structure
+            ms.Columns.Add(col4);
 
-            ScalarMiningStructureColumn Channel = new ScalarMiningStructureColumn("Channel", "Channel");
-            Channel.Type = MiningStructureColumnTypes.Text;
-            Channel.Content = MiningStructureColumnContents.Key;
-            Channel.IsKey = true;
-            // Add data binding to the column
-            Channel.KeyColumns.Add("PayChannels", "Channel", System.Data.OleDb.OleDbType.WChar);
-            PayChannels.Columns.Add(Channel);
-            ms.Columns.Add(PayChannels);
+            ScalarMiningStructureColumn col5 = new ScalarMiningStructureColumn("Children", "Children");
+            col5.Type = MiningStructureColumnTypes.Long;
+            col5.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col5.KeyColumns.Add("Table1", "Children", System.Data.OleDb.OleDbType.Integer);
+            // Add the column to the mining structure
+            ms.Columns.Add(col5);
+
+            ScalarMiningStructureColumn col6 = new ScalarMiningStructureColumn("Education", "Education");
+            col6.Type = MiningStructureColumnTypes.Text;
+            col6.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col6.KeyColumns.Add("Table1", "Education", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col6);
+
+            ScalarMiningStructureColumn col7 = new ScalarMiningStructureColumn("Occupation", "Occupation");
+            col7.Type = MiningStructureColumnTypes.Text;
+            col7.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col7.KeyColumns.Add("Table1", "Occupation", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col7);
+
+            ScalarMiningStructureColumn col8 = new ScalarMiningStructureColumn("Home Owner", "Home Owner");
+            col8.Type = MiningStructureColumnTypes.Text;
+            col8.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col8.KeyColumns.Add("Table1", "Home Owner", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col8);
+
+            ScalarMiningStructureColumn col9 = new ScalarMiningStructureColumn("Cars", "Cars");
+            col9.Type = MiningStructureColumnTypes.Long;
+            col9.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col9.KeyColumns.Add("Table1", "Cars", System.Data.OleDb.OleDbType.Integer);
+            // Add the column to the mining structure
+            ms.Columns.Add(col9);
+
+            ScalarMiningStructureColumn col10 = new ScalarMiningStructureColumn("Commute Distance", "Commute Distance");
+            col10.Type = MiningStructureColumnTypes.Text;
+            col10.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col10.KeyColumns.Add("Table1", "Commute Distance", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col10);
+
+            ScalarMiningStructureColumn col11 = new ScalarMiningStructureColumn("Region", "Region");
+            col11.Type = MiningStructureColumnTypes.Text;
+            col11.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col11.KeyColumns.Add("Table1", "Region", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col11);
+
+            ScalarMiningStructureColumn col12 = new ScalarMiningStructureColumn("Age", "Age");
+            col12.Type = MiningStructureColumnTypes.Long;
+            col12.Content = MiningStructureColumnContents.Continuous;
+            // col3 data binding to the column
+            col12.KeyColumns.Add("Table1", "Age", System.Data.OleDb.OleDbType.Integer);
+            // Add the column to the mining structure
+            ms.Columns.Add(col12);
+
+            ScalarMiningStructureColumn col13 = new ScalarMiningStructureColumn("BikeBuyer", "BikeBuyer");
+            col13.Type = MiningStructureColumnTypes.Text;
+            col13.Content = MiningStructureColumnContents.Discrete;
+            // col3 data binding to the column
+            col13.KeyColumns.Add("Table1", "BikeBuyer", System.Data.OleDb.OleDbType.WChar);
+            // Add the column to the mining structure
+            ms.Columns.Add(col13);
+            //// Add Nested table by creating a table column and adding
+            //// a key column to the nested table
+            //TableMiningStructureColumn PayChannels = new TableMiningStructureColumn("PayChannels", "PayChannels");
+            //PayChannels.ForeignKeyColumns.Add("PayChannels", "SurveyTakenID", System.Data.OleDb.OleDbType.Integer);
+
+            //ScalarMiningStructureColumn Channel = new ScalarMiningStructureColumn("Channel", "Channel");
+            //Channel.Type = MiningStructureColumnTypes.Text;
+            //Channel.Content = MiningStructureColumnContents.Key;
+            //Channel.IsKey = true;
+            //// Add data binding to the column
+            //Channel.KeyColumns.Add("PayChannels", "Channel", System.Data.OleDb.OleDbType.WChar);
+            //PayChannels.Columns.Add(Channel);
+            //ms.Columns.Add(PayChannels);
 
             // Add the mining structure to the database
             db.MiningStructures.Add(ms);
@@ -284,49 +367,20 @@ namespace dataMining_demo
         void CreateModels(MiningStructure ms)
         {
             MiningModel ClusterModel;
-            MiningModel TreeModel;
-            MiningModelColumn mmc;
+            //MiningModel TreeModel;
+          //  MiningModelColumn mmc;
 
             // Create the Cluster model and set the algorithm 
             // and parameters
-            ClusterModel = ms.CreateMiningModel(true, "Premium Generation Clusters");
+            ClusterModel = ms.CreateMiningModel(true, "BikeBuyer Clusters");
             ClusterModel.Algorithm = "Microsoft_Clustering";
             ClusterModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
 
             // The CreateMiningModel method adds 
             // all the structure columns to the collection
 
-
-            // Copy the Cluster model and change the necessary properties
-            TreeModel = ClusterModel.Clone();
-            TreeModel.Name = "Generation Trees";
-            TreeModel.ID = "Generation Trees";
-            TreeModel.Algorithm = "Microsoft_Decision_Trees";
-            TreeModel.AlgorithmParameters.Clear();
-            TreeModel.Columns["Generation"].Usage = "Predict";
-            TreeModel.Columns["PayChannels"].Usage = "Predict";
-
-            // Add an aliased copy of the PayChannels table to the trees model
-            mmc = TreeModel.Columns.Add("PayChannels_Hbo_Encore");
-            mmc.SourceColumnID = "PayChannels";
-            mmc = mmc.Columns.Add("Channel");
-            mmc.SourceColumnID = "Channel";
-            mmc.Usage = "Key";
-
-            // Now set a filter on the PayChannels_Hbo_Encore table and use it 
-            // as input to predict other channels
-            TreeModel.Columns["PayChannels_Hbo_Encore"].Filter = "Channel='HBO' OR Channel='Encore'";
-
-            // Set a complementary filter on the payChannels predictable nested table
-            TreeModel.Columns["PayChannels"].Filter = "Channel<>'HBO' AND Channel<>'Encore'";
-
-
-
-            ms.MiningModels.Add(TreeModel);
-
             // Submit the models to the server
             ClusterModel.Update();
-            TreeModel.Update();
         }
 
         void ProcessDatabase(Database db)
@@ -367,7 +421,11 @@ namespace dataMining_demo
             // Create a new role and add members
             Role r = new Role("ModelReader", "ModelReader");
 
-            r.Members.Add(new RoleMember("user-ПК\\user"));
+            //r.Members.Add(new RoleMember("user-ПК\\user"));
+            String conf = String.Concat(textBox1.Text, "\\", textBox2.Text);
+
+//            r.Members.Add(new RoleMember(textBox1+"\\"+textBox2));
+            r.Members.Add(new RoleMember(conf));
 
             // Add the role to the database and update
             db.Roles.Add(r);
