@@ -35,11 +35,11 @@ namespace dataMining_demo
 
 
             CreateDataAccessObjects(db);
-            /*MiningStructure ms = CreateMiningStructure(db);
+            MiningStructure ms = CreateMiningStructure(db);
 
             CreateModels(ms);
 
-            ProcessDatabase(db);
+            /*ProcessDatabase(db);
 
             
             db = svr.Databases["demo_DM"];
@@ -82,18 +82,7 @@ namespace dataMining_demo
             ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
 			
             db.DataSources.Add(ds);
-            /*
-            //// Create the DSV, ad the dataset and add to the database
-            DataSourceView dsv = new DataSourceView("demo_ds", "demo_ds");
-            dsv.DataSourceID = "demo_ds";
-            dsv.Schema = dst.Clone();
-            db.DataSourceViews.Add(dsv);
-            db.DataSourceViews[0].ID = dsv.ID;
-
-            // Update the database to create the objects on the server
-            db.Update(UpdateOptions.ExpandFull);
-            */
-
+          
             // Create connection to datasource cto extract schema to a dataset
             DataSet dset = new DataSet();
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
@@ -101,16 +90,6 @@ namespace dataMining_demo
             // Create data adapters from database tables and load schemas
             SqlDataAdapter daCustomers = new SqlDataAdapter("SELECT * FROM SourceData$", cn);
             daCustomers.FillSchema(dset, SchemaType.Mapped, "SourceData$");
-
-            //SqlDataAdapter daChannels = new SqlDataAdapter("SELECT * FROM Channels", cn);
-            //daChannels.FillSchema(dset, SchemaType.Mapped, "Channels");
-
-            //// Add relationship between Customers and Channels
-            //DataRelation drCustomerChannels = new DataRelation(
-            //                                        "Customer_Channels",
-            //                                        dset.Tables["Customers"].Columns["SurveyTakenID"],
-            //                                        dset.Tables["Channels"].Columns["SurveyTakenID"]);
-            //dset.Relations.Add(drCustomerChannels);
 
             // Create the DSV, ad the dataset and add to the database
             DataSourceView dsv = new DataSourceView("demo_dsv", "demo_dsv");
@@ -183,7 +162,7 @@ namespace dataMining_demo
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
 
-        }
+        }*/
 
         MiningStructure CreateMiningStructure(Database db)
         {
@@ -200,7 +179,7 @@ namespace dataMining_demo
             col1.Content = MiningStructureColumnContents.Key;
             col1.IsKey = true;
             //// Add data binding to the column
-            col1.KeyColumns.Add("Table1", "ID", System.Data.OleDb.OleDbType.Integer);
+            col1.KeyColumns.Add("SourceData$", "ID", System.Data.OleDb.OleDbType.Integer);
             //// Add the column to the mining structure
             ms.Columns.Add(col1);
 
@@ -209,7 +188,7 @@ namespace dataMining_demo
             col2.Type = MiningStructureColumnTypes.Text;
             col2.Content = MiningStructureColumnContents.Discrete;
             // Add data binding to the column
-            col2.KeyColumns.Add("Table1", "Marital Status", System.Data.OleDb.OleDbType.WChar);
+            col2.KeyColumns.Add("SourceData$", "Marital Status", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col2);
 
@@ -217,7 +196,7 @@ namespace dataMining_demo
             col3.Type = MiningStructureColumnTypes.Text;
             col3.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col3.KeyColumns.Add("Table1", "Gender", System.Data.OleDb.OleDbType.WChar);
+            col3.KeyColumns.Add("SourceData$", "Gender", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col3);
 
@@ -225,7 +204,7 @@ namespace dataMining_demo
             col4.Type = MiningStructureColumnTypes.Long;
             col4.Content = MiningStructureColumnContents.Discretized;
             // col3 data binding to the column
-            col4.KeyColumns.Add("Table1", "Yearly Income", System.Data.OleDb.OleDbType.Integer);
+            col4.KeyColumns.Add("SourceData$", "Yearly Income", System.Data.OleDb.OleDbType.Integer);
             // Add the column to the mining structure
             ms.Columns.Add(col4);
 
@@ -233,7 +212,7 @@ namespace dataMining_demo
             col5.Type = MiningStructureColumnTypes.Long;
             col5.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col5.KeyColumns.Add("Table1", "Children", System.Data.OleDb.OleDbType.Integer);
+            col5.KeyColumns.Add("SourceData$", "Children", System.Data.OleDb.OleDbType.Integer);
             // Add the column to the mining structure
             ms.Columns.Add(col5);
 
@@ -241,7 +220,7 @@ namespace dataMining_demo
             col6.Type = MiningStructureColumnTypes.Text;
             col6.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col6.KeyColumns.Add("Table1", "Education", System.Data.OleDb.OleDbType.WChar);
+            col6.KeyColumns.Add("SourceData$", "Education", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col6);
 
@@ -249,7 +228,7 @@ namespace dataMining_demo
             col7.Type = MiningStructureColumnTypes.Text;
             col7.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col7.KeyColumns.Add("Table1", "Occupation", System.Data.OleDb.OleDbType.WChar);
+            col7.KeyColumns.Add("SourceData$", "Occupation", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col7);
 
@@ -257,7 +236,7 @@ namespace dataMining_demo
             col8.Type = MiningStructureColumnTypes.Text;
             col8.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col8.KeyColumns.Add("Table1", "Home Owner", System.Data.OleDb.OleDbType.WChar);
+            col8.KeyColumns.Add("SourceData$", "Home Owner", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col8);
 
@@ -265,7 +244,7 @@ namespace dataMining_demo
             col9.Type = MiningStructureColumnTypes.Long;
             col9.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col9.KeyColumns.Add("Table1", "Cars", System.Data.OleDb.OleDbType.Integer);
+            col9.KeyColumns.Add("SourceData$", "Cars", System.Data.OleDb.OleDbType.Integer);
             // Add the column to the mining structure
             ms.Columns.Add(col9);
 
@@ -273,7 +252,7 @@ namespace dataMining_demo
             col10.Type = MiningStructureColumnTypes.Text;
             col10.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col10.KeyColumns.Add("Table1", "Commute Distance", System.Data.OleDb.OleDbType.WChar);
+            col10.KeyColumns.Add("SourceData$", "Commute Distance", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col10);
 
@@ -281,7 +260,7 @@ namespace dataMining_demo
             col11.Type = MiningStructureColumnTypes.Text;
             col11.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col11.KeyColumns.Add("Table1", "Region", System.Data.OleDb.OleDbType.WChar);
+            col11.KeyColumns.Add("SourceData$", "Region", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col11);
 
@@ -289,7 +268,7 @@ namespace dataMining_demo
             col12.Type = MiningStructureColumnTypes.Long;
             col12.Content = MiningStructureColumnContents.Continuous;
             // col3 data binding to the column
-            col12.KeyColumns.Add("Table1", "Age", System.Data.OleDb.OleDbType.Integer);
+            col12.KeyColumns.Add("SourceData$", "Age", System.Data.OleDb.OleDbType.Integer);
             // Add the column to the mining structure
             ms.Columns.Add(col12);
 
@@ -297,7 +276,7 @@ namespace dataMining_demo
             col13.Type = MiningStructureColumnTypes.Text;
             col13.Content = MiningStructureColumnContents.Discrete;
             // col3 data binding to the column
-            col13.KeyColumns.Add("Table1", "BikeBuyer", System.Data.OleDb.OleDbType.WChar);
+            col13.KeyColumns.Add("SourceData$", "BikeBuyer", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col13);
             //// Add Nested table by creating a table column and adding
@@ -321,7 +300,7 @@ namespace dataMining_demo
             return ms;
 
         }
-
+        
         void CreateModels(MiningStructure ms)
         {
             MiningModel ClusterModel;
@@ -339,7 +318,7 @@ namespace dataMining_demo
 
             // Submit the models to the server
             ClusterModel.Update();
-        }*/
+        }
 
         //void ProcessDatabase(Database db)
         //{
