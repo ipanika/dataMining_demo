@@ -16,6 +16,7 @@ namespace dataMining_demo
 {
     public partial class Form1 : Form
     {
+        Server svr;
 
         public Form1()
         {
