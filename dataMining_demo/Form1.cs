@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.AnalysisServices;
-using Excel;
 
 namespace dataMining_demo
 {
@@ -27,74 +26,7 @@ namespace dataMining_demo
         
         private void button1_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
-            String fileName = openFileDialog1.FileName; // = "C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\123_reduce.xls";//openFileDialog1.FileName;
-
-
-            while (!File.Exists(fileName))
-            {
-                MessageBox.Show("Файл не найден или поврежден!");
-                continue;
-            }
-            DataSet dataSet;
-            using (var file = File.OpenRead(fileName))
-            using (var reader = ExcelReaderFactory.CreateBinaryReader(file))//CreateOpenXmlReader(file))//
-            {
-                reader.IsFirstRowAsColumnNames = true;
-                dataSet = reader.AsDataSet();
-            }
-
-           
-           dataGridView1.AutoGenerateColumns = true;
-           dataGridView1.DataSource = dataSet.Tables[0];
-
-              
-
-                    /*
-                    if ((myStream = openFileDialog1.OpenFile()) != null)
-                    {
-                        using (myStream)
-                        {
-                            objExcel = new Microsoft.Office.Interop.Excel.Application();
-                            objWorkBook = objExcel.Workbooks.Open(openFileDialog1.FileName);
-                            objWorkSheet = objExcel.ActiveSheet as Microsoft.Office.Interop.Excel.Worksheet;
-                            Microsoft.Office.Interop.Excel.Range rg = null;
-
-                            Int16 row = 1;
-                            dataGridView1.Rows.Clear();
-
-                            string[] arr = new string[13];
-
-                            while (objWorkSheet.get_Range("a" + row, "a" + row).Value != null)
-                            {
-                                rg = objWorkSheet.get_Range("a" + row, "m" + row);
-
-                                Int16 i = 0;
-
-                                foreach (Microsoft.Office.Interop.Excel.Range item in rg)
-                                {
-
-                                    try
-                                    {
-                                        arr[i] = item.Value.ToString().Trim();
-                                        i += 1;
-
-                                    }
-                                    catch { arr[0] = "zero"; }
-                                }
-                                dataGridView1.Rows.Add(arr);
-                                row++;
-                            }
-                            MessageBox.Show("OK");
-                            objWorkBook.Close();
-
-
-                        }
-
-                    }*/
-                
             
-        
             // Create server object and connect
             svr = new Server();
             svr.Connect("localhost");
@@ -102,19 +34,18 @@ namespace dataMining_demo
             Database db = CreateDatabase();
 
 
-            CreateDataAccessObjects(db, fileName, dataSet );
-            //AddNewDataAccessObjects(db);
-            MiningStructure ms = CreateMiningStructure(db);
+            CreateDataAccessObjects(db);
+            /*MiningStructure ms = CreateMiningStructure(db);
 
             CreateModels(ms);
 
             ProcessDatabase(db);
 
-
+            
             db = svr.Databases["demo_DM"];
             db.Update(UpdateOptions.ExpandFull);
             SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
-
+            */
             //// Disconnect from the server
             svr.Disconnect();
 
@@ -126,7 +57,7 @@ namespace dataMining_demo
         Database CreateDatabase()
         {
             // Create a database and set the properties
-            Database db = null; //new Database();
+            Database db = null; 
             if ((svr != null) && (svr.Connected))
             {
                 db = svr.Databases.FindByName("demo_DM");
@@ -143,17 +74,15 @@ namespace dataMining_demo
             return db;
         }
 
-        void CreateDataAccessObjects(Database db, String filePath, DataSet dst)
+        void CreateDataAccessObjects(Database db)
         {
             // Create a relational data source
             // by specifying the name and the id
             RelationalDataSource ds = new RelationalDataSource("demo_ds", Utils.GetSyntacticallyValidID("demo_ds", typeof(Database)));
-            ds.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + filePath + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=1;\"";
-            //Provider=Microsoft.ACE.OLEDB.12.0
-            //Provider=Microsoft.Jet.OLEDB.4.0
+            ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
 			
             db.DataSources.Add(ds);
-
+            /*
             //// Create the DSV, ad the dataset and add to the database
             DataSourceView dsv = new DataSourceView("demo_ds", "demo_ds");
             dsv.DataSourceID = "demo_ds";
@@ -163,8 +92,37 @@ namespace dataMining_demo
 
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
-        }
+            */
 
+            // Create connection to datasource cto extract schema to a dataset
+            DataSet dset = new DataSet();
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter daCustomers = new SqlDataAdapter("SELECT * FROM SourceData$", cn);
+            daCustomers.FillSchema(dset, SchemaType.Mapped, "SourceData$");
+
+            //SqlDataAdapter daChannels = new SqlDataAdapter("SELECT * FROM Channels", cn);
+            //daChannels.FillSchema(dset, SchemaType.Mapped, "Channels");
+
+            //// Add relationship between Customers and Channels
+            //DataRelation drCustomerChannels = new DataRelation(
+            //                                        "Customer_Channels",
+            //                                        dset.Tables["Customers"].Columns["SurveyTakenID"],
+            //                                        dset.Tables["Channels"].Columns["SurveyTakenID"]);
+            //dset.Relations.Add(drCustomerChannels);
+
+            // Create the DSV, ad the dataset and add to the database
+            DataSourceView dsv = new DataSourceView("demo_dsv", "demo_dsv");
+            dsv.DataSourceID = "demo_ds";
+            dsv.Schema = dset.Clone();
+            db.DataSourceViews.Add(dsv);
+            db.DataSourceViews[0].ID = dsv.ID;
+
+            // Update the database to create the objects on the server
+            db.Update(UpdateOptions.ExpandFull);
+        }
+/*
         void AddNewDataAccessObjects(Database db)
         {
             // Create connection to datasource cto extract schema to a dataset
@@ -381,36 +339,36 @@ namespace dataMining_demo
 
             // Submit the models to the server
             ClusterModel.Update();
-        }
+        }*/
 
-        void ProcessDatabase(Database db)
-        {
-            Trace t;
-            TraceEvent e;
+        //void ProcessDatabase(Database db)
+        //{
+        //    Trace t;
+        //    TraceEvent e;
 
-            // create the trace object to trace progress reports
-            // and add the column containing the progress description
-            t = svr.Traces.Add();
-            e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
-            e.Columns.Add(TraceColumn.TextData);
-            t.Update();
+        //    // create the trace object to trace progress reports
+        //    // and add the column containing the progress description
+        //    t = svr.Traces.Add();
+        //    e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
+        //    e.Columns.Add(TraceColumn.TextData);
+        //    t.Update();
 
-            // Add the handler for the trace event
-            t.OnEvent += new TraceEventHandler(ProgressReportHandler);
-            try
-            {
-                // start the trace, process of the database, then stop it
-                t.Start();
-                db.Process(ProcessType.ProcessFull);
-                t.Stop();
+        //    // Add the handler for the trace event
+        //    t.OnEvent += new TraceEventHandler(ProgressReportHandler);
+        //    try
+        //    {
+        //        // start the trace, process of the database, then stop it
+        //        t.Start();
+        //        db.Process(ProcessType.ProcessFull);
+        //        t.Stop();
 
 
-            }
-            catch (System.Exception /*ex*/)
-            {
-            }
+        //    }
+        //    catch (System.Exception /*ex*/)
+        //    {
+        //    }
 
-        }
+        //}
         void ProgressReportHandler(object sender, TraceEventArgs e)
         {
             Console.WriteLine(e[TraceColumn.TextData]);
@@ -421,11 +379,11 @@ namespace dataMining_demo
             // Create a new role and add members
             Role r = new Role("ModelReader", "ModelReader");
 
-            //r.Members.Add(new RoleMember("user-ПК\\user"));
-            String conf = String.Concat(textBox1.Text, "\\", textBox2.Text);
+            String userName = SystemInformation.UserName;
+            String PCName = Environment.MachineName;
 
-//            r.Members.Add(new RoleMember(textBox1+"\\"+textBox2));
-            r.Members.Add(new RoleMember(conf));
+            //r.Members.Add(new RoleMember("user-ПК\\user"));
+            r.Members.Add(new RoleMember(PCName + "\\" + userName));
 
             // Add the role to the database and update
             db.Roles.Add(r);
