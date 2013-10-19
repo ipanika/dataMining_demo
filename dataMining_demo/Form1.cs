@@ -19,9 +19,13 @@ namespace dataMining_demo
         // member variable -- the Analysis Services server connection
         Server svr;
 
+        Form2 f2;
+
         public Form1()
         {
             InitializeComponent();
+
+            f2 = new Form2();
         }
         
         private void button1_Click(object sender, EventArgs e)
@@ -387,6 +391,11 @@ namespace dataMining_demo
             // Add permission to the model and update
             mm.MiningModelPermissions.Add(mmp);
             mmp.Update();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            f2.Show();
         }
 
 
