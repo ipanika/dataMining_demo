@@ -39,13 +39,13 @@ namespace dataMining_demo
 
             CreateModels(ms);
 
-            /*ProcessDatabase(db);
+            ProcessDatabase(db);
 
             
             db = svr.Databases["demo_DM"];
             db.Update(UpdateOptions.ExpandFull);
             SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
-            */
+            
             //// Disconnect from the server
             svr.Disconnect();
 
@@ -312,6 +312,7 @@ namespace dataMining_demo
             ClusterModel = ms.CreateMiningModel(true, "BikeBuyer Clusters");
             ClusterModel.Algorithm = "Microsoft_Clustering";
             ClusterModel.AlgorithmParameters.Add("CLUSTER_COUNT", 0);
+            ClusterModel.AlgorithmParameters.Add("CLUSTERING_METHOD", 3);
 
             // The CreateMiningModel method adds 
             // all the structure columns to the collection
@@ -320,34 +321,34 @@ namespace dataMining_demo
             ClusterModel.Update();
         }
 
-        //void ProcessDatabase(Database db)
-        //{
-        //    Trace t;
-        //    TraceEvent e;
+        void ProcessDatabase(Database db)
+        {
+            Trace t;
+            TraceEvent e;
 
-        //    // create the trace object to trace progress reports
-        //    // and add the column containing the progress description
-        //    t = svr.Traces.Add();
-        //    e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
-        //    e.Columns.Add(TraceColumn.TextData);
-        //    t.Update();
+            // create the trace object to trace progress reports
+            // and add the column containing the progress description
+            t = svr.Traces.Add();
+            e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
+            e.Columns.Add(TraceColumn.TextData);
+            t.Update();
 
-        //    // Add the handler for the trace event
-        //    t.OnEvent += new TraceEventHandler(ProgressReportHandler);
-        //    try
-        //    {
-        //        // start the trace, process of the database, then stop it
-        //        t.Start();
-        //        db.Process(ProcessType.ProcessFull);
-        //        t.Stop();
+            // Add the handler for the trace event
+            t.OnEvent += new TraceEventHandler(ProgressReportHandler);
+            try
+            {
+                // start the trace, process of the database, then stop it
+                t.Start();
+                db.Process(ProcessType.ProcessFull);
+                t.Stop();
 
 
-        //    }
-        //    catch (System.Exception /*ex*/)
-        //    {
-        //    }
+            }
+            catch (System.Exception /*ex*/)
+            {
+            }
 
-        //}
+        }
         void ProgressReportHandler(object sender, TraceEventArgs e)
         {
             Console.WriteLine(e[TraceColumn.TextData]);
