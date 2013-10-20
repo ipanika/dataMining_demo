@@ -34,18 +34,16 @@ namespace dataMining_demo
             
             if (dt.Rows.Count > 0)
             {
-                ((ListBox)checkedListBox1).DataSource = dt;
-                
-                ((ListBox)checkedListBox2).DataSource = dset;
-                
+                //((ListBox)checkedListBox1).DataSource = dset;
+                checkedListBox1.DataSource = dt;
+                checkedListBox1.DisplayMember = "COLUMN_NAME";
             }
 
             
-
-            //for (int i = 0; i < dset.Tables[0].Rows.Count; i++)
-            //{
-            //    this.checkedListBox2.Items.Insert(i, dset.Tables[0].Rows[i]);
-            //}
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                checkedListBox1.SetItemChecked(i, true);
+            }
 
 
 
