@@ -18,6 +18,7 @@ namespace dataMining_demo
     {
         // member variable -- the Analysis Services server connection
         Server svr;
+        Database db;
 
         Form2 f2;
 
@@ -31,12 +32,7 @@ namespace dataMining_demo
         private void button1_Click(object sender, EventArgs e)
         {
             
-            // Create server object and connect
-            svr = new Server();
-            svr.Connect("localhost");
-
-            Database db = CreateDatabase();
-
+            
 
             CreateDataAccessObjects(db);
             MiningStructure ms = CreateMiningStructure(db);
@@ -396,6 +392,17 @@ namespace dataMining_demo
         private void button2_Click(object sender, EventArgs e)
         {
             f2.Show();
+            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Create server object and connect
+            svr = new Server();
+            svr.Connect("localhost");
+
+            db = CreateDatabase();
+
         }
 
 

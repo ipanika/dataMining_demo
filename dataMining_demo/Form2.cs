@@ -45,10 +45,32 @@ namespace dataMining_demo
                 checkedListBox1.SetItemChecked(i, true);
             }
 
-
+            
 
             // получить список столбцов таблицы SourceData$
             // отобразить их в checkedListBox
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string[] arr = new string[13];
+            int i = 0;
+            string str = "";
+            foreach (object obj in checkedListBox1.CheckedItems)
+            {
+                DataRowView drv;
+                drv = (System.Data.DataRowView) obj;
+                arr[i] = drv["COLUMN_NAME"].ToString();
+                str += arr[i];
+                i += 1;
+            }
+            
+            MessageBox.Show(str);
+
+            
+            
+        }
+
+        
     }
 }
