@@ -17,12 +17,11 @@ namespace dataMining_demo
     public partial class Form1 : Form
     {
         // member variable -- the Analysis Services server connection
-        Server svr;
-        Database db;
+        public static Server svr;
+        public static Database db;
 
         Form2 f2;
         
-
         public Form1()
         {
             InitializeComponent();

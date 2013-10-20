@@ -13,9 +13,11 @@ namespace dataMining_demo
 {
     public partial class Form2 : Form
     {
+        //Database db = dataMining_demo.Form1.db;
+        //Server svr = dataMining_demo.Form1.svr;
+         Server svr = new Server();
+         Database db = new Database();
 
-        Server svr;
-        Database db;
 
         public Form2()
         {
@@ -24,8 +26,15 @@ namespace dataMining_demo
 
         private void Form2_Load(object sender, EventArgs e)
         {
+            svr.Connect("localhost");
 
-            
+            if ((svr != null) && (svr.Connected))
+            {
+                db = svr.Databases.FindByName("demo_DM");
+                
+                //db = svr.Databases.Add("demo_DM");
+                db.Update();
+            }
 
             // создать соединение с БД
             DataSet dset = new DataSet();
@@ -53,58 +62,53 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string[] arr = new string[13];
+            var colForDSV = new List<string>();
             int i = 0;
-            string str = "";
+            
+            // создание массива с именами столбцов, выбранных для представления
             foreach (object obj in checkedListBox1.CheckedItems)
             {
                 DataRowView drv;
                 drv = (System.Data.DataRowView) obj;
-                arr[i] = drv["COLUMN_NAME"].ToString();
-                str += arr[i];
+                colForDSV.Add(drv["COLUMN_NAME"].ToString());
                 i += 1;
             }
 
-            db = OpenDatabase();
-
-            // Create server object and connect
-            svr = new Server();
-            svr.Connect("localhost");
-
-            
-            CreateDataAccessObjects(db);
+            CreateDataAccessObjects(db, colForDSV);
         }
 
-        Database OpenDatabase()
-        {
-            // Create a database and set the properties
-            Database db = null;
-            if ((svr != null) && (svr.Connected))
-            {
-                db = svr.Databases.FindByName("demo_DM");
-                
-                db.Update();
-            }
-
-
-            return db;
-        }
-
-        void CreateDataAccessObjects(Database db)
+        
+        void CreateDataAccessObjects(Database db, List<string> columnNames )
         {
             // Create a relational data source
             // by specifying the name and the id
             RelationalDataSource ds = new RelationalDataSource("demo_ds", Utils.GetSyntacticallyValidID("demo_ds", typeof(Database)));
             ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
-
+            
             db.DataSources.Add(ds);
 
+            
             // Create connection to datasource cto extract schema to a dataset
             DataSet dset = new DataSet();
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
 
+            string argsForQuery = " ";
+            string strQuery = "";
+
+            int i;
+            for (i = 0; i < columnNames.Count-1; i++)
+            {
+                argsForQuery += "["+columnNames[i] + "], ";
+            }
+
+            argsForQuery += "[" + columnNames[i] + "] ";
+
+            MessageBox.Show(argsForQuery);
+            
+            strQuery = "SELECT "+ argsForQuery + " FROM SourceData$";
+
             // Create data adapters from database tables and load schemas
-            SqlDataAdapter daCustomers = new SqlDataAdapter("SELECT * FROM SourceData$", cn);
+            SqlDataAdapter daCustomers = new SqlDataAdapter(strQuery, cn);
             daCustomers.FillSchema(dset, SchemaType.Mapped, "SourceData$");
 
             // Create the DSV, ad the dataset and add to the database
