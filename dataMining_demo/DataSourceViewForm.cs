@@ -36,20 +36,18 @@ namespace dataMining_demo
             }
 
             // создать соединение с БД
-            DataSet dset = new DataSet();
             DataTable dt = new DataTable();
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
-            {
                 cn.Open();
-            }
+
             SqlDataAdapter sqlDA = new SqlDataAdapter("select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_CATALOG = 'demo_source' AND TABLE_NAME = 'SourceData$'", cn);
-            sqlDA.FillSchema(dset, SchemaType.Mapped, "SourceData$");
             sqlDA.Fill(dt);
 
             
             if (dt.Rows.Count > 0)
             {
+                checkedListBox1.CheckOnClick = true;
                 checkedListBox1.DataSource = dt;
                 checkedListBox1.DisplayMember = "COLUMN_NAME";
             }
@@ -107,8 +105,7 @@ namespace dataMining_demo
             string strQuery = "";
 
             int i;
-            for (i = 0; i < columnNames.Count-1; i++)
-            {
+            for (i = 0; i < columnNames.Count-1; i++){
                 argsForQuery += "["+columnNames[i] + "], ";
             }
 

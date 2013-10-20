@@ -21,12 +21,14 @@ namespace dataMining_demo
         public static Database db;
 
         DataSourceViewForm f2;
+        MiningStructureForm f3;
         
         public MainForm()
         {
             InitializeComponent();
 
             f2 = new DataSourceViewForm();
+            f3 = new MiningStructureForm();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -228,20 +230,7 @@ namespace dataMining_demo
             col13.KeyColumns.Add("SourceData$", "BikeBuyer", System.Data.OleDb.OleDbType.WChar);
             // Add the column to the mining structure
             ms.Columns.Add(col13);
-            //// Add Nested table by creating a table column and adding
-            //// a key column to the nested table
-            //TableMiningStructureColumn PayChannels = new TableMiningStructureColumn("PayChannels", "PayChannels");
-            //PayChannels.ForeignKeyColumns.Add("PayChannels", "SurveyTakenID", System.Data.OleDb.OleDbType.Integer);
-
-            //ScalarMiningStructureColumn Channel = new ScalarMiningStructureColumn("Channel", "Channel");
-            //Channel.Type = MiningStructureColumnTypes.Text;
-            //Channel.Content = MiningStructureColumnContents.Key;
-            //Channel.IsKey = true;
-            //// Add data binding to the column
-            //Channel.KeyColumns.Add("PayChannels", "Channel", System.Data.OleDb.OleDbType.WChar);
-            //PayChannels.Columns.Add(Channel);
-            //ms.Columns.Add(PayChannels);
-
+            
             // Add the mining structure to the database
             db.MiningStructures.Add(ms);
             ms.Update();
@@ -341,7 +330,7 @@ namespace dataMining_demo
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            f3.Show();
         }
 
 
