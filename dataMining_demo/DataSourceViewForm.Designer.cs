@@ -74,11 +74,11 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(140, 13);
+            this.label2.Size = new System.Drawing.Size(112, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Название представления:";
+            this.label2.Text = "Имя представления:";
             // 
-            // Form2
+            // DataSourceViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +90,7 @@
             this.Controls.Add(this.checkedListBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form2";
+            this.Name = "DataSourceViewForm";
             this.Text = "Создание представления";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);

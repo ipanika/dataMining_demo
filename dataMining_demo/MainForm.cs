@@ -31,7 +31,7 @@ namespace dataMining_demo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            // Create server object and connect
+            // Create SSAS-server object and connect
             svr = new Server();
             svr.Connect("localhost");
 

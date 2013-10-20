@@ -82,14 +82,23 @@ namespace dataMining_demo
         {
             // Create a relational data source
             // by specifying the name and the id
-            RelationalDataSource ds = new RelationalDataSource("demo_ds", Utils.GetSyntacticallyValidID("demo_ds", typeof(Database)));
+            string dsName = "demo_ds";
+            RelationalDataSource ds = new RelationalDataSource(dsName, Utils.GetSyntacticallyValidID(dsName, typeof(Database)));
             ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
 
-            if (db.DataSources.FindByName("demo_ds") == null)
-                db.DataSources.Add(ds);             
-            
+            if (db.DataSources.FindByName(dsName) == null){
+                
+                db.DataSources.Add(ds);
 
-            
+                SqlConnection cnToDS = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+                
+                if (cnToDS.State == ConnectionState.Closed)
+                    cnToDS.Open();
+
+                SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_ds]  VALUES ('" + dsName + "')", cnToDS);
+                sqlCmd.ExecuteNonQuery();
+            }
+
             // Create connection to datasource cto extract schema to a dataset
             DataSet dset = new DataSet();
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
@@ -115,20 +124,27 @@ namespace dataMining_demo
 
 
             // определение имени представления данных
-            string dsvNme = textBox1.Text;
-
-            if (dsvNme == "")
-                dsvNme = "dsv";
+            string dsvName = textBox1.Text;
 
             // Create the DSV, ad the dataset and add to the database
-            DataSourceView dsv = new DataSourceView(dsvNme, dsvNme);
-            dsv.DataSourceID = "demo_ds";
+            DataSourceView dsv = new DataSourceView(dsvName, dsvName);
+            dsv.DataSourceID = dsName;
             dsv.Schema = dset.Clone();
             db.DataSourceViews.Add(dsv);
             //db.DataSourceViews[0].ID = dsv.ID;
 
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
+
+            // сохранение в БД приложения информации о созданных источниках и
+            // представлениях данных
+            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            if (cnToDSV.State == ConnectionState.Closed)
+                cnToDSV.Open();
+
+            SqlCommand sqlCmd2 = new SqlCommand("INSERT INTO [demo_dsv]  VALUES ('" + dsvName + "')", cnToDSV);
+            sqlCmd2.ExecuteNonQuery();
+
         }
 
         
