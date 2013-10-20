@@ -20,13 +20,15 @@ namespace dataMining_demo
         Server svr;
         Database db;
 
-        Form2 f2;
+       // Form2 f2;
+        Form3 f3;
 
         public Form1()
         {
             InitializeComponent();
 
-            f2 = new Form2();
+           // f2 = new Form2();
+            f3 = new Form3();
         }
         
         private void button1_Click(object sender, EventArgs e)
@@ -391,7 +393,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            f2.Show();
+            f3.Show();
             
         }
 

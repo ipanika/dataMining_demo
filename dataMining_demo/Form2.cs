@@ -41,14 +41,7 @@ namespace dataMining_demo
 
             
             for (int i = 0; i < checkedListBox1.Items.Count; i++)
-            {
                 checkedListBox1.SetItemChecked(i, true);
-            }
-
-            
-
-            // получить список столбцов таблицы SourceData$
-            // отобразить их в checkedListBox
         }
 
         private void button1_Click(object sender, EventArgs e)
