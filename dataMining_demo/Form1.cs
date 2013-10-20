@@ -20,30 +20,25 @@ namespace dataMining_demo
         Server svr;
         Database db;
 
-       // Form2 f2;
-        Form3 f3;
+        Form2 f2;
+        
 
         public Form1()
         {
             InitializeComponent();
 
-           // f2 = new Form2();
-            f3 = new Form3();
+            f2 = new Form2();
         }
         
         private void button1_Click(object sender, EventArgs e)
         {
-            
-            
-
             CreateDataAccessObjects(db);
             MiningStructure ms = CreateMiningStructure(db);
 
             CreateModels(ms);
 
             ProcessDatabase(db);
-
-            
+ 
             db = svr.Databases["demo_DM"];
             db.Update(UpdateOptions.ExpandFull);
             SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
@@ -393,7 +388,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            f3.Show();
+            f2.Show();
             
         }
 
