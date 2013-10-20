@@ -11,15 +11,14 @@ using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
-    public partial class Form2 : Form
+    public partial class DataSourceViewForm : Form
     {
         //Database db = dataMining_demo.Form1.db;
         //Server svr = dataMining_demo.Form1.svr;
          Server svr = new Server();
          Database db = new Database();
 
-
-        public Form2()
+        public DataSourceViewForm()
         {
             InitializeComponent();
         }
@@ -33,7 +32,7 @@ namespace dataMining_demo
                 db = svr.Databases.FindByName("demo_DM");
                 
                 //db = svr.Databases.Add("demo_DM");
-                db.Update();
+                //db.Update();
             }
 
             // создать соединение с БД
@@ -75,17 +74,20 @@ namespace dataMining_demo
             }
 
             CreateDataAccessObjects(db, colForDSV);
+
+            this.Close();
         }
 
-        
         void CreateDataAccessObjects(Database db, List<string> columnNames )
         {
             // Create a relational data source
             // by specifying the name and the id
             RelationalDataSource ds = new RelationalDataSource("demo_ds", Utils.GetSyntacticallyValidID("demo_ds", typeof(Database)));
             ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
+
+            if (db.DataSources.FindByName("demo_ds") == null)
+                db.DataSources.Add(ds);             
             
-            db.DataSources.Add(ds);
 
             
             // Create connection to datasource cto extract schema to a dataset
@@ -111,12 +113,19 @@ namespace dataMining_demo
             SqlDataAdapter daCustomers = new SqlDataAdapter(strQuery, cn);
             daCustomers.FillSchema(dset, SchemaType.Mapped, "SourceData$");
 
+
+            // определение имени представления данных
+            string dsvNme = textBox1.Text;
+
+            if (dsvNme == "")
+                dsvNme = "dsv";
+
             // Create the DSV, ad the dataset and add to the database
-            DataSourceView dsv = new DataSourceView("demo_dsv", "demo_dsv");
+            DataSourceView dsv = new DataSourceView(dsvNme, dsvNme);
             dsv.DataSourceID = "demo_ds";
             dsv.Schema = dset.Clone();
             db.DataSourceViews.Add(dsv);
-            db.DataSourceViews[0].ID = dsv.ID;
+            //db.DataSourceViews[0].ID = dsv.ID;
 
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);

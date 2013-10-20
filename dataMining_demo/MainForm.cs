@@ -14,21 +14,31 @@ using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         // member variable -- the Analysis Services server connection
         public static Server svr;
         public static Database db;
 
-        Form2 f2;
+        DataSourceViewForm f2;
         
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
-            f2 = new Form2();
+            f2 = new DataSourceViewForm();
         }
-        
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // Create server object and connect
+            svr = new Server();
+            svr.Connect("localhost");
+
+            db = CreateDatabase();
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             CreateDataAccessObjects(db);
@@ -47,9 +57,14 @@ namespace dataMining_demo
 
             MessageBox.Show("OK");           
              
-        } 
+        }
 
-        //create database for SSAS
+        private void button2_Click(object sender, EventArgs e)
+        {
+            f2.Show();
+
+        }
+
         Database CreateDatabase()
         {
             // Create a database and set the properties
@@ -57,13 +72,13 @@ namespace dataMining_demo
             if ((svr != null) && (svr.Connected))
             {
                 db = svr.Databases.FindByName("demo_DM");
-                if (db != null)
+                if (db == null)
                 {
-                    db.Drop();
+                    db = svr.Databases.Add("demo_DM");
+                    db.Update();
                 }
 
-                db = svr.Databases.Add("demo_DM");
-                db.Update();
+                
             }
 
 
@@ -97,68 +112,6 @@ namespace dataMining_demo
             // Update the database to create the objects on the server
             db.Update(UpdateOptions.ExpandFull);
         }
-/*
-        void AddNewDataAccessObjects(Database db)
-        {
-            // Create connection to datasource cto extract schema to a dataset
-            DataSet dset = new DataSet();
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=Chapter 16; Integrated Security=true");
-
-            // Create the Customers data adapter with the calculated appended
-            SqlDataAdapter daCustomers = new SqlDataAdapter(
-                    "SELECT *, " +
-                    "(CASE WHEN (Age < 30) THEN 'GenY' " +
-                    " WHEN (Age >= 30 AND Age < 40) THEN 'GenX' " +
-                    "ELSE 'Baby Boomer' END) AS Generation " +
-                    "FROM Customers", cn);
-            daCustomers.FillSchema(dset, SchemaType.Mapped, "Customers");
-            // Add Extended properties to the Generation column indicating to 
-            // Analysis Services that it is a calculated column
-            DataColumn genColumn = dset.Tables["Customers"].Columns["Generation"];
-            genColumn.ExtendedProperties.Add("DbColumnName", "Generation");
-            genColumn.ExtendedProperties.Add("Description", "Customer generation");
-            genColumn.ExtendedProperties.Add("IsLogical", "true");
-            genColumn.ExtendedProperties.Add("ComputedColumnExpression",
-                                "CASE WHEN (Age < 30) THEN 'GenY' " +
-                                "WHEN (Age >= 30 AND Age < 40) THEN 'GenX' " +
-                                "ELSE 'Baby Boomer' END");
-
-            // Create a 'Pay Channels' data adapter with a customer query
-            // for our named query
-            SqlDataAdapter daPayChannels = new SqlDataAdapter(
-                    "SELECT * FROM Channels " +
-                    "WHERE Channel IN ('Cinemax', 'Encore', 'HBO', 'Showtime', " +
-                    "'STARZ!', 'The Movie Channel')", cn);
-            daPayChannels.FillSchema(dset, SchemaType.Mapped, "PayChannels");
-            // Add Extended properties to the PayChannels table indicating to 
-            // Analysis Services that it is a named query
-            DataTable pcTable = dset.Tables["PayChannels"];
-            pcTable.ExtendedProperties.Add("IsLogical", "true");
-            pcTable.ExtendedProperties.Add("Description", "Channels requiring an additional fee");
-            pcTable.ExtendedProperties.Add("TableType", "View");
-            pcTable.ExtendedProperties.Add("QueryDefinition",
-                    "SELECT * FROM Channels " +
-                    "WHERE Channel IN ('Cinemax', 'Encore', 'HBO', 'Showtime', " +
-                    "'STARZ!', 'The Movie Channel')");
-
-            // Add relationship between Customers and PayChannels
-            DataRelation drCustomerPayChannels = new DataRelation(
-                                                    "CustomerPayChannels",
-                                                    dset.Tables["Customers"].Columns["SurveyTakenID"],
-                                                    dset.Tables["PayChannels"].Columns["SurveyTakenID"]);
-            dset.Relations.Add(drCustomerPayChannels);
-
-            // Access the data source and the DSV created previously
-            // by specifying the ID
-            DataSourceView dsv = new DataSourceView("MovieClick", "MovieClick");
-            dsv.DataSourceID = "MovieClick";
-            dsv.Schema = dset.Clone();
-            db.DataSourceViews.Add(dsv);
-
-            // Update the database to create the objects on the server
-            db.Update(UpdateOptions.ExpandFull);
-
-        }*/
 
         MiningStructure CreateMiningStructure(Database db)
         {
@@ -345,6 +298,7 @@ namespace dataMining_demo
             }
 
         }
+
         void ProgressReportHandler(object sender, TraceEventArgs e)
         {
             Console.WriteLine(e[TraceColumn.TextData]);
@@ -385,23 +339,10 @@ namespace dataMining_demo
             mmp.Update();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-            f2.Show();
-            
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            // Create server object and connect
-            svr = new Server();
-            svr.Connect("localhost");
-
-            db = CreateDatabase();
 
         }
-
-
 
 
     }

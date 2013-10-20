@@ -1,6 +1,6 @@
 ﻿namespace dataMining_demo
 {
-    partial class Form2
+    partial class DataSourceViewForm
     {
         /// <summary>
         /// Required designer variable.
@@ -41,7 +41,7 @@
             this.checkedListBox1.Location = new System.Drawing.Point(12, 64);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(190, 214);
-            this.checkedListBox1.TabIndex = 0;
+            this.checkedListBox1.TabIndex = 1;
             // 
             // label1
             // 
@@ -67,7 +67,7 @@
             this.textBox1.Location = new System.Drawing.Point(12, 25);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 3;
+            this.textBox1.TabIndex = 0;
             // 
             // label2
             // 
