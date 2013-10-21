@@ -183,13 +183,16 @@ namespace dataMining_demo
             var colForMStr = new List<ScalarMiningStructureColumn>();
             int i = 0;
 
+
             for (i = 0; i<dataGridView1.Rows.Count-1; i++)
+
             {
                 DataGridViewRow drv = dataGridView1.Rows[i];
                 // если параметр отмечен для входа, то для ее параметров создать 
                 // столбец в структуре ИАД
                 if (drv.Cells[1].Value.Equals(true))
                 {
+
                     string rowName = drv.Cells[0].Value.ToString();
                     ScalarMiningStructureColumn colItem = new ScalarMiningStructureColumn(rowName, rowName);
                     
@@ -253,6 +256,7 @@ namespace dataMining_demo
             sqlCmd.ExecuteNonQuery();
 
             this.Close();
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
