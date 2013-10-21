@@ -51,7 +51,8 @@ namespace dataMining_demo
 
             if ((svr != null) && (svr.Connected))
                 db = svr.Databases.FindByName("demo_DM");
-           
+            
+            // создать соединение с БД
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
@@ -64,11 +65,6 @@ namespace dataMining_demo
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "dsv_name";
 
-            // создать соединение с БД
-            cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
-            if (cn.State == ConnectionState.Closed)
-                cn.Open();
-
             DataSourceView dsv = new DataSourceView();
             DataSet ds;
 
@@ -80,6 +76,41 @@ namespace dataMining_demo
                 checkedListBox1.Items.Clear();
                 while (i < dsv.Schema.Tables[0].Columns.Count)
                 {
+                    // заполнение комбинированного dataGridView1 
+                    DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+
+                    dvr.Cells[dataGridView1.Columns["Column1"].Index].Value = dsv.Schema.Tables[0].Columns[i].ColumnName;
+
+                    DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)dvr.Cells[1];
+                    //DataGridViewCheckBoxCell chk = new DataGridViewCheckBoxCell();
+                    chk.Value = true;
+                    
+                    chk = (DataGridViewCheckBoxCell) dvr.Cells[2];
+                    chk.Value = false;
+                    //dvr.Cells[2].Selected = false;
+
+                    
+                    // запрос к БД для получения типов данных
+                    dt = new DataTable();
+                    sqlDA = new SqlDataAdapter("select DISTINCT [data_type_name] FROM [demo_data_content]", cn);
+                    sqlDA.Fill(dt);
+
+                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell) dvr.Cells[3];
+                    cmbbx.DataSource = dt;
+                    cmbbx.DisplayMember = "data_type_name";
+                    
+                    // запрос к БД для получения типов содержимого
+                    dt = new DataTable();
+                    sqlDA = new SqlDataAdapter("select DISTINCT [data_content_name] FROM [demo_data_content]", cn);// WHERE [data_type_name] = '" + cmbbx.Value.ToString() + "'
+                    sqlDA.Fill(dt);
+
+                    cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
+                    cmbbx.DataSource = dt;
+                    cmbbx.DisplayMember = "data_content_name";
+
+                    // добавление строки в dataGridView
+                    dataGridView1.Rows.Add(dvr);
+
                     checkedListBox1.CheckOnClick = true;
                     checkedListBox1.Items.Add(dsv.Schema.Tables[0].Columns[i].ColumnName);
                     checkedListBox1.SetItemChecked(i, true);
@@ -243,6 +274,21 @@ namespace dataMining_demo
             db.MiningStructures.Add(ms);
             ms.Update();
 
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show("CellContentClick");
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show("CellValueChanged");
+        }
+
+        private void dataGridView1_CurrentCellChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("CurrentCellChanged");
         }
         
 
