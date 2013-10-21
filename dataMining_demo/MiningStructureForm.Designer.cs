@@ -88,6 +88,7 @@
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(191, 154);
             this.checkedListBox1.TabIndex = 4;
+            this.checkedListBox1.Visible = false;
             this.checkedListBox1.SelectedValueChanged += new System.EventHandler(this.checkedListBox1_SelectedValueChanged);
             // 
             // label3
@@ -98,6 +99,7 @@
             this.label3.Size = new System.Drawing.Size(93, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Выбор столбцов:";
+            this.label3.Visible = false;
             // 
             // button1
             // 
@@ -117,6 +119,7 @@
             this.label4.Size = new System.Drawing.Size(104, 13);
             this.label4.TabIndex = 7;
             this.label4.Text = "Ключевой столбец:";
+            this.label4.Visible = false;
             // 
             // comboBox2
             // 
@@ -125,6 +128,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(121, 21);
             this.comboBox2.TabIndex = 8;
+            this.comboBox2.Visible = false;
             // 
             // dataGridView1
             // 
@@ -137,7 +141,7 @@
             this.Column4});
             this.dataGridView1.Location = new System.Drawing.Point(12, 350);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(545, 169);
+            this.dataGridView1.Size = new System.Drawing.Size(564, 169);
             this.dataGridView1.TabIndex = 9;
             // 
             // label5
@@ -178,7 +182,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(570, 560);
+            this.ClientSize = new System.Drawing.Size(585, 560);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.comboBox2);
