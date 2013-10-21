@@ -244,6 +244,14 @@ namespace dataMining_demo
             db.MiningStructures.Add(ms);
             ms.Update();
 
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+                
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
+
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mstr]  VALUES ('" + strName + "')", cn);
+            sqlCmd.ExecuteNonQuery();
+
             this.Close();
         }
 

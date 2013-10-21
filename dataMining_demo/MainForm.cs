@@ -22,6 +22,7 @@ namespace dataMining_demo
 
         DataSourceViewForm f2;
         MiningStructureForm f3;
+        MiningModelForm f4;
         
         public MainForm()
         {
@@ -29,6 +30,7 @@ namespace dataMining_demo
 
             f2 = new DataSourceViewForm();
             f3 = new MiningStructureForm();
+            f4 = new MiningModelForm();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -321,8 +323,6 @@ namespace dataMining_demo
             mmp.AllowDrillThrough = true;
             mmp.ReadDefinition = ReadDefinitionAccess.Allowed;
 
-
-
             // Add permission to the model and update
             mm.MiningModelPermissions.Add(mmp);
             mmp.Update();
@@ -331,6 +331,11 @@ namespace dataMining_demo
         private void button3_Click(object sender, EventArgs e)
         {
             f3.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            f4.Show();
         }
 
 

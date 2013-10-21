@@ -60,6 +60,12 @@
     <Compile Include="DataSourceViewForm.Designer.cs">
       <DependentUpon>DataSourceViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiningModelForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MiningModelForm.Designer.cs">
+      <DependentUpon>MiningModelForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MiningStructureForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,6 +74,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="MiningModelForm.resx">
+      <DependentUpon>MiningModelForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MiningStructureForm.resx">
       <DependentUpon>MiningStructureForm.cs</DependentUpon>
     </EmbeddedResource>
