@@ -72,7 +72,6 @@ namespace dataMining_demo
         private void button2_Click(object sender, EventArgs e)
         {
             f2.Show();
-
         }
 
         Database CreateDatabase()
