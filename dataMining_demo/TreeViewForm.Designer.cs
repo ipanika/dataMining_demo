@@ -58,7 +58,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TreeViewForm";
-            this.Text = "TreeView";
+            this.Text = "Дерево объектов";
             this.Load += new System.EventHandler(this.TreeViewForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

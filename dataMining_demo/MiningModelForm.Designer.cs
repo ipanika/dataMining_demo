@@ -33,10 +33,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,6 +84,17 @@
             this.dataGridView1.Size = new System.Drawing.Size(351, 160);
             this.dataGridView1.TabIndex = 8;
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Параметр";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 200;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Значение";
+            this.Column2.Name = "Column2";
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -103,17 +114,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Параметр";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 200;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Значение";
-            this.Column2.Name = "Column2";
-            // 
             // MiningModelForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -129,7 +129,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MiningModelForm";
-            this.Text = "MiningModelForm";
+            this.Text = "Создание модели";
             this.Load += new System.EventHandler(this.MiningModelForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

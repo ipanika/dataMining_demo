@@ -29,10 +29,7 @@ namespace dataMining_demo
         {
             InitializeComponent();
 
-            f2 = new DataSourceViewForm();
-            f3 = new MiningStructureForm();
-            f4 = new MiningModelForm();
-            f5 = new TreeViewForm();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -71,6 +68,8 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
+            f2 = new DataSourceViewForm();
+
             f2.Show();
         }
 
@@ -168,11 +167,14 @@ namespace dataMining_demo
 
         private void button3_Click(object sender, EventArgs e)
         {
+            
+            f3 = new MiningStructureForm();
             f3.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
+            f4 = new MiningModelForm();
             f4.Show();
         }
 
@@ -218,7 +220,22 @@ namespace dataMining_demo
 
         private void button5_Click(object sender, EventArgs e)
         {
+            
+            f5 = new TreeViewForm();
             f5.Show();
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            DataTable dt = new DataTable();
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [dsv_name] FROM [demo_dsv]", cn);
+            sqlDA.Fill(dt);
+
+            comboBox1.DataSource = dt;
+            comboBox1.DisplayMember = "dsv_name";
         }
 
             }

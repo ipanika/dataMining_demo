@@ -188,6 +188,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "dataMining_demo";
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

@@ -29,8 +29,7 @@ namespace dataMining_demo
 
             dataGridView1.Rows.Clear();
 
-            checkedListBox1.Items.Clear();
-
+           
             dsv = db.DataSourceViews.FindByName(comboBox1.Text);
             if (dsv != null)
             {
@@ -76,11 +75,7 @@ namespace dataMining_demo
 
                     // добавление строки в dataGridView
                     dataGridView1.Rows.Add(dvr);
-
-                    checkedListBox1.CheckOnClick = true;
-                    checkedListBox1.Items.Add(dsv.Schema.Tables[0].Columns[i].ColumnName);
-                    checkedListBox1.SetItemChecked(i, true);
-                    
+ 
                     i += 1;
                 }                    
             }
@@ -116,7 +111,6 @@ namespace dataMining_demo
             {
                 ds = dsv.Schema;
                 int i = 0;
-                checkedListBox1.Items.Clear();
                 while (i < dsv.Schema.Tables[0].Columns.Count)
                 {
                     // заполнение комбинированного dataGridView1 из представления dsv
@@ -151,26 +145,13 @@ namespace dataMining_demo
                     // добавление строки в dataGridView
                     dataGridView1.Rows.Add(dvr);
 
-                    checkedListBox1.CheckOnClick = true;
-                    checkedListBox1.Items.Add(dsv.Schema.Tables[0].Columns[i].ColumnName);
-                    checkedListBox1.SetItemChecked(i, true);
-
+                    
                     i += 1;
                 }
             }
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
-
-            comboBox2.DataSource = null;
-            comboBox2.DataSource = checkedListBox1.CheckedItems;
-
         }
-
-        private void checkedListBox1_SelectedValueChanged(object sender, EventArgs e)
-        {
-            comboBox2.DataSource = null;
-            comboBox2.DataSource = checkedListBox1.CheckedItems;
-        }
-        
+                
         private void button1_Click(object sender, EventArgs e)
         {
             String strName = textBox1.Text;
