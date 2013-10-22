@@ -252,7 +252,7 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mstr]  VALUES ('" + strName + "')", cn);
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mstr]  VALUES ('" + strName + "', '" + dsvName + "')", cn);
             sqlCmd.ExecuteNonQuery();
 
             this.Close();

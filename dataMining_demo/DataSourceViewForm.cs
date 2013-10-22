@@ -111,8 +111,6 @@ namespace dataMining_demo
 
             argsForQuery += "[" + columnNames[i] + "] ";
 
-            MessageBox.Show(argsForQuery);
-            
             strQuery = "SELECT "+ argsForQuery + " FROM SourceData$";
 
             // Create data adapters from database tables and load schemas

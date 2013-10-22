@@ -54,7 +54,9 @@ namespace dataMining_demo
             // Create the Cluster model and set the algorithm 
             // and parameters
             string modelName = textBox1.Text;
-            ms = db.MiningStructures.FindByName(comboBox1.Text);
+            string strName = comboBox1.Text;
+
+            ms = db.MiningStructures.FindByName(strName);
             ClusterModel = ms.CreateMiningModel(true, modelName);
             ClusterModel.Algorithm = "Microsoft_Clustering";
 
@@ -75,7 +77,7 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mm]  VALUES ('" + modelName + "')", cn);
+            SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mm]  VALUES ('" + modelName + "', '"+strName +"')", cn);
             sqlCmd.ExecuteNonQuery();
             // Submit the models to the server
             ClusterModel.Update();
