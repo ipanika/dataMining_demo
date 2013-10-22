@@ -41,6 +41,16 @@ namespace dataMining_demo
 
             db = CreateDatabase();
 
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            DataTable dt = new DataTable();
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [dsv_name] FROM [demo_dsv]", cn);
+            sqlDA.Fill(dt);
+
+            comboBox1.DataSource = dt;
+            comboBox1.DisplayMember = "dsv_name";
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -338,6 +348,45 @@ namespace dataMining_demo
             f4.Show();
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox2.DataSource = null;
+            comboBox2.Text = null;
 
-    }
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            DataTable dt = new DataTable();
+
+            String dsvName = comboBox1.Text;
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [mstr_name] FROM [demo_mstr] WHERE [dsv_name] = '" + dsvName + "'", cn);
+            sqlDA.Fill(dt);
+            if (dt != null)
+            {
+                comboBox2.DataSource = dt;
+                comboBox2.DisplayMember = "mstr_name";
+            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox3.DataSource = null;
+            comboBox3.Text = null;
+
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            DataTable dt = new DataTable();
+
+            String strName = comboBox2.Text;
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [mm_name] FROM [demo_mm] WHERE [mstr_name] = '" + strName + "'", cn);
+            sqlDA.Fill(dt);
+            if (dt != null)
+            {
+                comboBox3.DataSource = dt;
+                comboBox3.DisplayMember = "mm_name";
+            }
+        }
+
+            }
 }
