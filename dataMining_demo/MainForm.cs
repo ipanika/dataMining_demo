@@ -23,7 +23,8 @@ namespace dataMining_demo
         DataSourceViewForm f2;
         MiningStructureForm f3;
         MiningModelForm f4;
-        
+        TreeViewForm f5;
+              
         public MainForm()
         {
             InitializeComponent();
@@ -31,6 +32,7 @@ namespace dataMining_demo
             f2 = new DataSourceViewForm();
             f3 = new MiningStructureForm();
             f4 = new MiningModelForm();
+            f5 = new TreeViewForm();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -213,6 +215,11 @@ namespace dataMining_demo
                 comboBox3.DataSource = dt;
                 comboBox3.DisplayMember = "mm_name";
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            f5.Show();
         }
 
             }
