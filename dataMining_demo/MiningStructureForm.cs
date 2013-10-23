@@ -152,6 +152,7 @@ namespace dataMining_demo
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
         }
                 
+
         private void button1_Click(object sender, EventArgs e)
         {
             String strName = textBox1.Text;
@@ -173,7 +174,6 @@ namespace dataMining_demo
                 // столбец в структуре ИАД
                 if (drv.Cells[1].Value.Equals(true))
                 {
-
                     string rowName = drv.Cells[0].Value.ToString();
                     ScalarMiningStructureColumn colItem = new ScalarMiningStructureColumn(rowName, rowName);
                     
