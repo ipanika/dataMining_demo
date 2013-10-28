@@ -22,6 +22,7 @@ namespace dataMining_demo
             InitializeComponent();
         }
 
+        
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             DataSourceView dsv = new DataSourceView();
@@ -41,7 +42,13 @@ namespace dataMining_demo
                     // заполнение комбинированного dataGridView1 из представления dsv
                     DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
 
-                    dvr.Cells[0].Value = dsv.Schema.Tables[0].Columns[i].ColumnName;
+                    //dvr.Cells[0].Value = dsv.Schema.Tables[0].Columns[i].ColumnName;
+                    //string colName = dsv.Schema.Tables[0].Columns[0].ColumnName;
+
+
+                    string colName = dsv.Schema.Tables[0].Columns[i].ColumnName;
+                    dvr.Cells[0].Value = colName;
+
 
                     DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)dvr.Cells[1];
                     chk.Value = true;
@@ -57,19 +64,40 @@ namespace dataMining_demo
                     if (cn.State == ConnectionState.Closed)
                         cn.Open();
 
-                    SqlDataAdapter sqlDA = new SqlDataAdapter("select DISTINCT [data_type_name] FROM [demo_data_content]", cn);
-                    sqlDA.Fill(dt);
+                    dt = new DataTable();
 
-                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[3];
-                    cmbbx.DataSource = dt;
-                    cmbbx.DisplayMember = "data_type_name";
+                    fillDataTable(colName, dt, cn);
+
+                    int j = 0;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        switch (dr[0].ToString())
+                        {
+                            case "nvarchar":
+                                dvr.Cells[3].Value = "TEXT";
+                                break;
+                            case "float":
+                                dvr.Cells[3].Value = "DOUBLE";
+                                break;
+                            case "int":
+                            case "bigint":
+                                dvr.Cells[3].Value = "LONG";
+                                break;
+                            case "date":
+                            case "datetime":
+                            case "datetime2":
+                                dvr.Cells[3].Value = "DATE";
+                                break;
+                        }
+                        j++;
+                    };   
 
                     // запрос к БД для получения типов содержимого
                     dt = new DataTable();
-                    sqlDA = new SqlDataAdapter("select DISTINCT [data_content_name] FROM [demo_data_content]", cn);// WHERE [data_type_name] = '" + cmbbx.Value.ToString() + "'
+                    SqlDataAdapter sqlDA = new SqlDataAdapter("select DISTINCT [data_content_name] FROM [demo_data_content]", cn);// WHERE [data_type_name] = '" + cmbbx.Value.ToString() + "'
                     sqlDA.Fill(dt);
 
-                    cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
+                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
                     cmbbx.DataSource = dt;
                     cmbbx.DisplayMember = "data_content_name";
 
@@ -116,7 +144,8 @@ namespace dataMining_demo
                     // заполнение комбинированного dataGridView1 из представления dsv
                     DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
 
-                    dvr.Cells[0].Value = dsv.Schema.Tables[0].Columns[i].ColumnName;
+                    string colName = dsv.Schema.Tables[0].Columns[i].ColumnName;
+                    dvr.Cells[0].Value = colName;
 
                     DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)dvr.Cells[1];
                     chk.Value = true;
@@ -124,28 +153,49 @@ namespace dataMining_demo
                     chk = (DataGridViewCheckBoxCell) dvr.Cells[2];
                     chk.Value = false;
                     
-                    // запрос к БД для получения типов данных
+                    // заполнение столбца типа данных:
+                    // выбор из схемы БД информации о типе данных столбца
                     dt = new DataTable();
-                    sqlDA = new SqlDataAdapter("select DISTINCT [data_type_name] FROM [demo_data_content]", cn);
-                    sqlDA.Fill(dt);
-
-                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell) dvr.Cells[3];
-                    cmbbx.DataSource = dt;
-                    cmbbx.DisplayMember = "data_type_name";
                     
+
+                    fillDataTable(colName, dt, cn);
+
+                    int j = 0;
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        switch(dr[0].ToString())
+                        {
+                            case "nvarchar":
+                                dvr.Cells[3].Value = "TEXT";
+                                break;
+                            case "float":
+                                dvr.Cells[3].Value = "DOUBLE";
+                                break;
+                            case "int":
+                            case "bigint":
+                                dvr.Cells[3].Value = "LONG";
+                                break;
+                            case "date": 
+                            case "datetime":
+                            case "datetime2":
+                                dvr.Cells[3].Value = "DATE";
+                                break;
+                        }
+                        j++;
+                    };                    
+
                     // запрос к БД для получения типов содержимого
                     dt = new DataTable();
                     sqlDA = new SqlDataAdapter("select DISTINCT [data_content_name] FROM [demo_data_content]", cn);// WHERE [data_type_name] = '" + cmbbx.Value.ToString() + "'
                     sqlDA.Fill(dt);
 
-                    cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
+                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
                     cmbbx.DataSource = dt;
                     cmbbx.DisplayMember = "data_content_name";
 
                     // добавление строки в dataGridView
                     dataGridView1.Rows.Add(dvr);
 
-                    
                     i += 1;
                 }
             }
@@ -184,8 +234,8 @@ namespace dataMining_demo
                         colItem.Content = MiningStructureColumnContents.Key;
                     }
 
-                    switch (drv.Cells[3].Value.ToString())
-                    {
+                   switch (drv.Cells[3].Value.ToString())
+                   {
                         case "TEXT":
                             colItem.Type = MiningStructureColumnTypes.Text;
                             colItem.KeyColumns.Add("SourceData$", rowName, System.Data.OleDb.OleDbType.WChar);
@@ -254,7 +304,14 @@ namespace dataMining_demo
         {
             MessageBox.Show("CurrentCellChanged");
         }
-        
 
+        private void fillDataTable(string colName, DataTable dt, SqlConnection cn)
+        {
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT t.name AS type_name FROM sys.columns AS c  " +
+                                               " JOIN sys.types AS t ON c.user_type_id=t.user_type_id " +
+                                               " WHERE c.object_id = OBJECT_ID('dbo.SourceData$') AND c.name = '" +
+                                               colName + "'" + " ORDER BY c.column_id;", cn);
+            sqlDA.Fill(dt);
+        }
     }
 }
