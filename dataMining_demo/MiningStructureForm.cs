@@ -38,7 +38,6 @@ namespace dataMining_demo
                 int i = 0;
                 while (i < dsv.Schema.Tables[0].Columns.Count)
                 {
-
                     // заполнение комбинированного dataGridView1 из представления dsv
                     DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
 
