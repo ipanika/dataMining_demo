@@ -95,29 +95,30 @@ namespace dataMining_demo
 
         void ProcessDatabase(Database db)
         {
-            Trace t;
-            TraceEvent e;
+            //Trace t;
+            //TraceEvent e;
 
             // create the trace object to trace progress reports
             // and add the column containing the progress description
-            t = svr.Traces.Add();
-            e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
-            e.Columns.Add(TraceColumn.TextData);
-            t.Update();
+            //t = svr.Traces.Add();
+            //e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
+            //e.Columns.Add(TraceColumn.TextData);
+            //t.Update();
 
             // Add the handler for the trace event
-            t.OnEvent += new TraceEventHandler(ProgressReportHandler);
+            //t.OnEvent += new TraceEventHandler(ProgressReportHandler);
             try
             {
                 // start the trace, process of the database, then stop it
-                t.Start();
+                //t.Start();
                 db.Process(ProcessType.ProcessFull);
-                t.Stop();
+                //t.Stop();
 
 
             }
             catch (System.Exception /*ex*/)
             {
+                MessageBox.Show("Произошла ошибка обработки БД");
             }
 
         }
@@ -157,6 +158,7 @@ namespace dataMining_demo
                 mmp.AllowBrowsing = true;
                 mmp.AllowDrillThrough = true;
                 mmp.ReadDefinition = ReadDefinitionAccess.Allowed;
+
 
                 // Add permission to the model and update
                 mm.MiningModelPermissions.Add(mmp);

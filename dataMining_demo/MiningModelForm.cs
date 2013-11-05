@@ -71,7 +71,9 @@ namespace dataMining_demo
                     ClusterModel.AlgorithmParameters.Add(parName, parValue);
                 };
             }
-            
+
+            ClusterModel.AllowDrillThrough = true;
+
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
 
             if (cn.State == ConnectionState.Closed)
