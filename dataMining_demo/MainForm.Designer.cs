@@ -1,4 +1,6 @@
-﻿namespace dataMining_demo
+﻿using System.Windows.Forms;
+
+namespace dataMining_demo
 {
     partial class MainForm
     {
@@ -37,7 +39,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            MainForm.comboBox3 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button5 = new System.Windows.Forms.Button();
@@ -136,17 +138,17 @@
             // 
             // comboBox3
             // 
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(9, 128);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(121, 21);
-            this.comboBox3.TabIndex = 5;
+            MainForm.comboBox3.FormattingEnabled = true;
+            MainForm.comboBox3.Location = new System.Drawing.Point(9, 128);
+            MainForm.comboBox3.Name = "comboBox3";
+            MainForm.comboBox3.Size = new System.Drawing.Size(121, 21);
+            MainForm.comboBox3.TabIndex = 5;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.comboBox3);
+            this.groupBox1.Controls.Add(MainForm.comboBox3);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.comboBox2);
@@ -208,6 +210,7 @@
             this.groupBox3.Size = new System.Drawing.Size(269, 71);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Результат";
             // 
             // MainForm
             // 
@@ -244,13 +247,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.GroupBox groupBox3;
+        public static System.Windows.Forms.ComboBox comboBox3;
 
 
     }

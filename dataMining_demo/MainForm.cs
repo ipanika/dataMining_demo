@@ -55,13 +55,20 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ProcessDatabase(db);
- 
-            db = svr.Databases["demo_DM"];
-            db.Update(UpdateOptions.ExpandFull);
-            SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
+            string modelName = comboBox3.Text;
+            string strName = comboBox2.Text;
             
-            svr.Disconnect();
+            MiningStructure ms = db.MiningStructures.FindByName(strName);
+            MiningModel mm = ms.MiningModels.FindByName(modelName);
+            mm.Process();
+            mm.Update();
+            //ProcessDatabase(db);
+ 
+            //db = svr.Databases["demo_DM"];
+            //db.Update(UpdateOptions.ExpandFull);
+            //SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
+            
+            //svr.Disconnect();
 
             MessageBox.Show("Анализ данных успешно завершен.");           
              

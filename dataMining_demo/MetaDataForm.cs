@@ -25,7 +25,9 @@ namespace dataMining_demo
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
-            cmd.CommandText = "SELECT NODE_CAPTION, NODE_DESCRIPTION FROM [mod_drill].CONTENT";
+            string modelName = MainForm.comboBox3.Text;
+            cmd.CommandText = "SELECT NODE_CAPTION, NODE_DESCRIPTION, NODE_PROBABILITY, NODE_SUPPORT FROM [" + modelName + "].CONTENT";
+            //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
 
             AdomdDataReader reader = cmd.ExecuteReader();
             dataGridView1.AutoGenerateColumns = true;
