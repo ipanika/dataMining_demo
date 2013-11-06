@@ -274,7 +274,6 @@ namespace dataMining_demo
                 };
             }
 
-            
             db.MiningStructures.Add(ms);
             ms.Update();
 

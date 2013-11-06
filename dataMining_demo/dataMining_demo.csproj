@@ -36,6 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AnalysisServices, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,6 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrillThroughForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DrillThroughForm.Designer.cs">
+      <DependentUpon>DrillThroughForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetaDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetaDataForm.Designer.cs">
+      <DependentUpon>MetaDataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +96,12 @@
     <Compile Include="TreeViewForm.Designer.cs">
       <DependentUpon>TreeViewForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="DrillThroughForm.resx">
+      <DependentUpon>DrillThroughForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MetaDataForm.resx">
+      <DependentUpon>MetaDataForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MiningModelForm.resx">
       <DependentUpon>MiningModelForm.cs</DependentUpon>
     </EmbeddedResource>

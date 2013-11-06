@@ -24,6 +24,7 @@ namespace dataMining_demo
         MiningStructureForm f3;
         MiningModelForm f4;
         TreeViewForm f5;
+        MetaDataForm f6;
               
         public MainForm()
         {
@@ -238,6 +239,18 @@ namespace dataMining_demo
 
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "dsv_name";
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            f6 = new MetaDataForm();
+            f6.Show();
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+
         }
 
             }
