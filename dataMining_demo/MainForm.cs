@@ -25,6 +25,7 @@ namespace dataMining_demo
         MiningModelForm f4;
         TreeViewForm f5;
         MetaDataForm f6;
+        DrillThroughForm f7;
               
         public MainForm()
         {
@@ -257,7 +258,8 @@ namespace dataMining_demo
 
         private void button7_Click(object sender, EventArgs e)
         {
-
+            f7 = new DrillThroughForm();
+            f7.Show();
         }
 
             }

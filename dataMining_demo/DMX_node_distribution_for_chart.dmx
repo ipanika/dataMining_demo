@@ -1,0 +1,4 @@
+SELECT flattened 
+(SELECT  ATTRIBUTE_VALUE, [SUPPORT]
+FROM NODE_DISTRIBUTION where ATTRIBUTE_NAME = 'Yearly Income') 
+FROM [mod_discrete].CONTENT where node_caption = 'Кластер 1'
