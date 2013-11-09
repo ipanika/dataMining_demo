@@ -19,6 +19,7 @@ namespace dataMining_demo
         // member variable -- the Analysis Services server connection
         public static Server svr;
         public static Database db;
+        public static string modelName;
 
         DataSourceViewForm f2;
         MiningStructureForm f3;
@@ -36,6 +37,7 @@ namespace dataMining_demo
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             // Create SSAS-server object and connect
             svr = new Server();
             svr.Connect("localhost");
@@ -260,6 +262,11 @@ namespace dataMining_demo
         {
             f7 = new DrillThroughForm();
             f7.Show();
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            modelName = comboBox3.Text;
         }
 
             }
