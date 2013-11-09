@@ -10,9 +10,9 @@ using Microsoft.AnalysisServices.AdomdClient;
 
 namespace dataMining_demo
 {
-    public partial class MetaDataForm : Form
+    public partial class FormMetaData : Form
     {
-        public MetaDataForm()
+        public FormMetaData()
         {
             InitializeComponent();
         }
@@ -25,7 +25,7 @@ namespace dataMining_demo
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
-            string modelName = MainForm.modelName;// MainForm.comboBox3.Text;
+            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
             cmd.CommandText = "SELECT NODE_CAPTION, NODE_DESCRIPTION, NODE_PROBABILITY, NODE_SUPPORT FROM [" + modelName + "].CONTENT";
             //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
 

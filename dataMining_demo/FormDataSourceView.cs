@@ -11,14 +11,14 @@ using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
-    public partial class DataSourceViewForm : Form
+    public partial class FormDataSourceView : Form
     {
         //Database db = dataMining_demo.Form1.db;
         //Server svr = dataMining_demo.Form1.svr;
          Server svr = new Server();
          Database db = new Database();
 
-        public DataSourceViewForm()
+        public FormDataSourceView()
         {
             InitializeComponent();
         }

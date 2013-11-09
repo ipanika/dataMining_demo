@@ -11,13 +11,13 @@ using System.Data.SqlClient;
 
 namespace dataMining_demo
 {
-    public partial class MiningModelForm : Form
+    public partial class FormMiningModel : Form
     {
         Server svr = new Server();
         Database db = new Database();
         MiningStructure ms = new MiningStructure();
 
-        public MiningModelForm()
+        public FormMiningModel()
         {
             InitializeComponent();
         }

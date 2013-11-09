@@ -1,6 +1,6 @@
 ﻿namespace dataMining_demo
 {
-    partial class DataSourceViewForm
+    partial class FormDataSourceView
     {
         /// <summary>
         /// Required designer variable.

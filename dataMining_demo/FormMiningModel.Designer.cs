@@ -1,6 +1,6 @@
 ﻿namespace dataMining_demo
 {
-    partial class MiningModelForm
+    partial class FormMiningModel
     {
         /// <summary>
         /// Required designer variable.

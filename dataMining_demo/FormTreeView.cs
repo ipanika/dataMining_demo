@@ -11,13 +11,13 @@ using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
-    public partial class TreeViewForm : Form
+    public partial class FormTreeView : Form
     {
 
         Server svr = new Server();
         Database db = new Database();
 
-        public TreeViewForm()
+        public FormTreeView()
         {
             InitializeComponent();
         }

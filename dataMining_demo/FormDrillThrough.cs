@@ -11,9 +11,9 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace dataMining_demo
 {
-    public partial class DrillThroughForm : Form
+    public partial class FormDrillThrough : Form
     {
-        public DrillThroughForm()
+        public FormDrillThrough()
         {
             InitializeComponent();
         }
@@ -26,7 +26,7 @@ namespace dataMining_demo
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
-            string modelName = MainForm.modelName;// MainForm.comboBox3.Text;
+            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
             cmd.CommandText = "SELECT NODE_CAPTION FROM [" + modelName + "].CONTENT";
             //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
 
@@ -53,7 +53,7 @@ namespace dataMining_demo
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
-            string modelName = MainForm.modelName;// MainForm.comboBox3.Text;
+            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
             cmd.CommandText = "CALL System.GetModelAttributes('" + modelName + "')";
             
             AdomdDataReader reader = cmd.ExecuteReader();
@@ -80,7 +80,7 @@ namespace dataMining_demo
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
-            string modelName = MainForm.modelName;// MainForm.comboBox3.Text;
+            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
             cmd.CommandText = " SELECT flattened (SELECT  ATTRIBUTE_VALUE, [SUPPORT]" +
                                 "FROM NODE_DISTRIBUTION where ATTRIBUTE_NAME = '"+comboBox2.Text+"') " +
                                 "FROM ["+ modelName + "].CONTENT where node_caption = '"+comboBox1.Text + "'";

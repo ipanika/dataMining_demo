@@ -1,6 +1,6 @@
 ﻿namespace dataMining_demo
 {
-    partial class TreeViewForm
+    partial class FormTreeView
     {
         /// <summary>
         /// Required designer variable.

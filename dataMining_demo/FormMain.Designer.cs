@@ -2,7 +2,7 @@
 
 namespace dataMining_demo
 {
-    partial class MainForm
+    partial class FormMain
     {
         /// <summary>
         /// Требуется переменная конструктора.
@@ -46,6 +46,7 @@ namespace dataMining_demo
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button8 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -53,11 +54,11 @@ namespace dataMining_demo
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(175, 170);
+            this.button1.Location = new System.Drawing.Point(10, 181);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(96, 37);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Обработка объектов ИАД";
+            this.button1.Text = "Обработка модели ИАД";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -73,7 +74,7 @@ namespace dataMining_demo
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(6, 67);
+            this.button3.Location = new System.Drawing.Point(6, 111);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(97, 38);
             this.button3.TabIndex = 2;
@@ -83,7 +84,7 @@ namespace dataMining_demo
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(6, 111);
+            this.button4.Location = new System.Drawing.Point(6, 155);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(96, 38);
             this.button4.TabIndex = 3;
@@ -162,19 +163,20 @@ namespace dataMining_demo
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button8);
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Location = new System.Drawing.Point(169, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(112, 153);
+            this.groupBox2.Size = new System.Drawing.Size(112, 197);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Конструктор";
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(18, 171);
+            this.button5.Location = new System.Drawing.Point(12, 224);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(88, 36);
             this.button5.TabIndex = 9;
@@ -206,18 +208,27 @@ namespace dataMining_demo
             // 
             this.groupBox3.Controls.Add(this.button7);
             this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 214);
+            this.groupBox3.Location = new System.Drawing.Point(12, 275);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(269, 71);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Результат";
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(7, 68);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(96, 37);
+            this.button8.TabIndex = 4;
+            this.button8.Text = "Создать выборку";
+            this.button8.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 297);
+            this.ClientSize = new System.Drawing.Size(296, 358);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
@@ -255,6 +266,7 @@ namespace dataMining_demo
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ComboBox comboBox3;
+        private Button button8;
 
 
     }

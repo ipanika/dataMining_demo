@@ -53,68 +53,77 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrillThroughForm.cs">
+    <Compile Include="FormDrillThrough.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DrillThroughForm.Designer.cs">
-      <DependentUpon>DrillThroughForm.cs</DependentUpon>
+    <Compile Include="FormDrillThrough.Designer.cs">
+      <DependentUpon>FormDrillThrough.cs</DependentUpon>
     </Compile>
-    <Compile Include="MetaDataForm.cs">
+    <Compile Include="FormSelection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MetaDataForm.Designer.cs">
-      <DependentUpon>MetaDataForm.cs</DependentUpon>
+    <Compile Include="FormSelection.Designer.cs">
+      <DependentUpon>FormSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs">
+    <Compile Include="FormMetaData.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="FormMetaData.Designer.cs">
+      <DependentUpon>FormMetaData.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataSourceViewForm.cs">
+    <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataSourceViewForm.Designer.cs">
-      <DependentUpon>DataSourceViewForm.cs</DependentUpon>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="MiningModelForm.cs">
+    <Compile Include="FormDataSourceView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MiningModelForm.Designer.cs">
-      <DependentUpon>MiningModelForm.cs</DependentUpon>
+    <Compile Include="FormDataSourceView.Designer.cs">
+      <DependentUpon>FormDataSourceView.cs</DependentUpon>
     </Compile>
-    <Compile Include="MiningStructureForm.cs">
+    <Compile Include="FormMiningModel.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MiningStructureForm.Designer.cs">
-      <DependentUpon>MiningStructureForm.cs</DependentUpon>
+    <Compile Include="FormMiningModel.Designer.cs">
+      <DependentUpon>FormMiningModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMiningStructure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMiningStructure.Designer.cs">
+      <DependentUpon>FormMiningStructure.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TreeViewForm.cs">
+    <Compile Include="FormTreeView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TreeViewForm.Designer.cs">
-      <DependentUpon>TreeViewForm.cs</DependentUpon>
+    <Compile Include="FormTreeView.Designer.cs">
+      <DependentUpon>FormTreeView.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="DrillThroughForm.resx">
-      <DependentUpon>DrillThroughForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormDrillThrough.resx">
+      <DependentUpon>FormDrillThrough.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MetaDataForm.resx">
-      <DependentUpon>MetaDataForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormMetaData.resx">
+      <DependentUpon>FormMetaData.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MiningModelForm.resx">
-      <DependentUpon>MiningModelForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormMiningModel.resx">
+      <DependentUpon>FormMiningModel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MiningStructureForm.resx">
-      <DependentUpon>MiningStructureForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormMiningStructure.resx">
+      <DependentUpon>FormMiningStructure.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataSourceViewForm.resx">
-      <DependentUpon>DataSourceViewForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormDataSourceView.resx">
+      <DependentUpon>FormDataSourceView.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelection.resx">
+      <DependentUpon>FormSelection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -126,8 +135,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="TreeViewForm.resx">
-      <DependentUpon>TreeViewForm.cs</DependentUpon>
+    <EmbeddedResource Include="FormTreeView.resx">
+      <DependentUpon>FormTreeView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

@@ -1,6 +1,6 @@
 ﻿namespace dataMining_demo
 {
-    partial class DrillThroughForm
+    partial class FormDrillThrough
     {
         /// <summary>
         /// Required designer variable.

@@ -14,21 +14,21 @@ using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
-    public partial class MainForm : Form
+    public partial class FormMain : Form
     {
         // member variable -- the Analysis Services server connection
         public static Server svr;
         public static Database db;
         public static string modelName;
 
-        DataSourceViewForm f2;
-        MiningStructureForm f3;
-        MiningModelForm f4;
-        TreeViewForm f5;
-        MetaDataForm f6;
-        DrillThroughForm f7;
+        FormDataSourceView f2;
+        FormMiningStructure f3;
+        FormMiningModel f4;
+        FormTreeView f5;
+        FormMetaData f6;
+        FormDrillThrough f7;
               
-        public MainForm()
+        public FormMain()
         {
             InitializeComponent();
 
@@ -79,7 +79,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            f2 = new DataSourceViewForm();
+            f2 = new FormDataSourceView();
 
             f2.Show();
         }
@@ -181,13 +181,13 @@ namespace dataMining_demo
         private void button3_Click(object sender, EventArgs e)
         {
             
-            f3 = new MiningStructureForm();
+            f3 = new FormMiningStructure();
             f3.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            f4 = new MiningModelForm();
+            f4 = new FormMiningModel();
             f4.Show();
         }
 
@@ -234,7 +234,7 @@ namespace dataMining_demo
         private void button5_Click(object sender, EventArgs e)
         {
             
-            f5 = new TreeViewForm();
+            f5 = new FormTreeView();
             f5.Show();
         }
 
@@ -253,14 +253,14 @@ namespace dataMining_demo
 
         private void button6_Click(object sender, EventArgs e)
         {
-            f6 = new MetaDataForm();
+            f6 = new FormMetaData();
             f6.Show();
 
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            f7 = new DrillThroughForm();
+            f7 = new FormDrillThrough();
             f7.Show();
         }
 
