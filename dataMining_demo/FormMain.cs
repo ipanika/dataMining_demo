@@ -196,22 +196,29 @@ namespace dataMining_demo
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //comboBox2.DataSource = null;
-            //comboBox2.Text = null;
+            comboBox2.DataSource = null;
+            comboBox2.Text = null;
 
-            //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-            //DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            DataTable dt = new DataTable();
+            
+            String dsvName = comboBox1.Text;
 
-            //String dsvName = comboBox1.Text;
+            if (dsvName != "")
+            {
+                string strSel = "SELECT dbo.selections.name FROM [dbo].selections JOIN dbo.data_source_views" +
+                                    " ON dbo.data_source_views.id_dsv = dbo.selections.id_dsv" +
+                                    " and dbo.data_source_views.name = '" + dsvName +"'";
 
-            //// Create data adapters from database tables and load schemas
-            ////SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [name] FROM [structures] WHERE [dsv_name] = '" + dsvName + "'", cn);
-            //sqlDA.Fill(dt);
-            //if (dt != null)
-            //{
-            //    comboBox2.DataSource = dt;
-            //    comboBox2.DisplayMember = "mstr_name";
-            //}
+                SqlDataAdapter sqlDA = new SqlDataAdapter(strSel, cn);
+                sqlDA.Fill(dt);
+
+                if (dt != null)
+                {
+                    comboBox2.DataSource = dt;
+                    comboBox2.DisplayMember = "name";
+                }
+            }
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
