@@ -154,7 +154,6 @@ namespace dataMining_demo
                 String userName = SystemInformation.UserName;
                 String PCName = Environment.MachineName;
 
-                //r.Members.Add(new RoleMember("user-ПК\\user"));
                 r.Members.Add(new RoleMember(PCName + "\\" + userName));
 
                 // Add the role to the database and update
@@ -223,22 +222,26 @@ namespace dataMining_demo
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //comboBox3.DataSource = null;
-            //comboBox3.Text = null;
+            comboBox3.DataSource = null;
+            comboBox3.Text = null;
 
-            //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-            //DataTable dt = new DataTable();
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            DataTable dt = new DataTable();
 
-            //String strName = comboBox2.Text;
-
-            //// Create data adapters from database tables and load schemas
-            ////SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [mm_name] FROM [demo_mm] WHERE [mstr_name] = '" + strName + "'", cn);
-            ////sqlDA.Fill(dt);
-            //if (dt != null)
-            //{
-            //    comboBox3.DataSource = dt;
-            //    comboBox3.DisplayMember = "mm_name";
-            //}
+            String selName = comboBox2.Text;
+            if (selName != "")
+            {
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT structures.name FROM [structures] JOIN selections ON " +
+                                                            " selections.name = '" + selName + "' AND " +
+                                                            " selections.id_selection = structures.id_selection", cn);
+                sqlDA.Fill(dt);
+                if (dt != null)
+                {
+                    comboBox3.DataSource = dt;
+                    comboBox3.DisplayMember = "name";
+                }
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)

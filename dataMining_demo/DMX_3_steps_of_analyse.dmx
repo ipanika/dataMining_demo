@@ -1,0 +1,32 @@
+CREATE MINING STRUCTURE [Market Basket] (
+    OrderNumber TEXT KEY,
+    [Products] TABLE (
+        [Model] TEXT KEY
+    )
+)
+
+ALTER MINING STRUCTURE [Market Basket]
+ADD MINING MODEL [Default Association]
+(
+    OrderNumber,
+    [Products] PREDICT (
+        [Model]
+    )
+)
+Using Microsoft_Association_Rules
+
+
+INSERT INTO MINING STRUCTURE [Market Basket]
+(
+   [OrderNumber],[Products] (SKIP, [Model])
+)
+SHAPE {
+  OPENQUERY([Adventure Works DW],'SELECT OrderNumber
+            FROM vAssocSeqOrders ORDER BY OrderNumber')}
+APPEND
+( 
+  {OPENQUERY([Adventure Works DW],'SELECT OrderNumber, Model FROM 
+    dbo.vAssocSeqLineItems ORDER BY OrderNumber, Model')
+}
+RELATE OrderNumber to OrderNumber 
+) AS [Products]

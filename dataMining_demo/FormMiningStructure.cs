@@ -188,7 +188,7 @@ namespace dataMining_demo
             dmxQuery += ")";
 
             if (test_ratio != "")
-                dmxQuery += "WITH HOLDOUT (" + test_ratio + " PERCENT)";
+                dmxQuery += " WITH HOLDOUT (" + test_ratio + " PERCENT)";
 
             // создание соединения с сервером и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
