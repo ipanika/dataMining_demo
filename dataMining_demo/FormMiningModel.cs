@@ -6,16 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.AnalysisServices;
+using Microsoft.AnalysisServices.AdomdClient;
 using System.Data.SqlClient;
 
 namespace dataMining_demo
 {
     public partial class FormMiningModel : Form
     {
-        Server svr = new Server();
-        Database db = new Database();
-        MiningStructure ms = new MiningStructure();
+        //Server svr = new Server();
+        //Database db = new Database();
+        //MiningStructure ms = new MiningStructure();
 
         public FormMiningModel()
         {
@@ -24,65 +24,85 @@ namespace dataMining_demo
 
         private void MiningModelForm_Load(object sender, EventArgs e)
         {
-            svr.Connect("localhost");
+            //svr.Connect("localhost");
 
-            if ((svr != null) && (svr.Connected))
-                db = svr.Databases.FindByName("demo_DM");
+            //if ((svr != null) && (svr.Connected))
+            //    db = svr.Databases.FindByName("demo_DM");
 
             // создать соединение с БД
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            DataTable dt = new DataTable();
+            DataTable dt1 = new DataTable();
             // загрузка имеющихся представлений ИАД
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select [mstr_name] FROM [demo_mstr]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter("select [name] FROM [structures]", cn);
+            sqlDA.Fill(dt1);
+
+            comboBox1.DataSource = dt1;
+            comboBox1.DisplayMember = "name";
+
+            DataTable dt = new DataTable();
+            sqlDA = new SqlDataAdapter("select [name] FROM [algorithm_variants]", cn);
             sqlDA.Fill(dt);
 
-            comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "mstr_name";
-
-            //dataGridView1.Rows.Add("CLUSTERING_METHOD", "");
-            //dataGridView1.Rows.Add("CLUSTER_COUNT", "");
+            comboBox2.DataSource = dt;
+            comboBox2.DisplayMember = "name";
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //MiningModel ClusterModel;
 
-            //// Create the Cluster model and set the algorithm 
-            //// and parameters
-            //string modelName = textBox1.Text;
-            //string strName = comboBox1.Text;
+            string modelName = textBox1.Text;
+            string strName = comboBox1.Text;
+            string algVarName = comboBox2.Text;
 
-            //ms = db.MiningStructures.FindByName(strName);
-            //ClusterModel = ms.CreateMiningModel(true, modelName);
-            //ClusterModel.Algorithm = "Microsoft_Clustering";
+            string dmxQuery = "";
+            string sqlQuery = "";
 
-            //// считывание параметров алгоритма из dataGridView
-            //for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
-            //{
-            //    DataGridViewRow drv = dataGridView1.Rows[i];
-            //    if (drv.Cells[1].Value.ToString() != "")
-            //    {
-            //        string parName = drv.Cells[0].Value.ToString();
-            //        string parValue = drv.Cells[1].Value.ToString();
-            //        ClusterModel.AlgorithmParameters.Add(parName, parValue);
-            //    };
-            //}
+            
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
 
-            //ClusterModel.AllowDrillThrough = true;
+            SqlCommand sqlCmd = new SqlCommand();
+            // получение используемого id_structure
+            sqlQuery = "SELECT id_structure FROM structures WHERE name = '" + strName + "'";
+            sqlCmd.CommandText = sqlQuery;
+            sqlCmd.Connection = cn;
+            string idStr = sqlCmd.ExecuteScalar().ToString();
 
-            //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            // получение используемого id_algorithm_variant 
+            sqlQuery = "SELECT id_algorithm_variant FROM algorithm_variants WHERE name = '" + algVarName + "'";
+            sqlCmd.CommandText = sqlQuery;
+            string idAlgVar = sqlCmd.ExecuteScalar().ToString();
 
-            //if (cn.State == ConnectionState.Closed)
-            //    cn.Open();
+            // получение имени используемого алгоритма ИАД
+            sqlQuery = "SELECT [algorithms].name FROM algorithms JOIN algorithm_variants" + 
+                        " ON algorithm_variants.id_algorithm = algorithms.id_algorithm AND"+
+                        " algorithm_variants.name = '" + algVarName + "'";
+            sqlCmd.CommandText = sqlQuery;
+            string nameAlg = sqlCmd.ExecuteScalar().ToString();
 
-            //SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mm]  VALUES ('" + modelName + "', '"+strName +"')", cn);
-            //sqlCmd.ExecuteNonQuery();
-            //// Submit the models to the server
-            //ClusterModel.Update();
+            // сохранение информации о создаваемой модели в БД
+            sqlQuery = "INSERT INTO [models] VALUES ('" + idStr + "', '" + modelName + "', '" + idAlgVar+ "')";
+            sqlCmd.CommandText = sqlQuery;
+            sqlCmd.ExecuteNonQuery();
+
+            dmxQuery = "ALTER MINING STRUCTURE [" + strName + "]" +
+                        " ADD MINING MODEL [" + modelName + "]" +
+                        " USING " + nameAlg;
+
+            // создание объекта соединения с БД SSAS и команды для отправки dmx-запроса
+            AdomdConnection adomdCn = new AdomdConnection();
+            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            adomdCn.Open();
+
+            AdomdCommand adomdCmd = adomdCn.CreateCommand();
+            adomdCmd.CommandText = dmxQuery;
+            adomdCmd.Execute();
+
             this.Close();
         }
     }

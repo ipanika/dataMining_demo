@@ -92,16 +92,16 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(16, 106);
+            this.comboBox2.Location = new System.Drawing.Point(12, 106);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(224, 21);
+            this.comboBox2.Size = new System.Drawing.Size(228, 21);
             this.comboBox2.TabIndex = 12;
             // 
             // FormMiningModel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 227);
+            this.ClientSize = new System.Drawing.Size(248, 174);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button1);
