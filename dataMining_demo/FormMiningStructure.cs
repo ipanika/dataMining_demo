@@ -59,7 +59,7 @@ namespace dataMining_demo
                     DataTable dt = new DataTable();
 
                     // создать соединение с БД
-                    SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+                    SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
                     if (cn.State == ConnectionState.Closed)
                         cn.Open();
 
@@ -116,7 +116,7 @@ namespace dataMining_demo
                 db = svr.Databases.FindByName("demo_DM");
             
             // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -277,7 +277,7 @@ namespace dataMining_demo
             db.MiningStructures.Add(ms);
             ms.Update();
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
                 
             if (cn.State == ConnectionState.Closed)
                 cn.Open();

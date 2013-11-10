@@ -88,13 +88,6 @@ namespace dataMining_demo
                 
                 db.DataSources.Add(ds);
 
-                SqlConnection cnToDS = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
-                
-                if (cnToDS.State == ConnectionState.Closed)
-                    cnToDS.Open();
-
-                SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_ds]  VALUES ('" + dsName + "')", cnToDS);
-                sqlCmd.ExecuteNonQuery();
             }
 
             // Create connection to datasource cto extract schema to a dataset
@@ -106,39 +99,36 @@ namespace dataMining_demo
 
             int i;
             for (i = 0; i < columnNames.Count-1; i++){
-                argsForQuery += "["+columnNames[i] + "], ";
+                argsForQuery += "'"+columnNames[i] + "', ";
             }
 
-            argsForQuery += "[" + columnNames[i] + "] ";
+            argsForQuery += "'" + columnNames[i] + "' ";
 
             strQuery = "SELECT "+ argsForQuery + " FROM SourceData$";
-
-            // Create data adapters from database tables and load schemas
-            SqlDataAdapter daCustomers = new SqlDataAdapter(strQuery, cn);
-            daCustomers.FillSchema(dset, SchemaType.Mapped, "SourceData$");
-
 
             // определение имени представления данных
             string dsvName = textBox1.Text;
 
-            // Create the DSV, ad the dataset and add to the database
-            DataSourceView dsv = new DataSourceView(dsvName, dsvName);
-            dsv.DataSourceID = dsName;
-            dsv.Schema = dset.Clone();
-            db.DataSourceViews.Add(dsv);
-            //db.DataSourceViews[0].ID = dsv.ID;
-
-            // Update the database to create the objects on the server
-            db.Update(UpdateOptions.ExpandFull);
-
             // сохранение в БД приложения информации о созданных источниках и
             // представлениях данных
-            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             if (cnToDSV.State == ConnectionState.Closed)
                 cnToDSV.Open();
 
-            SqlCommand sqlCmd2 = new SqlCommand("INSERT INTO [demo_dsv]  VALUES ('" + dsvName + "')", cnToDSV);
+            // заполнение таблицы data_source_views
+            SqlCommand sqlCmd2 = new SqlCommand("INSERT INTO [data_source_views]  VALUES ('" + dsvName + "')", cnToDSV);
             sqlCmd2.ExecuteNonQuery();
+
+            // получение id созданного представления для связи с таблицей dsv_columns
+            sqlCmd2 = new SqlCommand("SELECT [id_dsv] FROM [data_source_views]  WHERE [name] = ('" + dsvName + "')", cnToDSV);
+            string dsvID = sqlCmd2.ExecuteScalar().ToString();
+
+            // заполнение таблицы [dsv_columns] данными представлений
+            for (i = 0; i < columnNames.Count; i++)
+            {
+                sqlCmd2 = new SqlCommand("INSERT INTO [dsv_columns]  VALUES ('" + dsvID + "', '" + columnNames[i] + "')", cnToDSV);
+                sqlCmd2.ExecuteNonQuery();
+            }
 
         }
 
