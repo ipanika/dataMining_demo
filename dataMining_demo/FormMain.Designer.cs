@@ -41,14 +41,15 @@ namespace dataMining_demo
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -56,9 +57,9 @@ namespace dataMining_demo
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(21, 232);
+            this.button1.Location = new System.Drawing.Point(19, 274);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 37);
+            this.button1.Size = new System.Drawing.Size(94, 37);
             this.button1.TabIndex = 1;
             this.button1.Text = "Обработка модели ИАД";
             this.button1.UseVisualStyleBackColor = true;
@@ -86,7 +87,7 @@ namespace dataMining_demo
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(6, 155);
+            this.button4.Location = new System.Drawing.Point(6, 212);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(96, 38);
             this.button4.TabIndex = 3;
@@ -133,7 +134,7 @@ namespace dataMining_demo
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 155);
+            this.label3.Location = new System.Drawing.Point(6, 151);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(76, 13);
             this.label3.TabIndex = 4;
@@ -165,18 +166,47 @@ namespace dataMining_demo
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Выбор объектов ИАД";
             // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Location = new System.Drawing.Point(9, 170);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(121, 21);
+            this.comboBox4.TabIndex = 5;
+            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 108);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 13);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "Структура ИАД:";
+            // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button9);
             this.groupBox2.Controls.Add(this.button8);
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Location = new System.Drawing.Point(169, 12);
+            this.groupBox2.Location = new System.Drawing.Point(171, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(112, 197);
+            this.groupBox2.Size = new System.Drawing.Size(110, 256);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Конструктор";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(6, 156);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(96, 50);
+            this.button9.TabIndex = 5;
+            this.button9.Text = "Создать вариант алгоритма";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // button8
             // 
@@ -190,9 +220,9 @@ namespace dataMining_demo
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(175, 233);
+            this.button5.Location = new System.Drawing.Point(178, 274);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(88, 36);
+            this.button5.Size = new System.Drawing.Size(93, 36);
             this.button5.TabIndex = 9;
             this.button5.Text = "Дерево объектов";
             this.button5.UseVisualStyleBackColor = true;
@@ -222,36 +252,18 @@ namespace dataMining_demo
             // 
             this.groupBox3.Controls.Add(this.button7);
             this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 275);
+            this.groupBox3.Location = new System.Drawing.Point(12, 317);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(269, 71);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Результат";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 111);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "Структура ИАД:";
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(9, 170);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(121, 21);
-            this.comboBox4.TabIndex = 5;
-            this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 358);
+            this.ClientSize = new System.Drawing.Size(296, 395);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
@@ -292,6 +304,7 @@ namespace dataMining_demo
         private Button button8;
         private ComboBox comboBox4;
         private Label label4;
+        private Button button9;
 
 
     }

@@ -20,15 +20,7 @@ namespace dataMining_demo
         public static Server svr;
         public static Database db;
         public static string modelName;
-        
-        FormDataSourceView f2;
-        FormMiningStructure f3;
-        FormMiningModel f4;
-        FormTreeView f5;
-        FormMetaData f6;
-        FormDrillThrough f7;
-        FormSelection f8;
-              
+                
         public FormMain()
         {
             InitializeComponent();
@@ -82,7 +74,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            f2 = new FormDataSourceView();
+            FormDataSourceView f2 = new FormDataSourceView();
 
             f2.Show();
         }
@@ -100,7 +92,6 @@ namespace dataMining_demo
                     db.Update();
                 }
 
-                
             }
 
 
@@ -182,14 +173,13 @@ namespace dataMining_demo
 
         private void button3_Click(object sender, EventArgs e)
         {
-            
-            f3 = new FormMiningStructure();
+            FormMiningStructure f3 = new FormMiningStructure();
             f3.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            f4 = new FormMiningModel();
+            FormMiningModel f4 = new FormMiningModel();
             f4.Show();
         }
 
@@ -246,8 +236,8 @@ namespace dataMining_demo
 
         private void button5_Click(object sender, EventArgs e)
         {
-            
-            f5 = new FormTreeView();
+
+            FormTreeView f5 = new FormTreeView();
             f5.Show();
         }
 
@@ -266,14 +256,14 @@ namespace dataMining_demo
 
         private void button6_Click(object sender, EventArgs e)
         {
-            f6 = new FormMetaData();
+            FormMetaData f6 = new FormMetaData();
             f6.Show();
 
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            f7 = new FormDrillThrough();
+            FormDrillThrough f7 = new FormDrillThrough();
             f7.Show();
         }
 
@@ -284,9 +274,16 @@ namespace dataMining_demo
 
         private void button8_Click(object sender, EventArgs e)
         {
-            f8 = new FormSelection();
+            FormSelection f8 = new FormSelection();
             f8.Show();
         }
 
-            }
+        private void button9_Click(object sender, EventArgs e)
+        {
+            FormAlgorithmVariants f9 = new FormAlgorithmVariants();
+            f9.Show();
+
+        }
+
+    }
 }
