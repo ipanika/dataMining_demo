@@ -165,7 +165,7 @@ namespace dataMining_demo
             string dmxQuery;
             dmxQuery = "CREATE MINING STRUCTURE ["+strName+"] (";
 
-            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 DataGridViewRow drv = dataGridView1.Rows[i];
                 if (drv.Cells[1].Value.Equals(true))

@@ -2,29 +2,27 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using DataTable = System.Data.DataTable;
+//using DataTSystem.Data.DataTable;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using Microsoft.Office.Interop.Excel;
-using Microsoft.AnalysisServices;
+using Microsoft.AnalysisServices.AdomdClient;
 
 namespace dataMining_demo
 {
     public partial class FormMain : Form
     {
         // member variable -- the Analysis Services server connection
-        public static Server svr;
-        public static Database db;
+        //public static Server svr;
+        //public static Database db;
         public static string modelName;
                 
         public FormMain()
         {
             InitializeComponent();
-
             
         }
 
@@ -32,11 +30,10 @@ namespace dataMining_demo
         {
             
             // Create SSAS-server object and connect
-            svr = new Server();
-            svr.Connect("localhost");
+            //svr = new Server();
+            //svr.Connect("localhost");
 
-            db = CreateDatabase();
-
+            //db = CreateDatabase();
 
 
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
@@ -53,20 +50,46 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string modelName = comboBox3.Text;
-            string strName = comboBox2.Text;
-            
-            MiningStructure ms = db.MiningStructures.FindByName(strName);
-            MiningModel mm = ms.MiningModels.FindByName(modelName);
-            mm.Process();
-            mm.Update();
-            //ProcessDatabase(db);
- 
-            //db = svr.Databases["demo_DM"];
-            //db.Update(UpdateOptions.ExpandFull);
-            //SetModelPermissions(db, db.MiningStructures[0].MiningModels[0]);
-            
-            //svr.Disconnect();
+            string dmxQuery = "";
+
+            dmxQuery += "INSERT INTO [" + modelName + "] (";
+
+            // получение списка столбцов текущей структуры
+
+            string sqlQuery = "";
+            sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
+                        " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
+                        " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
+                        " structures.id_selection = selections.id_selection JOIN models ON" +
+                        " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
+
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            DataTable dt = new DataTable();
+
+            // Create data adapters from database tables and load schemas
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+            sqlDA.Fill(dt);
+
+            // строка, содержащая имена столбцов структуры (модели)
+            string colNames = "";
+            for (int i = 0; i < dt.Rows.Count; i++)
+                colNames += " [" + dt.Rows[i][0].ToString() + "],";
+
+            colNames = colNames.Substring(0, colNames.Length - 1);
+
+            dmxQuery += colNames + ")" +
+                    " openquery ([demo_ds], ' SELECT " + colNames +
+                    " FROM SourceData$')";
+
+
+            // создание соединения с сервером и команды для отправки dmx-запроса
+            AdomdConnection adomdCn = new AdomdConnection();
+            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            adomdCn.Open();
+
+            AdomdCommand adomdCmd = adomdCn.CreateCommand();
+            adomdCmd.CommandText = dmxQuery;
+            adomdCmd.Execute();
 
             MessageBox.Show("Анализ данных успешно завершен.");           
              
@@ -79,97 +102,97 @@ namespace dataMining_demo
             f2.Show();
         }
 
-        Database CreateDatabase()
-        {
-            // Create a database and set the properties
-            Database db = null; 
-            if ((svr != null) && (svr.Connected))
-            {
-                db = svr.Databases.FindByName("demo_DM");
-                if (db == null)
-                {
-                    db = svr.Databases.Add("demo_DM");
-                    db.Update();
-                }
+        //Database CreateDatabase()
+        //{
+        //    // Create a database and set the properties
+        //    Database db = null; 
+        //    if ((svr != null) && (svr.Connected))
+        //    {
+        //        db = svr.Databases.FindByName("demo_DM");
+        //        if (db == null)
+        //        {
+        //            db = svr.Databases.Add("demo_DM");
+        //            db.Update();
+        //        }
 
-            }
-
-
-            return db;
-        }
-
-        void ProcessDatabase(Database db)
-        {
-            //Trace t;
-            //TraceEvent e;
-
-            // create the trace object to trace progress reports
-            // and add the column containing the progress description
-            //t = svr.Traces.Add();
-            //e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
-            //e.Columns.Add(TraceColumn.TextData);
-            //t.Update();
-
-            // Add the handler for the trace event
-            //t.OnEvent += new TraceEventHandler(ProgressReportHandler);
-            try
-            {
-                // start the trace, process of the database, then stop it
-                //t.Start();
-                db.Process(ProcessType.ProcessFull);
-                //t.Stop();
+        //    }
 
 
-            }
-            catch (System.Exception /*ex*/)
-            {
-                MessageBox.Show("Произошла ошибка обработки БД");
-            }
+        //    return db;
+        //}
 
-        }
+        //void ProcessDatabase(Database db)
+        //{
+        //    //Trace t;
+        //    //TraceEvent e;
 
-        void ProgressReportHandler(object sender, TraceEventArgs e)
-        {
-            Console.WriteLine(e[TraceColumn.TextData]);
-        }
+        //    // create the trace object to trace progress reports
+        //    // and add the column containing the progress description
+        //    //t = svr.Traces.Add();
+        //    //e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
+        //    //e.Columns.Add(TraceColumn.TextData);
+        //    //t.Update();
 
-        void SetModelPermissions(Database db, MiningModel mm)
-        {
-            // Create a new role and add members
-
-            Role r = db.Roles.FindByName("ModelReader");
-            if (r == null)
-            {
-                r = new Role("ModelReader", "ModelReader");
-
-                String userName = SystemInformation.UserName;
-                String PCName = Environment.MachineName;
-
-                r.Members.Add(new RoleMember(PCName + "\\" + userName));
-
-                // Add the role to the database and update
-                db.Roles.Add(r);
-                r.Update();
-
-                // Create a permission object referring the role
-                MiningModelPermission mmp = new MiningModelPermission();
-                mmp.Name = "ModelReader";
-                mmp.ID = "ModelReader";
-                mmp.RoleID = "ModelReader";
-
-                // Assign access rights to the permission
-                mmp.Read = ReadAccess.Allowed;
-                mmp.AllowBrowsing = true;
-                mmp.AllowDrillThrough = true;
-                mmp.ReadDefinition = ReadDefinitionAccess.Allowed;
+        //    // Add the handler for the trace event
+        //    //t.OnEvent += new TraceEventHandler(ProgressReportHandler);
+        //    try
+        //    {
+        //        // start the trace, process of the database, then stop it
+        //        //t.Start();
+        //        db.Process(ProcessType.ProcessFull);
+        //        //t.Stop();
 
 
-                // Add permission to the model and update
-                mm.MiningModelPermissions.Add(mmp);
-                mmp.Update();
-            }
+        //    }
+        //    catch (System.Exception /*ex*/)
+        //    {
+        //        MessageBox.Show("Произошла ошибка обработки БД");
+        //    }
+
+        //}
+
+        //void ProgressReportHandler(object sender, TraceEventArgs e)
+        //{
+        //    Console.WriteLine(e[TraceColumn.TextData]);
+        //}
+
+        //void SetModelPermissions(Database db, MiningModel mm)
+        //{
+        //    // Create a new role and add members
+
+        //    Role r = db.Roles.FindByName("ModelReader");
+        //    if (r == null)
+        //    {
+        //        r = new Role("ModelReader", "ModelReader");
+
+        //        String userName = SystemInformation.UserName;
+        //        String PCName = Environment.MachineName;
+
+        //        r.Members.Add(new RoleMember(PCName + "\\" + userName));
+
+        //        // Add the role to the database and update
+        //        db.Roles.Add(r);
+        //        r.Update();
+
+        //        // Create a permission object referring the role
+        //        MiningModelPermission mmp = new MiningModelPermission();
+        //        mmp.Name = "ModelReader";
+        //        mmp.ID = "ModelReader";
+        //        mmp.RoleID = "ModelReader";
+
+        //        // Assign access rights to the permission
+        //        mmp.Read = ReadAccess.Allowed;
+        //        mmp.AllowBrowsing = true;
+        //        mmp.AllowDrillThrough = true;
+        //        mmp.ReadDefinition = ReadDefinitionAccess.Allowed;
+
+
+        //        // Add permission to the model and update
+        //        mm.MiningModelPermissions.Add(mmp);
+        //        mmp.Update();
+        //    }
             
-        }
+        //}
 
         private void button3_Click(object sender, EventArgs e)
         {
