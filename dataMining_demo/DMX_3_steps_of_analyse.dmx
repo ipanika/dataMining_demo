@@ -5,6 +5,8 @@ CREATE MINING STRUCTURE [Market Basket] (
     )
 )
 
+//--------------------------------------------
+
 ALTER MINING STRUCTURE [Market Basket]
 ADD MINING MODEL [Default Association]
 (
@@ -13,9 +15,10 @@ ADD MINING MODEL [Default Association]
         [Model]
     )
 )
-Using Microsoft_Association_Rules
+Using Microsoft_Clustering
 
-
+//-------------------------------------------
+ 
 INSERT INTO MINING STRUCTURE [Market Basket]
 (
    [OrderNumber],[Products] (SKIP, [Model])

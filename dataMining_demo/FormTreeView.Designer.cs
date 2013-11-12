@@ -34,6 +34,9 @@
             // 
             // treeView1
             // 
+            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Location = new System.Drawing.Point(12, 26);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(260, 220);
@@ -48,7 +51,7 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Дерево объектов:";
             // 
-            // TreeViewForm
+            // FormTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -57,7 +60,7 @@
             this.Controls.Add(this.treeView1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "TreeViewForm";
+            this.Name = "FormTreeView";
             this.Text = "Дерево объектов";
             this.Load += new System.EventHandler(this.TreeViewForm_Load);
             this.ResumeLayout(false);

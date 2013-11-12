@@ -41,6 +41,8 @@ namespace dataMining_demo
         // функция заполняет dataGridView выборкой данных из представления
         private void fillDataGridView(string dsvName, string filter)
         {
+            dataGridView1.DataSource = null;
+
             // получение списка доступных представлений:
             string strQuery = "";
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
@@ -98,7 +100,7 @@ namespace dataMining_demo
         {
             string dsvName = comboBox1.Text;
             string filter = textBox1.Text;
-
+            
             fillDataGridView(dsvName, filter);
 
         }
@@ -124,6 +126,10 @@ namespace dataMining_demo
             string idDSV = sqlCmd.ExecuteScalar().ToString();
             string selName = textBox2.Text;
             string filter = textBox1.Text;
+
+            //проверка вставляемых значений на наличие кавычечк
+            selName = checkQuotes(selName);
+            filter = checkQuotes(filter);
 
             sqlCmd.CommandText = "INSERT INTO [selections] ([id_dsv], [name], [filter])  VALUES ('" + idDSV+ "', '" +selName + "', '" + filter+ "')";
             sqlCmd.ExecuteNonQuery();
@@ -172,6 +178,23 @@ namespace dataMining_demo
 
             this.Close();
 
+        }
+
+        private string checkQuotes(string word)
+        {
+            string newWord = "";
+
+            for (int i = 0; i < word.Length; i++ )
+            {
+                newWord += word[i];
+                if (word[i].ToString() == "'")
+                {
+                    newWord += word[i];
+                }
+
+            }
+
+            return newWord;
         }
     }
 }

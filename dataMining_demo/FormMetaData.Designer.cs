@@ -38,6 +38,9 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -69,7 +72,7 @@
             this.Column4.HeaderText = "Мощность кластера";
             this.Column4.Name = "Column4";
             // 
-            // MetaDataForm
+            // FormMetaData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -77,7 +80,7 @@
             this.Controls.Add(this.dataGridView1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "MetaDataForm";
+            this.Name = "FormMetaData";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.MetaDataForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

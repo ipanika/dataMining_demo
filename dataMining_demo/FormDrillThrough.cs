@@ -90,7 +90,9 @@ namespace dataMining_demo
             List<string> attr_support = new List<string>();
 
             Series series;
+            
             chart1.Series.Clear();
+            //chart1.ChartAreas.Clear();
 
             while (reader.Read())
             {

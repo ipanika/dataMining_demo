@@ -40,6 +40,9 @@
             // 
             // chart1
             // 
+            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Location = new System.Drawing.Point(12, 91);
@@ -87,7 +90,7 @@
             this.comboBox2.TabIndex = 2;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
-            // DrillThroughForm
+            // FormDrillThrough
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -99,7 +102,7 @@
             this.Controls.Add(this.chart1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DrillThroughForm";
+            this.Name = "FormDrillThrough";
             this.Text = "DrillThroughForm";
             this.Load += new System.EventHandler(this.DrillThroughForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();

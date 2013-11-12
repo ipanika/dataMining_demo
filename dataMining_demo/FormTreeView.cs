@@ -14,8 +14,8 @@ namespace dataMining_demo
     public partial class FormTreeView : Form
     {
 
-        Server svr = new Server();
-        Database db = new Database();
+        //Server svr = new Server();
+        //Database db = new Database();
 
         public FormTreeView()
         {
@@ -24,12 +24,12 @@ namespace dataMining_demo
 
         private void TreeViewForm_Load(object sender, EventArgs e)
         {
-            svr.Connect("localhost");
+            //svr.Connect("localhost");
 
-            if ((svr != null) && (svr.Connected))
-            {
-                db = svr.Databases.FindByName("demo_DM");
-            }
+            //if ((svr != null) && (svr.Connected))
+            //{
+            //    db = svr.Databases.FindByName("demo_DM");
+            //}
 
 
             DataTable dtDsv = new DataTable();
@@ -38,39 +38,42 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select [dsv_name] from [demo_dsv]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter("select [id_dsv], [name] from [data_source_views]", cn);
             sqlDA.Fill(dtDsv);
             
             for (int i = 0; i < dtDsv.Rows.Count; i++)
             {
-                DataTable dtStr = new DataTable();
-                string dsvName = dtDsv.Rows[i]["dsv_name"].ToString();
+                string dsvID = dtDsv.Rows[i][0].ToString();
+                string dsvName = dtDsv.Rows[i][1].ToString();
                 TreeNode dsvNode = new TreeNode(dsvName);
 
                 treeView1.Nodes.Add(dsvNode);
 
-                sqlDA = new SqlDataAdapter("select [mstr_name] from [demo_mstr] where [dsv_name] = '"+dsvName + "'", cn);
+                DataTable dtSel = new DataTable();
+                sqlDA = new SqlDataAdapter("select [id_selection], [name] from [selections] where [id_dsv] = '"+dsvID + "'", cn);
+                sqlDA.Fill(dtSel);
 
-                sqlDA.Fill(dtStr);
-                if (dtStr != null)
-                    for (int j = 0; j < dtStr.Rows.Count; j++)
+                if (dtSel != null)
+                    for (int j = 0; j < dtSel.Rows.Count; j++)
                     {
-                        DataTable dtM = new DataTable();
-                        string strName = dtStr.Rows[j]["mstr_name"].ToString();
-                        TreeNode strNode = new TreeNode(strName);
+                        string selID = dtSel.Rows[j][0].ToString();
+                        string selName = dtSel.Rows[j][1].ToString();
+                        TreeNode selNode = new TreeNode(selName);
 
-                        dsvNode.Nodes.Add(strNode);
+                        dsvNode.Nodes.Add(selNode);
 
-                        sqlDA = new SqlDataAdapter("select [mm_name] from [demo_mm] where [mstr_name] = '" + strName + "'", cn);
-                        sqlDA.Fill(dtM);
+                        DataTable dtStr = new DataTable();
+                        sqlDA = new SqlDataAdapter("select [id_structure], [name] from [structures] where [id_selection] = '" + selID + "'", cn);
+                        sqlDA.Fill(dtStr);
 
-                        if (dtM != null)
-                            for (int k = 0; k < dtM.Rows.Count; k++)
+                        if (dtStr != null)
+                            for (int k = 0; k < dtStr.Rows.Count; k++)
                             {
-                                string mName = dtM.Rows[k]["mm_name"].ToString();
-                                TreeNode mNode = new TreeNode(mName);
+                                string strID = dtStr.Rows[k][0].ToString();
+                                string strName = dtStr.Rows[k][1].ToString();
+                                TreeNode strNode = new TreeNode(strName);
 
-                                strNode.Nodes.Add(mNode);
+                                selNode.Nodes.Add(strNode);
                             }
                     }
                 
