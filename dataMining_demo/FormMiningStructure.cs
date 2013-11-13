@@ -197,86 +197,15 @@ namespace dataMining_demo
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();
             adomdCmd.CommandText = dmxQuery;
-            adomdCmd.Execute();
-
-            //// Initialize a new mining structure
-            //MiningStructure ms = new MiningStructure(strName, strName);
-            //ms.Source = new DataSourceViewBinding(dsvName);
-
-            //var colForMStr = new List<ScalarMiningStructureColumn>();
-            //int i = 0;
-
-
-            //for (i = 0; i<dataGridView1.Rows.Count-1; i++)
-
-            //{
-            //    DataGridViewRow drv = dataGridView1.Rows[i];
-            //    // если параметр отмечен для входа, то для ее параметров создать 
-            //    // столбец в структуре ИАД
-            //    if (drv.Cells[1].Value.Equals(true))
-            //    {
-            //        string rowName = drv.Cells[0].Value.ToString();
-            //        ScalarMiningStructureColumn colItem = new ScalarMiningStructureColumn(rowName, rowName);
-                    
-            //        // если параметр отмечен как ключ:
-            //        if (drv.Cells[2].Value.Equals(true))
-            //        {
-            //            colItem.IsKey = true;
-            //            colItem.Content = MiningStructureColumnContents.Key;
-            //        }
-
-            //       switch (drv.Cells[3].Value.ToString())
-            //       {
-            //            case "TEXT":
-            //                colItem.Type = MiningStructureColumnTypes.Text;
-            //                colItem.KeyColumns.Add("SourceData$", rowName, System.Data.OleDb.OleDbType.WChar);
-            //                break;
-            //            case "LONG":
-            //                colItem.Type = MiningStructureColumnTypes.Long;
-            //                colItem.KeyColumns.Add("SourceData$", rowName, System.Data.OleDb.OleDbType.Integer);
-            //                break;
-            //            case "DOUBLE":
-            //                colItem.Type = MiningStructureColumnTypes.Double;
-            //                colItem.KeyColumns.Add("SourceData$", rowName, System.Data.OleDb.OleDbType.Double);
-            //                break;
-            //            case "DATE":
-            //                colItem.Type = MiningStructureColumnTypes.Date;
-            //                colItem.KeyColumns.Add("SourceData$", rowName, System.Data.OleDb.OleDbType.Date);
-            //                break;
-            //        };
-
-            //        switch (drv.Cells[4].Value.ToString())
-            //        {
-            //            case "CONTINUOUS":
-            //                colItem.Content = MiningStructureColumnContents.Continuous;
-            //                break;
-            //            case "DISCRETE":
-            //                colItem.Content = MiningStructureColumnContents.Discrete;
-            //                break;
-            //            case "DISCRETIZED":
-            //                colItem.Content = MiningStructureColumnContents.Discretized;
-            //                break;
-            //            case "KEY":
-            //                colItem.Content = MiningStructureColumnContents.Key;
-            //                break;
-            //        }
-
-            //        colForMStr.Add(colItem);
-            //        ms.Columns.Add(colItem);
-            //    };
-            //}
-
-            //db.MiningStructures.Add(ms);
-            //ms.Update();
-
-            //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-                
-            //if (cn.State == ConnectionState.Closed)
-            //    cn.Open();
-
-            //SqlCommand sqlCmd = new SqlCommand("INSERT INTO [demo_mstr]  VALUES ('" + strName + "', '" + dsvName + "')", cn);
-            //sqlCmd.ExecuteNonQuery();
-
+            try
+            {
+                adomdCmd.Execute();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+            
             this.Close();
 
         }

@@ -57,15 +57,22 @@ namespace dataMining_demo
                       "ON [dbo].[data_source_views].name = '" + dsvName + "' " +
                       "AND [dbo].[dsv_columns].id_dsv = dbo.data_source_views.id_dsv";
 
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                try 
                 {
-                    strQuery += " [" + reader.GetString(0) + "],";
-                }
+                    SqlDataReader reader = cmd.ExecuteReader();
 
+                    while (reader.Read())
+                    {
+                        strQuery += " [" + reader.GetString(0) + "],";
+                    }
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
                 if (strQuery != "")
                     strQuery = strQuery.Substring(0, strQuery.Length - 1);
+                
 
             }
             catch (Exception e)
@@ -123,7 +130,15 @@ namespace dataMining_demo
             SqlCommand sqlCmd = new SqlCommand();//("INSERT INTO [selections]  VALUES ('" + dsvName + "')", cn);
             sqlCmd.CommandText = "SELECT id_dsv FROM data_source_views WHERE name = '" +  comboBox1.Text + "'";
             sqlCmd.Connection = cn;
-            string idDSV = sqlCmd.ExecuteScalar().ToString();
+            string idDSV = "";
+            try
+            {
+                idDSV = sqlCmd.ExecuteScalar().ToString();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
             string selName = textBox2.Text;
             string filter = textBox1.Text;
 
@@ -132,14 +147,30 @@ namespace dataMining_demo
             filter = checkQuotes(filter);
 
             sqlCmd.CommandText = "INSERT INTO [selections] ([id_dsv], [name], [filter])  VALUES ('" + idDSV+ "', '" +selName + "', '" + filter+ "')";
-            sqlCmd.ExecuteNonQuery();
+            try
+            {
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+
 
             // заполнение таблицы selection_content
 
             // получение id созданной выборки
             sqlCmd.CommandText = "SELECT id_selection FROM selections WHERE name = '" + selName + "'";
             sqlCmd.Connection = cn;
-            string idSel = sqlCmd.ExecuteScalar().ToString();
+            string idSel = "";
+            try
+            {
+                idSel = sqlCmd.ExecuteScalar().ToString();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
             string dsvName = textBox2.Text;
 
             // получение списка идентификаторов столбцов для текущей выборки 
@@ -174,7 +205,14 @@ namespace dataMining_demo
 
             sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
             sqlCmd.Connection = cn;
-            sqlCmd.ExecuteNonQuery();
+            try
+            {
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
 
             this.Close();
 

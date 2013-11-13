@@ -19,30 +19,39 @@ namespace dataMining_demo
 
         private void MetaDataForm_Load(object sender, EventArgs e)
         {
-            // запрос к метаданным модели, выбранной на главной форме
-            AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
-            cn.Open();
-
-            AdomdCommand cmd = cn.CreateCommand();
-            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
-            cmd.CommandText = "SELECT NODE_CAPTION, NODE_DESCRIPTION, NODE_PROBABILITY, NODE_SUPPORT FROM [" + modelName + "].CONTENT";
-            //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
-
-            AdomdDataReader reader = cmd.ExecuteReader();
-            dataGridView1.AutoGenerateColumns = true;
-
-            while (reader.Read())
+            try
             {
-                DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+                // запрос к метаданным модели, выбранной на главной форме
+                AdomdConnection cn = new AdomdConnection();
+                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                cn.Open();
 
-                for (int i = 0; i < reader.FieldCount; i++)
+                AdomdCommand cmd = cn.CreateCommand();
+                string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+                cmd.CommandText = "SELECT NODE_CAPTION, NODE_DESCRIPTION, NODE_PROBABILITY, NODE_SUPPORT FROM [" + modelName + "].CONTENT";
+                //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
+
+           
+                AdomdDataReader reader = cmd.ExecuteReader();
+                dataGridView1.AutoGenerateColumns = true;
+
+                while (reader.Read())
                 {
-                    dvr.Cells[i].Value = reader.GetValue(i);
-                    
-                    //MessageBox.Show(reader.GetValue(i).ToString());
+                    DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        dvr.Cells[i].Value = reader.GetValue(i);
+
+                        //MessageBox.Show(reader.GetValue(i).ToString());
+                    }
+                    dataGridView1.Rows.Add(dvr);
                 }
-                dataGridView1.Rows.Add(dvr);
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+                this.Close();
             }
         }
     }

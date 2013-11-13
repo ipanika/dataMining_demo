@@ -24,14 +24,6 @@ namespace dataMining_demo
 
         private void TreeViewForm_Load(object sender, EventArgs e)
         {
-            //svr.Connect("localhost");
-
-            //if ((svr != null) && (svr.Connected))
-            //{
-            //    db = svr.Databases.FindByName("demo_DM");
-            //}
-
-
             DataTable dtDsv = new DataTable();
 
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
@@ -74,6 +66,36 @@ namespace dataMining_demo
                                 TreeNode strNode = new TreeNode(strName);
 
                                 selNode.Nodes.Add(strNode);
+
+                                DataTable dtMod = new DataTable();
+                                sqlDA = new SqlDataAdapter("select [id_model], [name] from [models] where [id_structure] = '" + strID + "'", cn);
+                                sqlDA.Fill(dtMod);
+
+                                if (dtMod != null)
+                                    for (int l = 0; l < dtMod.Rows.Count; l++)
+                                    {
+                                        string modID = dtMod.Rows[l][0].ToString();
+                                        string modName = dtMod.Rows[l][1].ToString();
+                                        TreeNode modNode = new TreeNode(modName);
+
+                                        strNode.Nodes.Add(modNode);
+
+                                        DataTable dtAlgVar = new DataTable();
+                                        sqlDA = new SqlDataAdapter("select [algorithm_variants].[name] from [algorithm_variants] JOIN [models] ON "+
+                                                  " models.id_algorithm_variant = algorithm_variants.id_algorithm_variant AND " +
+                                                  " models.name =  '" + modName + "'", cn);
+                                        sqlDA.Fill(dtAlgVar);
+
+                                        if (dtAlgVar != null)
+                                            for (int m = 0; m < dtAlgVar.Rows.Count; m++)
+                                            {
+                                                //string algVarID = dtMod.Rows[m][0].ToString();
+                                                string algVarName = dtAlgVar.Rows[m][0].ToString();
+                                                TreeNode algVarNode = new TreeNode(algVarName);
+
+                                                modNode.Nodes.Add(algVarNode);
+                                            }
+                                    }
                             }
                     }
                 

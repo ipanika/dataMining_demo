@@ -105,11 +105,26 @@ namespace dataMining_demo
             SqlCommand sqlCmd = new SqlCommand();
             sqlCmd.CommandText = "SELECT id_algorithm FROM algorithms WHERE name = '" + algName + "'";
             sqlCmd.Connection = cn;
-            
-            string idAlg = sqlCmd.ExecuteScalar().ToString();
+
+            string idAlg = "";
+            try
+            {
+                idAlg = sqlCmd.ExecuteScalar().ToString();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
 
             sqlCmd.CommandText = "INSERT INTO [algorithm_variants] VALUES ('" + idAlg + "', '" + algVarName + "')";
-            sqlCmd.ExecuteNonQuery();
+            try
+            {
+                sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
 
             sqlCmd.CommandText = "SELECT id_algorithm_variant FROM algorithm_variants WHERE name = '" + algVarName + "'";
             sqlCmd.Connection = cn;

@@ -50,48 +50,58 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string dmxQuery = "";
+            try
+            {
+                string dmxQuery = "";
 
-            dmxQuery += "INSERT INTO [" + modelName + "] (";
+                dmxQuery += "INSERT INTO [" + modelName + "] (";
 
-            // получение списка столбцов текущей структуры
+                // получение списка столбцов текущей структуры
 
-            string sqlQuery = "";
-            sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
-                        " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
-                        " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
-                        " structures.id_selection = selections.id_selection JOIN models ON" +
-                        " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
+                string sqlQuery = "";
+                sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
+                            " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
+                            " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
+                            " structures.id_selection = selections.id_selection JOIN models ON" +
+                            " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-            DataTable dt = new DataTable();
+                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+                DataTable dt = new DataTable();
 
-            // Create data adapters from database tables and load schemas
-            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-            sqlDA.Fill(dt);
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+                sqlDA.Fill(dt);
 
-            // строка, содержащая имена столбцов структуры (модели)
-            string colNames = "";
-            for (int i = 0; i < dt.Rows.Count; i++)
-                colNames += " [" + dt.Rows[i][0].ToString() + "],";
+                // строка, содержащая имена столбцов структуры (модели)
+                string colNames = "";
+                for (int i = 0; i < dt.Rows.Count; i++)
+                    colNames += " [" + dt.Rows[i][0].ToString() + "],";
 
-            colNames = colNames.Substring(0, colNames.Length - 1);
+                colNames = colNames.Substring(0, colNames.Length - 1);
 
-            dmxQuery += colNames + ")" +
-                    " openquery ([demo_ds], ' SELECT " + colNames +
-                    " FROM SourceData$')";
+                dmxQuery += colNames + ")" +
+                        " openquery ([demo_ds], ' SELECT " + colNames +
+                        " FROM SourceData$')";
 
 
-            // создание соединения с сервером и команды для отправки dmx-запроса
-            AdomdConnection adomdCn = new AdomdConnection();
-            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
-            adomdCn.Open();
+                // создание соединения с сервером и команды для отправки dmx-запроса
+                AdomdConnection adomdCn = new AdomdConnection();
+                adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                adomdCn.Open();
 
-            AdomdCommand adomdCmd = adomdCn.CreateCommand();
-            adomdCmd.CommandText = dmxQuery;
-            adomdCmd.Execute();
+                AdomdCommand adomdCmd = adomdCn.CreateCommand();
+                adomdCmd.CommandText = dmxQuery;
+            
 
-            MessageBox.Show("Анализ данных успешно завершен.");           
+                adomdCmd.Execute();
+
+                MessageBox.Show("Анализ данных успешно завершен.");    
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+       
              
         }
 
