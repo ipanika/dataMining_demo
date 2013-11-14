@@ -83,7 +83,7 @@ namespace dataMining_demo
             
             if (strQuery != "")
             {
-                cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+                cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
                 cn.Open();
                 
                 string strSelect = "SELECT " + strQuery + " " + "FROM SourceData$";

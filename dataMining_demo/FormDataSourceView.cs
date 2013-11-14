@@ -31,13 +31,11 @@ namespace dataMining_demo
             {
                 db = svr.Databases.FindByName("demo_DM");
                 
-                //db = svr.Databases.Add("demo_DM");
-                //db.Update();
             }
 
             // создать соединение с БД
             DataTable dt = new DataTable();
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -82,7 +80,7 @@ namespace dataMining_demo
             // by specifying the name and the id
             string dsName = "demo_ds";
             RelationalDataSource ds = new RelationalDataSource(dsName, Utils.GetSyntacticallyValidID(dsName, typeof(Database)));
-            ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_source";
+            ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DW";
 
             if (db.DataSources.FindByName(dsName) == null){
                 
@@ -92,7 +90,7 @@ namespace dataMining_demo
 
             // Create connection to datasource cto extract schema to a dataset
             DataSet dset = new DataSet();
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
 
             string argsForQuery = " ";
             string strQuery = "";

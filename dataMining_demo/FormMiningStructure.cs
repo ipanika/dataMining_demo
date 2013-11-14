@@ -212,7 +212,7 @@ namespace dataMining_demo
         
         private void getColumnType(string colName, DataTable dt, SqlConnection cn)
         {
-            cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_source; Integrated Security=true");
+            cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
             cn.Open();
             SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT t.name AS type_name FROM sys.columns AS c  " +
                                                " JOIN sys.types AS t ON c.user_type_id=t.user_type_id " +
