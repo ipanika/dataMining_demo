@@ -171,7 +171,45 @@ namespace dataMining_demo
                 if (drv.Cells[1].Value.Equals(true))
                 {
                     // получение имени столбца
-                    dmxQuery += " [" + drv.Cells[0].Value + "]";
+                    string parName = drv.Cells[0].Value.ToString();
+
+                    // замена недопустимых символов
+                    parName = parName.Replace(".", "_");
+                    parName = parName.Replace(",", "_");
+
+                    parName = parName.Replace(";", "_");
+                    parName = parName.Replace("'", "_");
+
+                    parName = parName.Replace("`", "_");
+                    parName = parName.Replace(":", "_");
+
+                    parName = parName.Replace("/", "_");
+                    parName = parName.Replace("\\", "_");
+                    parName = parName.Replace("*", "_");
+                    parName = parName.Replace("|", "_");
+
+                    parName = parName.Replace("?", "_");
+                    parName = parName.Replace("\"", "_");
+                    parName = parName.Replace("&", "_");
+                    parName = parName.Replace("%", "_");
+
+                    parName = parName.Replace("$", "_");
+                    parName = parName.Replace("!", "_");
+                    parName = parName.Replace("+", "_");
+                    parName = parName.Replace("=", "_");
+
+                    parName = parName.Replace("(", "_");
+                    parName = parName.Replace(")", "_");
+                    parName = parName.Replace("{", "_");
+                    parName = parName.Replace("}", "_");
+
+                    parName = parName.Replace("<", "_");
+                    parName = parName.Replace(">", "_");
+
+                    if (parName.Length > 99)
+                        parName = parName.Substring(0, 99);
+
+                    dmxQuery += " [" + parName + "]";
 
                     // получение типа данных столбца
                     dmxQuery += " " + drv.Cells[3].Value;
@@ -265,30 +303,38 @@ namespace dataMining_demo
 
                         getColumnType(colName, dt, cn);
 
-                        int j = 0;
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            switch (dr[0].ToString())
-                            {
-                                case "nvarchar":
-                                case "text":
-                                    dvr.Cells[3].Value = "TEXT";
-                                    break;
-                                case "float":
-                                    dvr.Cells[3].Value = "DOUBLE";
-                                    break;
-                                case "int":
-                                case "bigint":
-                                    dvr.Cells[3].Value = "LONG";
-                                    break;
-                                case "date":
-                                case "datetime":
-                                case "datetime2":
-                                    dvr.Cells[3].Value = "DATE";
-                                    break;
-                            }
-                            j++;
-                        }
+                        if (colName.Contains("ID"))
+                            dvr.Cells[3].Value = "LONG";
+                        else if (colName.Contains("Year"))
+                            dvr.Cells[3].Value = "DATE";
+                        else if (colName.Contains("Name"))
+                            dvr.Cells[3].Value = "TEXT";
+                        else
+                            dvr.Cells[3].Value = "DOUBLE";
+                        //int j = 0;
+                        //foreach (DataRow dr in dt.Rows)
+                        //{
+                        //    switch (dr[0].ToString())
+                        //    {
+                        //        case "nvarchar":
+                        //        case "text":
+                        //            dvr.Cells[3].Value = "TEXT";
+                        //            break;
+                        //        case "float":
+                        //            dvr.Cells[3].Value = "DOUBLE";
+                        //            break;
+                        //        case "int":
+                        //        case "bigint":
+                        //            dvr.Cells[3].Value = "LONG";
+                        //            break;
+                        //        case "date":
+                        //        case "datetime":
+                        //        case "datetime2":
+                        //            dvr.Cells[3].Value = "DATE";
+                        //            break;
+                        //    }
+                        //    j++;
+                        //}
 
                         DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
                         cmbbx.DataSource = contentType;

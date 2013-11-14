@@ -44,7 +44,7 @@ namespace dataMining_demo
             dataGridView1.DataSource = null;
 
             // получение списка доступных представлений:
-            string strQuery = "";
+            //string strQuery = "";
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             cn.Open();
 
@@ -57,23 +57,101 @@ namespace dataMining_demo
                       "ON [dbo].[data_source_views].name = '" + dsvName + "' " +
                       "AND [dbo].[dsv_columns].id_dsv = dbo.data_source_views.id_dsv";
 
+                List<string> colNames = new List<string>();
+                List<string> colNumbers = new List<string>();
+
                 try 
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        strQuery += " [" + reader.GetString(0) + "],";
+                        //strQuery += " [" + reader.GetString(0) + "],";
+                        string colNm = reader.GetString(0);
+
+                        colNames.Add(colNm);
+
+                        SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+                        cn2.Open();
+                        SqlCommand sqlCmd = new SqlCommand();
+
+                        sqlCmd.CommandText = "SELECT numLine FROM BalanceLine WHERE description = '" + colNm + "'";
+                        sqlCmd.Connection = cn2;
+                        string numLine = "";
+                        object obj = sqlCmd.ExecuteScalar();
+
+                        try
+                        {
+                            if (obj != null)
+                            {
+                                numLine = obj.ToString();
+                                colNumbers.Add("[" + numLine + "]");
+                            }
+                            else
+                                colNumbers.Add(" ");
+                        }
+                        catch (Exception e1)
+                        {
+                            MessageBox.Show(e1.Message);
+                        }
                     }
                 }
                 catch (Exception e1)
                 {
                     MessageBox.Show(e1.Message);
                 }
-                if (strQuery != "")
-                    strQuery = strQuery.Substring(0, strQuery.Length - 1);
+                //if (strQuery != "")
+                //    strQuery = strQuery.Substring(0, strQuery.Length - 1);
                 
+                //if (strQuery != "")
+                if (colNames.Count > 0)
+                {
+                    cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+                    cn.Open();
 
+                    string strSelect = "SELECT ";// +strQuery + " " + "FROM SourceData$";
+                    for (int i = 0; i < colNames.Count; i++)
+                    {
+                        if (colNumbers[i] != " ")
+                            strSelect += " " + colNumbers[i] + " AS '" + colNames[i] + "',";
+                        else
+                            strSelect += " " + colNames[i] + ",";
+                    }
+
+                    strSelect = strSelect.Substring(0, strSelect.Length - 1);
+
+                    strSelect += "FROM " +
+                                    "(SELECT     BalanceReport.companyID, Company.Name, BalanceReport.YearID,  " +
+                                    "BalanceLine.numLine, BalanceReport.PeriodEnd FROM BalanceReport " +
+                                    "INNER JOIN BalanceLine ON BalanceReport.balanceLineID = BalanceLine.lineID " +
+                                    "INNER JOIN Company ON BalanceReport.CompanyID = Company.CompanyID " +
+                                    "INNER JOIN Year ON BalanceReport.YearID = Year.YearID) p " +
+                                    "PIVOT (sum (PeriodEnd) FOR numline IN (";
+                    for (int i = 0; i < colNumbers.Count; i++)
+                    {
+                        if (colNumbers[i] != " ")
+                            strSelect += " " + colNumbers[i] + ",";
+                    }
+                    
+                    strSelect = strSelect.Substring(0, strSelect.Length - 1);
+
+                    strSelect += ") ) AS pvt";
+
+                    if (filter != "")
+                    {
+                        strSelect += " WHERE " + filter;
+                    }
+
+                    strSelect += " ORDER BY pvt.CompanyID";
+
+                    SqlDataAdapter sqlDA;
+                    sqlDA = new SqlDataAdapter(strSelect, cn);
+
+                    DataTable dt = new DataTable();
+                    sqlDA.Fill(dt);
+
+                    dataGridView1.DataSource = dt;
+                }
             }
             catch (Exception e)
             {
@@ -81,25 +159,7 @@ namespace dataMining_demo
             }
             
             
-            if (strQuery != "")
-            {
-                cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
-                cn.Open();
-                
-                string strSelect = "SELECT " + strQuery + " " + "FROM SourceData$";
-                if (filter != "")
-                {
-                    strSelect += " WHERE " + filter;
-                }
-
-                SqlDataAdapter sqlDA;
-                sqlDA = new SqlDataAdapter(strSelect, cn);
-
-                DataTable dt = new DataTable();
-                sqlDA.Fill(dt);
-
-                dataGridView1.DataSource = dt;
-            }
+            
         }
 
 
@@ -197,7 +257,10 @@ namespace dataMining_demo
                 {
                     strInsert += " (" + idSel + ","; //id_selection
                     strInsert += " " + dt.Rows[j][0].ToString() + ","; // id_column
-                    strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
+                    //if (dataGridView1.Rows[i].Cells[j].Value != null)
+                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
+                    //else
+                        //strInsert += " null'),"; // column_value
                 }
             }
 

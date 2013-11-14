@@ -37,6 +37,8 @@
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(12, 64);
             this.checkedListBox1.Name = "checkedListBox1";
@@ -78,7 +80,7 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Имя представления:";
             // 
-            // DataSourceViewForm
+            // FormDataSourceView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,7 +92,7 @@
             this.Controls.Add(this.checkedListBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DataSourceViewForm";
+            this.Name = "FormDataSourceView";
             this.Text = "Создание представления";
             this.Load += new System.EventHandler(this.Form2_Load);
             this.ResumeLayout(false);

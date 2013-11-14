@@ -34,23 +34,49 @@ namespace dataMining_demo
             }
 
             // создать соединение с БД
-            DataTable dt = new DataTable();
+            //DataTable dt = new DataTable();
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_CATALOG = 'demo_source' AND TABLE_NAME = 'SourceData$'", cn);
-            sqlDA.Fill(dt);
+            //SqlDataAdapter sqlDA = new SqlDataAdapter("select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_CATALOG = 'dw' ", cn); //AND TABLE_NAME = 'SourceData$'
+            //sqlDA.Fill(dt);
 
             
-            if (dt.Rows.Count > 0)
-            {
-                checkedListBox1.CheckOnClick = true;
-                checkedListBox1.DataSource = dt;
-                checkedListBox1.DisplayMember = "COLUMN_NAME";
-            }
+            //if (dt.Rows.Count > 0)
+            //{
+            //    checkedListBox1.CheckOnClick = true;
+            //    checkedListBox1.DataSource = dt;
+            //    checkedListBox1.DisplayMember = "COLUMN_NAME";
+            //}
 
-            
+            List<string> columnNames = new List<string>();
+
+            columnNames.Add("CompanyID");
+            columnNames.Add("Name");
+            columnNames.Add("Нематериальные активы");
+            columnNames.Add("YearID");
+            columnNames.Add("Основные средства");
+            columnNames.Add("Незавершенное строительство");
+            columnNames.Add("Доходные вложения в материал.ценности");
+            columnNames.Add("Отложенные налоговые активы");
+            columnNames.Add("Прочие внеоборотные активы");
+            columnNames.Add("Запасы");
+            columnNames.Add("в т.ч. сырье и материалы");
+            columnNames.Add("животные на выращивание и откорме");
+            columnNames.Add("затраты в НЗП");
+            columnNames.Add("готовая продукция и товары");
+            columnNames.Add("товары отгруженные");
+            columnNames.Add("РБП");
+            columnNames.Add("прочие запасы и затраты");
+            columnNames.Add("НДС");
+            columnNames.Add("ДЗ долгосрочная");
+            columnNames.Add("ДЗ краткосрочная");
+            columnNames.Add("покупатели и заказчики");
+
+            checkedListBox1.DataSource = columnNames;
+            checkedListBox1.CheckOnClick = true;
+
             for (int i = 0; i < checkedListBox1.Items.Count; i++)
                 checkedListBox1.SetItemChecked(i, true);
         }
@@ -63,9 +89,9 @@ namespace dataMining_demo
             // создание массива с именами столбцов, выбранных для представления
             foreach (object obj in checkedListBox1.CheckedItems)
             {
-                DataRowView drv;
-                drv = (System.Data.DataRowView) obj;
-                colForDSV.Add(drv["COLUMN_NAME"].ToString());
+                //DataRowView drv;
+                //drv = (System.Data.DataRowView) obj;
+                colForDSV.Add(obj.ToString());
                 i += 1;
             }
 
