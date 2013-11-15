@@ -303,7 +303,7 @@ namespace dataMining_demo
 
                         getColumnType(colName, dt, cn);
 
-                        if (colName.Contains("ID"))
+                        if (colName.Contains("Company"))
                             dvr.Cells[3].Value = "LONG";
                         else if (colName.Contains("Year"))
                             dvr.Cells[3].Value = "DATE";

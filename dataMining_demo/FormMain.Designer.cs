@@ -57,7 +57,8 @@ namespace dataMining_demo
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(19, 274);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(21, 267);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 37);
             this.button1.TabIndex = 1;
@@ -151,6 +152,7 @@ namespace dataMining_demo
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox4);
@@ -174,7 +176,6 @@ namespace dataMining_demo
             this.comboBox4.Size = new System.Drawing.Size(121, 21);
             this.comboBox4.TabIndex = 5;
             this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
-
             // 
             // label4
             // 
@@ -187,6 +188,7 @@ namespace dataMining_demo
             // 
             // groupBox2
             // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.button9);
             this.groupBox2.Controls.Add(this.button8);
             this.groupBox2.Controls.Add(this.button4);
@@ -221,7 +223,8 @@ namespace dataMining_demo
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(178, 274);
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(177, 274);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(93, 36);
             this.button5.TabIndex = 9;
@@ -231,6 +234,7 @@ namespace dataMining_demo
             // 
             // button6
             // 
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button6.Location = new System.Drawing.Point(6, 19);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(95, 39);
@@ -241,6 +245,7 @@ namespace dataMining_demo
             // 
             // button7
             // 
+            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button7.Location = new System.Drawing.Point(167, 19);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(93, 39);
@@ -251,9 +256,11 @@ namespace dataMining_demo
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.button7);
             this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 317);
+            this.groupBox3.Location = new System.Drawing.Point(12, 310);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(269, 71);
             this.groupBox3.TabIndex = 12;
@@ -264,7 +271,7 @@ namespace dataMining_demo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 395);
+            this.ClientSize = new System.Drawing.Size(296, 388);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
