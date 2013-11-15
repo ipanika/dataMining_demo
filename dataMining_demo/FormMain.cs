@@ -58,24 +58,53 @@ namespace dataMining_demo
 
                 // получение списка столбцов текущей структуры
 
-                string sqlQuery = "";
-                sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
-                            " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
-                            " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
-                            " structures.id_selection = selections.id_selection JOIN models ON" +
-                            " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
+                //string sqlQuery = "";
+                //sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
+                //            " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
+                //            " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
+                //            " structures.id_selection = selections.id_selection JOIN models ON" +
+                //            " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
 
-                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-                DataTable dt = new DataTable();
+                //sqlQuery += "CALL System.GetModelAttributes('"+modelName +"')";
 
-                // Create data adapters from database tables and load schemas
-                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-                sqlDA.Fill(dt);
+                //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+                //DataTable dt = new DataTable();
+
+                //// Create data adapters from database tables and load schemas
+                //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+                //sqlDA.Fill(dt);
+                AdomdConnection cn = new AdomdConnection();
+                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                cn.Open();
+                AdomdCommand cmd = cn.CreateCommand();
+                //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+                cmd.CommandText = "SELECT COLUMN_NAME FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
+                List<string> _sideList = new List<string>();
+                try
+                {
+                    AdomdDataReader reader = cmd.ExecuteReader();
+                    
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            //if (i % 7 == 1)
+                                _sideList.Add(reader.GetValue(i).ToString());
+                        }
+                    }
+
+                    comboBox2.DataSource = _sideList;
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
 
                 // строка, содержащая имена столбцов структуры (модели)
                 string colNames = "";
-                for (int i = 0; i < dt.Rows.Count; i++)
-                    colNames += " [" + dt.Rows[i][0].ToString() + "],";
+                for (int i = 0; i < _sideList.Count; i++)
+                    colNames += " [" + _sideList[i] + "],";
 
                 colNames = colNames.Substring(0, colNames.Length - 1);
 
@@ -280,11 +309,11 @@ namespace dataMining_demo
             DataTable dt = new DataTable();
 
             // Create data adapters from database tables and load schemas
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [dsv_name] FROM [demo_dsv]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [name] FROM [data_source_views]", cn);
             sqlDA.Fill(dt);
 
             comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "dsv_name";
+            comboBox1.DisplayMember = "name";
         }
 
         private void button6_Click(object sender, EventArgs e)
