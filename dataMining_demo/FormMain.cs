@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-//using DataTSystem.Data.DataTable;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
@@ -10,14 +9,15 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Microsoft.AnalysisServices.AdomdClient;
+using Microsoft.AnalysisServices;
 
 namespace dataMining_demo
 {
     public partial class FormMain : Form
     {
         // member variable -- the Analysis Services server connection
-        //public static Server svr;
-        //public static Database db;
+        public static Server svr;
+        public static Database db;
         public static string modelName;
                 
         public FormMain()
@@ -30,12 +30,17 @@ namespace dataMining_demo
         {
             
             // Create SSAS-server object and connect
-            //svr = new Server();
-            //svr.Connect("localhost");
+            svr = new Server();
+            svr.Connect("localhost");
 
-            //db = CreateDatabase();
+            CreateDatabase();
 
+            selectDataSourceViews();
+            
+        }
 
+        private void selectDataSourceViews()
+        {
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             DataTable dt = new DataTable();
 
@@ -45,9 +50,10 @@ namespace dataMining_demo
 
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "name";
-
         }
 
+        
+        
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -109,27 +115,27 @@ namespace dataMining_demo
         {
             FormDataSourceView f2 = new FormDataSourceView();
 
-            f2.Show();
+            f2.ShowDialog();
         }
 
-        //Database CreateDatabase()
-        //{
-        //    // Create a database and set the properties
-        //    Database db = null; 
-        //    if ((svr != null) && (svr.Connected))
-        //    {
-        //        db = svr.Databases.FindByName("demo_DM");
-        //        if (db == null)
-        //        {
-        //            db = svr.Databases.Add("demo_DM");
-        //            db.Update();
-        //        }
+        Database CreateDatabase()
+        {
+            // Create a database and set the properties
+            Database db = null; 
+            if ((svr != null) && (svr.Connected))
+            {
+                db = svr.Databases.FindByName("demo_DM");
+                if (db == null)
+                {
+                    db = svr.Databases.Add("demo_DM");
+                    db.Update();
+                }
 
-        //    }
+            }
 
 
-        //    return db;
-        //}
+            return db;
+        }
 
         //void ProcessDatabase(Database db)
         //{
@@ -276,15 +282,8 @@ namespace dataMining_demo
 
         private void MainForm_Activated(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-            DataTable dt = new DataTable();
-
-            // Create data adapters from database tables and load schemas
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [dsv_name] FROM [demo_dsv]", cn);
-            sqlDA.Fill(dt);
-
-            comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "dsv_name";
+            comboBox1.Text = null;
+            selectDataSourceViews();
         }
 
         private void button6_Click(object sender, EventArgs e)

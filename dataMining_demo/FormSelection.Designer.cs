@@ -107,16 +107,14 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(16, 76);
+            this.textBox2.Location = new System.Drawing.Point(12, 76);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(146, 20);
             this.textBox2.TabIndex = 6;
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button2.Location = new System.Drawing.Point(340, 393);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);

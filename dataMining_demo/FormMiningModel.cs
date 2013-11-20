@@ -85,10 +85,7 @@ namespace dataMining_demo
             sqlCmd.CommandText = sqlQuery;
             string nameAlg = sqlCmd.ExecuteScalar().ToString();
 
-            // сохранение информации о создаваемой модели в БД
-            sqlQuery = "INSERT INTO [models] VALUES ('" + idStr + "', '" + modelName + "', '" + idAlgVar+ "')";
-            sqlCmd.CommandText = sqlQuery;
-            sqlCmd.ExecuteNonQuery();
+            
 
             dmxQuery = "ALTER MINING STRUCTURE [" + strName + "]" +
                         " ADD MINING MODEL [" + modelName + "]" +
@@ -101,8 +98,20 @@ namespace dataMining_demo
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();
             adomdCmd.CommandText = dmxQuery;
-            adomdCmd.Execute();
-
+            try
+            {
+                adomdCmd.Execute();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            // сохранение информации о создаваемой модели в БД
+            sqlQuery = "INSERT INTO [models] VALUES ('" + idStr + "', '" + modelName + "', '" + idAlgVar + "')";
+            sqlCmd.CommandText = sqlQuery;
+            sqlCmd.ExecuteNonQuery();
+            
             this.Close();
         }
     }

@@ -54,8 +54,8 @@ namespace dataMining_demo
 
             columnNames.Add("CompanyID");
             columnNames.Add("Name");
-            columnNames.Add("Нематериальные активы");
             columnNames.Add("YearID");
+            columnNames.Add("Нематериальные активы");
             columnNames.Add("Основные средства");
             columnNames.Add("Незавершенное строительство");
             columnNames.Add("Доходные вложения в материал.ценности");
