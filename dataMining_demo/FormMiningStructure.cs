@@ -61,79 +61,8 @@ namespace dataMining_demo
             // функция заполняет DataGridView
             fillDataGridView(selName);
 
-            //DataSourceView dsv = new DataSourceView();
-            //DataSet ds;
-
-            //dsv = db.DataSourceViews.FindByName(comboBox1.Text);
-            //if (dsv != null)
-            //{
-            //    ds = dsv.Schema;
-            //    int i = 0;
-            //    while (i < dsv.Schema.Tables[0].Columns.Count)
-            //    {
-            //        // заполнение комбинированного dataGridView1 из представления dsv
-            //        DataGridViewRow dvr = (DataGridViewRow)dataGridView1.Rows[0].Clone();
-
-            //        string colName = dsv.Schema.Tables[0].Columns[i].ColumnName;
-            //        dvr.Cells[0].Value = colName;
-
-            //        DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)dvr.Cells[1];
-            //        chk.Value = true;
-                    
-            //        chk = (DataGridViewCheckBoxCell) dvr.Cells[2];
-            //        chk.Value = false;
-                    
-            //        // заполнение столбца типа данных:
-            //        // выбор из схемы БД информации о типе данных столбца
-            //        dt = new DataTable();
-                    
-
-            //        fillDataTable(colName, dt, cn);
-
-            //        int j = 0;
-            //        foreach (DataRow dr in dt.Rows)
-            //        {
-            //            switch(dr[0].ToString())
-            //            {
-            //                case "nvarchar":
-            //                case "text":
-            //                    dvr.Cells[3].Value = "TEXT";
-            //                    break;
-            //                case "float":
-            //                    dvr.Cells[3].Value = "DOUBLE";
-            //                    break;
-            //                case "int":
-            //                case "bigint":
-            //                    dvr.Cells[3].Value = "LONG";
-            //                    break;
-            //                case "date": 
-            //                case "datetime":
-            //                case "datetime2":
-            //                    dvr.Cells[3].Value = "DATE";
-            //                    break;
-            //            }
-            //            j++;
-            //        };                    
-
-            //        // запрос к БД для получения типов содержимого
-            //        dt = new DataTable();
-            //        sqlDA = new SqlDataAdapter("select DISTINCT [data_content_name] FROM [demo_data_content]", cn);// WHERE [data_type_name] = '" + cmbbx.Value.ToString() + "'
-            //        sqlDA.Fill(dt);
-
-            //        DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
-            //        cmbbx.DataSource = dt;
-            //        cmbbx.DisplayMember = "data_content_name";
-
-            //        // добавление строки в dataGridView
-            //        dataGridView1.Rows.Add(dvr);
-
-            //        i += 1;
-            //    }
-            //}
-
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
 
-            
         }
                 
 
@@ -274,12 +203,6 @@ namespace dataMining_demo
                 DataTable dtColumns = new DataTable();
                 sqlDA.Fill(dtColumns);
                 // список типов содержимого
-                var contentType = new List<string>();
-                
-                contentType.Add("KEY");
-                contentType.Add("DISCRETE");
-                contentType.Add("DISCRETIZED");
-                contentType.Add("CONTINUOUS");
 
                 if (dtColumns.Rows.Count > 0)
                 {
@@ -292,51 +215,35 @@ namespace dataMining_demo
                         dvr.Cells[0].Value = colName;
 
                         DataGridViewCheckBoxCell chk = (DataGridViewCheckBoxCell)dvr.Cells[1];
-                        chk.Value = true;
-
-                        chk = (DataGridViewCheckBoxCell)dvr.Cells[2];
                         chk.Value = false;
 
                         // заполнение столбца типа данных:
                         // выбор из схемы БД информации о типе данных столбца
                         DataTable dt = new DataTable();
 
-                        getColumnType(colName, dt, cn);
+                        //getColumnType(colName, dt, cn);
 
-                        if (colName.Contains("ID"))
-                            dvr.Cells[3].Value = "LONG";
-                        else if (colName.Contains("Year"))
-                            dvr.Cells[3].Value = "DATE";
-                        else if (colName.Contains("Name"))
-                            dvr.Cells[3].Value = "TEXT";
-                        else
-                            dvr.Cells[3].Value = "DOUBLE";
-                        //int j = 0;
-                        //foreach (DataRow dr in dt.Rows)
-                        //{
-                        //    switch (dr[0].ToString())
-                        //    {
-                        //        case "nvarchar":
-                        //        case "text":
-                        //            dvr.Cells[3].Value = "TEXT";
-                        //            break;
-                        //        case "float":
-                        //            dvr.Cells[3].Value = "DOUBLE";
-                        //            break;
-                        //        case "int":
-                        //        case "bigint":
-                        //            dvr.Cells[3].Value = "LONG";
-                        //            break;
-                        //        case "date":
-                        //        case "datetime":
-                        //        case "datetime2":
-                        //            dvr.Cells[3].Value = "DATE";
-                        //            break;
-                        //    }
-                        //    j++;
-                        //}
+                        List<string> dataType = new List<string>();
+                        DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[2];
 
-                        DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[4];
+                        dataType.Add("TEXT");
+                        dataType.Add("LONG");
+                        dataType.Add("BOOLEAN");
+                        dataType.Add("DOUBLE");
+                        dataType.Add("DATE");
+
+                        cmbbx.DataSource = dataType;
+
+                        List<string>  contentType = new List<string>();
+
+                        contentType.Add("CONTINUOUS");
+                        contentType.Add("CYCLICAL");
+                        contentType.Add("DISCRETE");
+                        contentType.Add("DISCRETIZED");
+                        contentType.Add("KEY");
+                        contentType.Add("KEY SEQUENCE");
+
+                        cmbbx = (DataGridViewComboBoxCell)dvr.Cells[3];
                         cmbbx.DataSource = contentType;
 
                         dataGridView1.Rows.Add(dvr);
@@ -349,6 +256,88 @@ namespace dataMining_demo
                 MessageBox.Show(e.Message);
             }
         }
+
+        private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentCell.ColumnIndex == 2 && dataGridView1.CurrentCell.RowIndex >= 0) 
+            {
+                List<string> contentType = new List<string>();
+
+                if (dataGridView1.CurrentCell.Value != null)
+                {
+                    switch(dataGridView1.CurrentCell.Value.ToString())
+                    {
+                        case "TEXT":
+                            contentType.Add("Cyclical");
+                            contentType.Add("Discrete");
+                            contentType.Add("Discretized");
+                            contentType.Add("Key Sequence");
+                            contentType.Add("Ordered");
+                            contentType.Add("Sequence");
+                            break;
+                        case "LONG":
+                            contentType.Add("Continuous");
+                            contentType.Add("Cyclical");
+                            contentType.Add("Discrete");
+                            contentType.Add("Discretized");
+                            contentType.Add("Key");
+                            contentType.Add("Key Sequence");
+                            contentType.Add("Key Time");
+                            contentType.Add("Ordered");
+                            contentType.Add("Sequence");
+                            contentType.Add("Time Classified");
+                            break;
+                        case "BOOLEAN":
+                            contentType.Add("Cyclical");
+                            contentType.Add("Discrete");
+                            contentType.Add("Ordered");
+                            break;
+                        case "DOUBLE":
+                            contentType.Add("Continuous");
+                            contentType.Add("Cyclical");
+                            contentType.Add("Discrete");
+                            contentType.Add("Discretized");
+                            contentType.Add("Key");
+                            contentType.Add("Key Sequence");
+                            contentType.Add("Key Time");
+                            contentType.Add("Ordered");
+                            contentType.Add("Sequence");
+                            contentType.Add("Time Classified");
+                            break;
+                        case "DATE":
+                            contentType.Add("Continuous");
+                            contentType.Add("Cyclical");
+                            contentType.Add("Discrete");
+                            contentType.Add("Discretized");
+                            contentType.Add("Key");
+                            contentType.Add("Key Sequence");
+                            contentType.Add("Key Time");
+                            contentType.Add("Ordered");
+                            break;
+                        default:
+                            contentType.Add("CONTINUOUS");
+                            contentType.Add("CYCLICAL");
+                            contentType.Add("DISCRETE");
+                            contentType.Add("DISCRETIZED");
+                            contentType.Add("KEY");
+                            contentType.Add("KEY SEQUENCE");
+                            break;
+
+                    }
+
+                    //(DataGridViewComboBoxCell) dataGridView1.CurrentCell.Cell[3]
+                    int colIndex = dataGridView1.CurrentCell.ColumnIndex;
+                    int rowIndex = dataGridView1.CurrentCell.RowIndex;
+
+                    DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dataGridView1.Rows[rowIndex].Cells[colIndex+1];
+                    cmbbx.DataSource = contentType;
+                }
+            }
+        }
+
+       
+
+        
 
     }
 }
