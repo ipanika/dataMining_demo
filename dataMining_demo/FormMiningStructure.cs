@@ -141,13 +141,13 @@ namespace dataMining_demo
                     dmxQuery += " [" + parName + "]";
 
                     // получение типа данных столбца
-                    dmxQuery += " " + drv.Cells[3].Value;
+                    dmxQuery += " " + drv.Cells[2].Value;
 
                     // получение типа содержимого столбца
-                    if (drv.Cells[2].Value.Equals(true))
+                    if (drv.Cells[1].Value.Equals(true))
                         dmxQuery += " KEY,";
                     else
-                        dmxQuery += " " + drv.Cells[4].Value.ToString() + ",";
+                        dmxQuery += " " + drv.Cells[3].Value.ToString() + ",";
                 }
             }
             

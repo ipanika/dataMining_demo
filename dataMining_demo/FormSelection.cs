@@ -217,8 +217,7 @@ namespace dataMining_demo
             }
 
 
-            // заполнение таблицы selection_content
-
+            
             // получение id созданной выборки
             sqlCmd.CommandText = "SELECT id_selection FROM selections WHERE name = '" + selName + "'";
             sqlCmd.Connection = cn;
@@ -233,12 +232,16 @@ namespace dataMining_demo
             }
             string dsvName = textBox2.Text;
 
+           
+
+            // заполнение таблицы selection_content
+
             // получение списка идентификаторов столбцов для текущей выборки 
             DataTable dt = new DataTable();
             SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [id_column] FROM [dsv_columns] WHERE id_dsv = '" + idDSV + "'", cn);
             sqlDA.Fill(dt);
 
-            //шаблон многострочного INSERT:
+            // шаблон многострочного INSERT:
             // INSERT INTO COL_1, COL_2, COL_3 
             //      VALUES (VAL_11, VAL_12, VAL_13),
             //      (VAL_21, VAL_22, VAL_23), .....
@@ -251,11 +254,37 @@ namespace dataMining_demo
             int i;
             for (i = 0; i < rowCount; i++)
             {
+
+                // сохранение записи о сохраняемой новой стркое
+                sqlCmd.CommandText = "INSERT INTO [selection_rows] ([id_selection])  VALUES ('" + idSel + "')";
+                try
+                {
+                    sqlCmd.ExecuteNonQuery();
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
+
+                // получение id созданной выборки
+                sqlCmd.CommandText = "SELECT TOP 1 id_row FROM selection_rows WHERE id_selection = " + idSel + " ORDER BY id_row DESC";
+                sqlCmd.Connection = cn;
+                string idRow = "";
+                try
+                {
+                    idRow = sqlCmd.ExecuteScalar().ToString();
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
+
+
                 // формируется строка значений одной записи
                 int j;
                 for (j = 0; j < colCount; j++)
                 {
-                    strInsert += " (" + idSel + ","; //id_selection
+                    strInsert += " (" + idRow.ToString() + ","; //id_row
                     strInsert += " " + dt.Rows[j][0].ToString() + ","; // id_column
                     //if (dataGridView1.Rows[i].Cells[j].Value != null)
                         strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
