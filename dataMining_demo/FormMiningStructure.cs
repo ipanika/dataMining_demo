@@ -81,8 +81,9 @@ namespace dataMining_demo
             SqlCommand sqlCmd = new SqlCommand();
             sqlCmd.CommandText = "SELECT id_selection FROM selections WHERE name = '" + selName + "'";
             sqlCmd.Connection = cn;
+            
             string idSel = sqlCmd.ExecuteScalar().ToString();
-                        
+            
             sqlCmd.CommandText = "INSERT INTO [structures] VALUES ('" + idSel + "', '" + strName + "', '" + test_ratio + "')";
             sqlCmd.ExecuteNonQuery();
 
@@ -97,7 +98,7 @@ namespace dataMining_demo
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 DataGridViewRow drv = dataGridView1.Rows[i];
-                if (drv.Cells[1].Value.Equals(true))
+                //if (drv.Cells[1].Value.Equals(true))
                 {
                     // получение имени столбца
                     string parName = drv.Cells[0].Value.ToString();

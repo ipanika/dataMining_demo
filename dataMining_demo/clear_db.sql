@@ -1,12 +1,18 @@
-USE [demo_source]
+USE [demo_dm]
 GO
 
-DELETE FROM [dbo].[demo_dsv]
+-- clear demo_dm database
 
-DELETE FROM [dbo].[demo_mm]
+delete from models
 
-DELETE FROM [dbo].[demo_mstr]
-      
-GO
+delete from structures
 
+--delete from selection_rows
 
+--delete from selection_content
+
+--delete from selections
+
+--delete from dsv_columns
+
+--delete from data_source_views
