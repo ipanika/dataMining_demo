@@ -120,7 +120,10 @@ namespace dataMining_demo
                         " dsv_columns.column_name from selection_content INNER JOIN " + 
 	                    " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
 	                    " selections ON selection_rows.id_selection = selections.id_selection INNER JOIN " +
-	                    " dsv_columns ON dsv_columns.id_column = selection_content.id_column  ) p" +
+	                    " dsv_columns ON dsv_columns.id_column = selection_content.id_column " +
+                        " INNER JOIN structures ON structures.id_selection = selections.id_selection " +
+		                " INNER JOIN models ON models.id_structure = structures.id_structure "+
+		                " AND models.name =  ''" + modelName + "'') p" +
                         " PIVOT ( max(column_value) FOR column_name IN (" + colNames + ") ) AS pvt')";
 
 
@@ -132,7 +135,6 @@ namespace dataMining_demo
                 AdomdCommand adomdCmd = adomdCn.CreateCommand();
                 adomdCmd.CommandText = dmxQuery;
             
-
                 adomdCmd.Execute();
 
                 MessageBox.Show("Анализ данных успешно завершен.");    
