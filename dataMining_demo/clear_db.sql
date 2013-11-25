@@ -13,6 +13,6 @@ delete from selection_content
 
 delete from selections
 
---delete from dsv_columns
+delete from dsv_columns
 
---delete from data_source_views
+delete from data_source_views

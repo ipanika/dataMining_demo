@@ -84,8 +84,10 @@ namespace dataMining_demo
                 cn.Open();
                 AdomdCommand cmd = cn.CreateCommand();
                 //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
-                cmd.CommandText = "SELECT COLUMN_NAME FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
+                cmd.CommandText = "SELECT COLUMN_NAME, DATA_TYPE FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
+
                 List<string> _sideList = new List<string>();
+                List<string> _typeList = new List<string>();
                 try
                 {
                     AdomdDataReader reader = cmd.ExecuteReader();
@@ -95,12 +97,34 @@ namespace dataMining_demo
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-                            //if (i % 7 == 1)
+                            if (i % 2 == 0)
                                 _sideList.Add(reader.GetValue(i).ToString());
+                            else if (i % 2 == 1)
+                            {
+                                switch (reader.GetValue(i).ToString())
+                                {
+                                    case ("5"):
+                                        _typeList.Add("real");
+                                        break;
+                                    case ("7"):
+                                        _typeList.Add("date");
+                                        break;
+                                    case ("20"):
+                                        _typeList.Add("bigint");
+                                        break;
+                                    case ("130"):
+                                        _typeList.Add("nchar");
+                                        break;
+                                    default:
+                                        _typeList.Add("nchar");
+                                        break;
+                                }
+                            }
                         }
+
                     }
 
-                    comboBox2.DataSource = _sideList;
+                   // comboBox2.DataSource = _sideList;
                 }
                 catch (Exception e1)
                 {
@@ -109,13 +133,18 @@ namespace dataMining_demo
 
                 // строка, содержащая имена столбцов структуры (модели)
                 string colNames = "";
+                string colNames2 = "";
                 for (int i = 0; i < _sideList.Count; i++)
-                    colNames += " [" + _sideList[i] + "],";
+                {
+                    colNames = " [" + _sideList[i] + "],";
+                    colNames2 += " cast([" + _sideList[i] + "] as " + _typeList[i] + ") as [" + _sideList[i] + "],";
+                }
 
                 colNames = colNames.Substring(0, colNames.Length - 1);
-
+                
+               // string mName = comboBox4.Text;
                 dmxQuery += colNames + ")" +
-                        " openquery ([demo_dm], ' SELECT " + colNames +
+                        " openquery ([demo_dm], ' SELECT " + colNames2 +
                         " FROM (select selection_content.id_row, column_value, " + 
                         " dsv_columns.column_name from selection_content INNER JOIN " + 
 	                    " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
@@ -123,7 +152,7 @@ namespace dataMining_demo
 	                    " dsv_columns ON dsv_columns.id_column = selection_content.id_column " +
                         " INNER JOIN structures ON structures.id_selection = selections.id_selection " +
 		                " INNER JOIN models ON models.id_structure = structures.id_structure "+
-		                " AND models.name =  ''" + modelName + "'') p" +
+                        " AND models.name =  ''" + modelName + "'') p" +
                         " PIVOT ( max(column_value) FOR column_name IN (" + colNames + ") ) AS pvt')";
 
 
