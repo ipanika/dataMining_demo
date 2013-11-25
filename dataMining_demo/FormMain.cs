@@ -264,8 +264,8 @@ namespace dataMining_demo
         private void MainForm_Activated(object sender, EventArgs e)
         {
 
-            comboBox1.Text = null;
-            selectDataSourceViews();
+            //comboBox1.Text = null;
+            //selectDataSourceViews();
         }
 
         private void button6_Click(object sender, EventArgs e)

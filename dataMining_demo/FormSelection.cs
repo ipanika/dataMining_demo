@@ -326,5 +326,12 @@ namespace dataMining_demo
 
             return newWord;
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormRelabel form = new FormRelabel();
+
+            form.Show();
+        }
     }
 }

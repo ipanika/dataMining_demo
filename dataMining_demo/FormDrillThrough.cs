@@ -20,42 +20,24 @@ namespace dataMining_demo
 
         private void DrillThroughForm_Load(object sender, EventArgs e)
         {
-            try
-            {
-                // запрос к метаданным модели, выбранной на главной форме
-                AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
-                cn.Open();
 
-                AdomdCommand cmd = cn.CreateCommand();
-                string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
-                cmd.CommandText = "SELECT NODE_CAPTION FROM [" + modelName + "].CONTENT";
-                //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
-
-            
-                AdomdDataReader reader = cmd.ExecuteReader();
-                List<string> _sideList = new List<string>();
-                while (reader.Read())
-                {
-
-                    for (int i = 0; i < reader.FieldCount; i++)
-                    {
-                        _sideList.Add(reader.GetValue(i).ToString());
-                    }
-                }
-
-                comboBox1.DataSource = _sideList;
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-                this.Close();
-            }
-
+            getNodeName();
+            getAttributeList();
 
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fillChart();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            fillChart();
+        }
+
+        private void getAttributeList()
         {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
@@ -88,9 +70,44 @@ namespace dataMining_demo
             }
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void getNodeName()
         {
+            try
+            {
 
+                // запрос к метаданным модели, выбранной на главной форме
+                AdomdConnection cn = new AdomdConnection();
+                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                cn.Open();
+
+                AdomdCommand cmd = cn.CreateCommand();
+                string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+                cmd.CommandText = "SELECT NODE_CAPTION FROM [" + modelName + "].CONTENT";
+                //cmd.CommandText = "SELECT NODE_CAPTION, NODE_DISTRIBUTION FROM [mod_drill].CONTENT";
+
+
+                AdomdDataReader reader = cmd.ExecuteReader();
+                List<string> _sideList = new List<string>();
+                while (reader.Read())
+                {
+
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        _sideList.Add(reader.GetValue(i).ToString());
+                    }
+                }
+
+                comboBox1.DataSource = _sideList;
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+                this.Close();
+            }
+        }
+
+        private void fillChart()
+        {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
             cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
@@ -99,8 +116,8 @@ namespace dataMining_demo
             AdomdCommand cmd = cn.CreateCommand();
             string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
             cmd.CommandText = " SELECT flattened (SELECT  ATTRIBUTE_VALUE, [SUPPORT]" +
-                                "FROM NODE_DISTRIBUTION where ATTRIBUTE_NAME = '"+comboBox2.Text+"') " +
-                                "FROM ["+ modelName + "].CONTENT where node_caption = '"+comboBox1.Text + "'";
+                                "FROM NODE_DISTRIBUTION where ATTRIBUTE_NAME = '" + comboBox2.Text + "') " +
+                                "FROM [" + modelName + "].CONTENT where node_caption = '" + comboBox1.Text + "'";
 
             try
             {
@@ -143,7 +160,6 @@ namespace dataMining_demo
             {
                 MessageBox.Show(e1.Message);
             }
-
         }
     }
 }
