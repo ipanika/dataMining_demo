@@ -7,9 +7,9 @@ delete from models
 
 delete from structures
 
-delete from selection_rows
-
 delete from selection_content
+
+delete from selection_rows
 
 delete from selections
 

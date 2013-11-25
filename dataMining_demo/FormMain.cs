@@ -33,7 +33,7 @@ namespace dataMining_demo
             svr = new Server();
             svr.Connect("localhost");
 
-            CreateDatabase();
+            db = CreateDatabase();
 
             selectDataSourceViews();
             
@@ -56,6 +56,9 @@ namespace dataMining_demo
         
         private void button1_Click(object sender, EventArgs e)
         {
+            // проверка существования источника данных demo_dm
+            checkDataSource();
+
             try
             {
                 string dmxQuery = "";
@@ -64,21 +67,6 @@ namespace dataMining_demo
 
                 // получение списка столбцов текущей структуры
 
-                //string sqlQuery = "";
-                //sqlQuery += "SELECT dsv_columns.column_name from dsv_columns join data_source_views ON" +
-                //            " dsv_columns.id_dsv = data_source_views.id_dsv JOIN selections ON" +
-                //            " selections.id_dsv = data_source_views.id_dsv JOIN structures ON" +
-                //            " structures.id_selection = selections.id_selection JOIN models ON" +
-                //            " models.id_structure = structures.id_structure AND models.name = '" + modelName + "'";
-
-                //sqlQuery += "CALL System.GetModelAttributes('"+modelName +"')";
-
-                //SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-                //DataTable dt = new DataTable();
-
-                //// Create data adapters from database tables and load schemas
-                //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-                //sqlDA.Fill(dt);
                 AdomdConnection cn = new AdomdConnection();
                 cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
                 cn.Open();
@@ -136,15 +124,16 @@ namespace dataMining_demo
                 string colNames2 = "";
                 for (int i = 0; i < _sideList.Count; i++)
                 {
-                    colNames = " [" + _sideList[i] + "],";
+                    colNames += " [" + _sideList[i] + "],";
                     colNames2 += " cast([" + _sideList[i] + "] as " + _typeList[i] + ") as [" + _sideList[i] + "],";
                 }
 
                 colNames = colNames.Substring(0, colNames.Length - 1);
+                colNames2 = colNames2.Substring(0, colNames2.Length - 1);
                 
                // string mName = comboBox4.Text;
                 dmxQuery += colNames + ")" +
-                        " openquery ([demo_dm], ' SELECT " + colNames2 +
+                        " openquery ([demo_ds_origin], ' SELECT " + colNames2 +
                         " FROM (select selection_content.id_row, column_value, " + 
                         " dsv_columns.column_name from selection_content INNER JOIN " + 
 	                    " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
@@ -201,79 +190,6 @@ namespace dataMining_demo
 
             return db;
         }
-
-        //void ProcessDatabase(Database db)
-        //{
-        //    //Trace t;
-        //    //TraceEvent e;
-
-        //    // create the trace object to trace progress reports
-        //    // and add the column containing the progress description
-        //    //t = svr.Traces.Add();
-        //    //e = t.Events.Add(TraceEventClass.ProgressReportCurrent);
-        //    //e.Columns.Add(TraceColumn.TextData);
-        //    //t.Update();
-
-        //    // Add the handler for the trace event
-        //    //t.OnEvent += new TraceEventHandler(ProgressReportHandler);
-        //    try
-        //    {
-        //        // start the trace, process of the database, then stop it
-        //        //t.Start();
-        //        db.Process(ProcessType.ProcessFull);
-        //        //t.Stop();
-
-
-        //    }
-        //    catch (System.Exception /*ex*/)
-        //    {
-        //        MessageBox.Show("Произошла ошибка обработки БД");
-        //    }
-
-        //}
-
-        //void ProgressReportHandler(object sender, TraceEventArgs e)
-        //{
-        //    Console.WriteLine(e[TraceColumn.TextData]);
-        //}
-
-        //void SetModelPermissions(Database db, MiningModel mm)
-        //{
-        //    // Create a new role and add members
-
-        //    Role r = db.Roles.FindByName("ModelReader");
-        //    if (r == null)
-        //    {
-        //        r = new Role("ModelReader", "ModelReader");
-
-        //        String userName = SystemInformation.UserName;
-        //        String PCName = Environment.MachineName;
-
-        //        r.Members.Add(new RoleMember(PCName + "\\" + userName));
-
-        //        // Add the role to the database and update
-        //        db.Roles.Add(r);
-        //        r.Update();
-
-        //        // Create a permission object referring the role
-        //        MiningModelPermission mmp = new MiningModelPermission();
-        //        mmp.Name = "ModelReader";
-        //        mmp.ID = "ModelReader";
-        //        mmp.RoleID = "ModelReader";
-
-        //        // Assign access rights to the permission
-        //        mmp.Read = ReadAccess.Allowed;
-        //        mmp.AllowBrowsing = true;
-        //        mmp.AllowDrillThrough = true;
-        //        mmp.ReadDefinition = ReadDefinitionAccess.Allowed;
-
-
-        //        // Add permission to the model and update
-        //        mm.MiningModelPermissions.Add(mmp);
-        //        mmp.Update();
-        //    }
-            
-        //}
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -407,6 +323,22 @@ namespace dataMining_demo
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             modelName = comboBox4.Text;
+        }
+
+        private void checkDataSource()
+        {
+            DataSource ds = db.DataSources.FindByName("demo_ds_origin");
+
+            if (ds == null)
+            {
+                ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Database)));
+                ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_dm";
+
+                db.DataSources.Add(ds);
+
+                // Update the database to create the objects on the server
+                db.Update(UpdateOptions.ExpandFull);
+            }
         }
 
     }
