@@ -12,6 +12,15 @@ namespace dataMining_demo
 {
     public partial class FormSelection : Form
     {
+
+        public static DataTable glob_dt; // DataTeble для передачи dataGridView в форму переразметки
+        public static int glob_relabelColumnIndex; // индекс переразмечиваемого столбца, устанавливается 
+                                                   // в форме переразметки, в текущей форме необходим для
+                                                   // обновления содержимого 
+        public static List<string> glob_columnNames = new List<string>(); // список названий столбцов, доступных для переразметки
+        public static List<string> glob_previousLabels; // список заменяемых меток
+        public static List<string> glob_currentLabels;  // список новых (заменяющих) меток
+
         public FormSelection()
         {
             InitializeComponent();
@@ -59,6 +68,7 @@ namespace dataMining_demo
 
                 List<string> colNames = new List<string>();
                 List<string> colNumbers = new List<string>();
+                glob_columnNames.Clear();
 
                 try 
                 {
@@ -70,6 +80,7 @@ namespace dataMining_demo
                         string colNm = reader.GetString(0);
 
                         colNames.Add(colNm);
+                        glob_columnNames.Add(colNm);
 
                         SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
                         cn2.Open();
@@ -327,8 +338,11 @@ namespace dataMining_demo
             return newWord;
         }
 
+        // нажатие на кнопку "Переразметить"
         private void button3_Click(object sender, EventArgs e)
         {
+            
+            glob_dt = (DataTable) dataGridView1.DataSource;
             FormRelabel form = new FormRelabel();
 
             form.Show();

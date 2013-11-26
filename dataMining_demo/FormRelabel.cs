@@ -15,5 +15,11 @@ namespace dataMining_demo
         {
             InitializeComponent();
         }
+
+        private void FormRelabel_Load(object sender, EventArgs e)
+        {
+            comboBox1.DataSource = FormSelection.glob_columnNames;
+            dataGridView1.DataSource = FormSelection.glob_dt;
+        }
     }
 }
