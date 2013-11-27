@@ -47,9 +47,16 @@ namespace dataMining_demo
             // Create data adapters from database tables and load schemas
             SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [name] FROM [data_source_views]", cn);
             sqlDA.Fill(dt);
-
-            comboBox1.DataSource = dt;
-            comboBox1.DisplayMember = "name";
+            
+            int rowsConunt = dt.Rows.Count;
+            int itemsCount = comboBox1.Items.Count;
+            itemsCount = itemsCount;
+            // если появились новые данные - обновить список представлений
+            if ( rowsConunt != itemsCount)
+            {
+                comboBox1.DataSource = dt;
+                comboBox1.DisplayMember = "name";
+            }
         }
 
         

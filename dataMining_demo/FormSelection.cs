@@ -18,8 +18,8 @@ namespace dataMining_demo
                                                    // в форме переразметки, в текущей форме необходим для
                                                    // обновления содержимого 
         public static List<string> glob_columnNames = new List<string>(); // список названий столбцов, доступных для переразметки
-        public static List<string> glob_previousLabels; // список заменяемых меток
-        public static List<string> glob_currentLabels;  // список новых (заменяющих) меток
+        public static List<string> glob_previousLabels = new List<string>(); // список заменяемых меток
+        public static List<string> glob_currentLabels = new List<string>();  // список новых (заменяющих) меток
 
         public FormSelection()
         {
