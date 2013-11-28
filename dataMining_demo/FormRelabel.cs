@@ -121,13 +121,13 @@ namespace dataMining_demo
             {
                 try
                 {
-                    // предыдущие метки:
+                    // сохранение предыдущих меток:
                     if (dataGridView1.Rows[i].Cells[0].Value != null)
                         FormSelection.glob_previousLabels.Add(dataGridView1.Rows[i].Cells[0].Value.ToString());
                     else
                         FormSelection.glob_previousLabels.Add("");
 
-                    // новые метки:
+                    // сохранение новых меток:
                     if (dataGridView1.Rows[i].Cells[1].Value != null)
                         FormSelection.glob_currentLabels.Add(dataGridView1.Rows[i].Cells[1].Value.ToString());
                     else

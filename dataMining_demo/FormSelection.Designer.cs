@@ -153,6 +153,7 @@
             this.MinimizeBox = false;
             this.Name = "FormSelection";
             this.Text = "FormSelection";
+            this.Activated += new System.EventHandler(this.FormSelection_Activated);
             this.Load += new System.EventHandler(this.FormSelection_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

@@ -227,8 +227,6 @@ namespace dataMining_demo
                 MessageBox.Show(e1.Message);
             }
 
-
-            
             // получение id созданной выборки
             sqlCmd.CommandText = "SELECT id_selection FROM selections WHERE name = '" + selName + "'";
             sqlCmd.Connection = cn;
@@ -346,6 +344,39 @@ namespace dataMining_demo
             FormRelabel form = new FormRelabel();
 
             form.Show();
+        }
+
+        private void FormSelection_Activated(object sender, EventArgs e)
+        {
+            // если в массиве glob_columnNames есть данные для переразметки, то обновить dataGridView
+            if (glob_previousLabels.Count != 0 && glob_relabelColumnIndex >= 0)
+            {
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    string previousLabel = dataGridView1.Rows[i].Cells[glob_relabelColumnIndex].Value.ToString();
+                    string newLabel = relabelString(previousLabel); 
+
+                    dataGridView1.Rows[i].Cells[glob_relabelColumnIndex].Value = newLabel;
+                }
+                
+                // очищаем данных глобальных переменных
+                glob_relabelColumnIndex = -1;
+                glob_previousLabels.Clear();
+                glob_currentLabels.Clear();
+            }
+        }
+
+        private string relabelString(string previous)
+        {
+            int index = glob_previousLabels.Count;
+
+            for (int i = 0; i < index; i++)
+            {
+                if (previous == glob_previousLabels[i].ToString())
+                    return glob_currentLabels[i].ToString();
+            }
+
+            return "";
         }
     }
 }

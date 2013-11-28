@@ -50,7 +50,6 @@ namespace dataMining_demo
             
             int rowsConunt = dt.Rows.Count;
             int itemsCount = comboBox1.Items.Count;
-            itemsCount = itemsCount;
             // если появились новые данные - обновить список представлений
             if ( rowsConunt != itemsCount)
             {
