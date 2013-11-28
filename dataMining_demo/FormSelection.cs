@@ -241,8 +241,6 @@ namespace dataMining_demo
             }
             string dsvName = textBox2.Text;
 
-           
-
             // заполнение таблицы selection_content
 
             // получение списка идентификаторов столбцов для текущей выборки 
