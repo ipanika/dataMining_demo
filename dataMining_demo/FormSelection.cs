@@ -20,6 +20,7 @@ namespace dataMining_demo
         public static List<string> glob_columnNames = new List<string>(); // список названий столбцов, доступных для переразметки
         public static List<string> glob_previousLabels = new List<string>(); // список заменяемых меток
         public static List<string> glob_currentLabels = new List<string>();  // список новых (заменяющих) меток
+        public static ComboBox cmb = new ComboBox();
 
         public FormSelection()
         {
@@ -34,31 +35,86 @@ namespace dataMining_demo
 
             DataTable dt = new DataTable();
 
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [name] FROM [data_source_views]", cn);
+            string strQuery = "SELECT [data_source_views].[name] FROM [data_source_views]"+
+                                " INNER JOIN relations ON [data_source_views].[id_dsv] = " +
+                                " relations.id_dsv WHERE relations.id_task = " + FormMain.taskType.ToString(); 
+            SqlDataAdapter sqlDA = new SqlDataAdapter(strQuery, cn);
             sqlDA.Fill(dt);
 
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "name";
             string dsvName = comboBox1.Text;
-            string filter = textBox1.Text;
+            
             dataGridView1.AllowUserToAddRows = false;
-
+            
+            if (FormMain.taskType == 2)
+            {
+                textBox1.Visible = false;
+                // добавление нового выпадающего списка на форму
+                initializeCmb(cmb);
+            }
             // заполнение dataGridView
-            fillDataGridView(dsvName, filter);
+            fillDataGridView(dsvName);
             
         }
 
         // функция заполняет dataGridView выборкой данных из представления
-        private void fillDataGridView(string dsvName, string filter)
+        private void fillDataGridView(string dsvName)
         {
             dataGridView1.DataSource = null;
+            string filter = "";
 
-            // получение списка доступных представлений:
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
-            cn.Open();
+            // обращаемся к методу заполнения в зависимости от решаемой задачи
+            if (FormMain.taskType == 1)
+            {
+                filter = textBox2.Text;
+            }
+            else
+            {
+                filter = cmb.Text;
+            }
 
+            // запрос данных из хранилища и заполнение ими dataGridView
+            sqlSelect(dsvName, filter);
+
+        }
+        
+        // добавление нового выпадающего списка на форму
+        private void initializeCmb(ComboBox cmb)
+        {
+            cmb.FormattingEnabled = true;
+            cmb.Location = new System.Drawing.Point(12, 120);
+            cmb.Name = "comboBox2";
+            cmb.Size = new System.Drawing.Size(313, 20);
+            cmb.TabIndex = 4;
+            cmb.SelectedIndexChanged += new System.EventHandler(this.cmb_SelectedIndexChanged);
+
+            // получение списка доступных предприятий:
+            SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+            cn2.Open();
+            SqlCommand sqlCmd = new SqlCommand();
+            // получение списка предприятий
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT name FROM Company", cn2);
+
+            DataTable dt = new DataTable();
+            sqlDA.Fill(dt);
+
+            cmb.DataSource = dt;
+            cmb.DisplayMember = "name";
+            
+            Controls.Add(cmb);
+            
+        }
+
+        private void sqlSelect(string dsvName, string filter)
+        {
             try
             {
+                // получение списка доступных представлений:
+                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+                cn.Open();
+
+                // получение имен столбцов для текущего представления
                 SqlCommand cmd = cn.CreateCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "SELECT [column_name] " +
@@ -70,13 +126,12 @@ namespace dataMining_demo
                 List<string> colNumbers = new List<string>();
                 glob_columnNames.Clear();
 
-                try 
+                try
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        //strQuery += " [" + reader.GetString(0) + "],";
                         string colNm = reader.GetString(0);
 
                         colNames.Add(colNm);
@@ -86,6 +141,7 @@ namespace dataMining_demo
                         cn2.Open();
                         SqlCommand sqlCmd = new SqlCommand();
 
+                        // получение номеров строк баланса 
                         sqlCmd.CommandText = "SELECT numLine FROM BalanceLine WHERE description = '" + colNm + "'";
                         sqlCmd.Connection = cn2;
                         string numLine = "";
@@ -113,14 +169,16 @@ namespace dataMining_demo
                 }
                 //if (strQuery != "")
                 //    strQuery = strQuery.Substring(0, strQuery.Length - 1);
-                
+
                 //if (strQuery != "")
                 if (colNames.Count > 0)
                 {
                     cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
                     cn.Open();
 
-                    string strSelect = "SELECT ";// +strQuery + " " + "FROM SourceData$";
+                    // формирование pivot-запроса:
+                    string strSelect = "SELECT ";
+                    // выбор заголовков столбцов
                     for (int i = 0; i < colNames.Count; i++)
                     {
                         if (colNumbers[i] != " ")
@@ -133,27 +191,35 @@ namespace dataMining_demo
 
                     strSelect += "FROM " +
                                     "(SELECT     BalanceReport.companyID, Company.Name, BalanceReport.YearID,  " +
-                                    "BalanceLine.numLine, BalanceReport.PeriodEnd FROM BalanceReport " +
+                                    "BalanceLine.numLine, cast(BalanceReport.PeriodEnd as nvarchar) as PeriodEnd FROM BalanceReport " +
                                     "INNER JOIN BalanceLine ON BalanceReport.balanceLineID = BalanceLine.lineID " +
                                     "INNER JOIN Company ON BalanceReport.CompanyID = Company.CompanyID " +
-                                    "INNER JOIN Year ON BalanceReport.YearID = Year.YearID) p " +
-                                    "PIVOT (sum (PeriodEnd) FOR numline IN (";
+                                    "INNER JOIN Year ON BalanceReport.YearID = Year.YearID ) p " +
+                                    "PIVOT (max(PeriodEnd) FOR numline IN (";
                     for (int i = 0; i < colNumbers.Count; i++)
                     {
                         if (colNumbers[i] != " ")
                             strSelect += " " + colNumbers[i] + ",";
                     }
-                    
+
                     strSelect = strSelect.Substring(0, strSelect.Length - 1);
 
                     strSelect += ") ) AS pvt";
 
                     if (filter != "")
                     {
-                        strSelect += " WHERE " + filter;
+                        strSelect += " WHERE ";
+                        // модификация запроса для кластеризации
+                        if (FormMain.taskType == 1)
+                        {
+                            strSelect += filter;
+                            strSelect += " ORDER BY pvt.CompanyID";
+                        }
+                        // модификация запроса для прогнозирования
+                        else
+                            strSelect += " name = '" + filter + "'";
                     }
 
-                    strSelect += " ORDER BY pvt.CompanyID";
 
                     SqlDataAdapter sqlDA;
                     sqlDA = new SqlDataAdapter(strSelect, cn);
@@ -163,32 +229,35 @@ namespace dataMining_demo
 
                     dataGridView1.DataSource = dt;
                 }
+
+
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-            }
-            
-            
-            
+            }  
         }
-
-
+        
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string dsvName = comboBox1.Text;
-            string filter = textBox1.Text;
-            
-            fillDataGridView(dsvName, filter);
+            fillDataGridView(dsvName);
+
+        }
+
+        private void cmb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string dsvName = comboBox1.Text;
+
+            fillDataGridView(dsvName);
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             string dsvName = comboBox1.Text;
-            string filter = textBox1.Text;
 
-            fillDataGridView(dsvName, filter);
+            fillDataGridView(dsvName);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -352,7 +421,7 @@ namespace dataMining_demo
                 for (int i = 0; i < dataGridView1.Rows.Count; i++)
                 {
                     string previousLabel = dataGridView1.Rows[i].Cells[glob_relabelColumnIndex].Value.ToString();
-                    string newLabel = relabelString(previousLabel); 
+                    string newLabel = relabelString(previousLabel);
 
                     dataGridView1.Rows[i].Cells[glob_relabelColumnIndex].Value = newLabel;
                 }

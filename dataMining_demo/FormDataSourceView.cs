@@ -64,11 +64,8 @@ namespace dataMining_demo
             RelationalDataSource ds = new RelationalDataSource(dsName, Utils.GetSyntacticallyValidID(dsName, typeof(Database)));
             ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DW";
 
-            if (db.DataSources.FindByName(dsName) == null){
-                
+            if (db.DataSources.FindByName(dsName) == null)
                 db.DataSources.Add(ds);
-
-            }
 
             // Create connection to datasource cto extract schema to a dataset
             DataSet dset = new DataSet();
@@ -144,7 +141,6 @@ namespace dataMining_demo
             {
                 columnNames.Add("CompanyID");
                 columnNames.Add("Name");
-                columnNames.Add("YearID");
                 
                 fillColumnNames(columnNames);
 
@@ -159,6 +155,7 @@ namespace dataMining_demo
 
         private void fillColumnNames(List<string> columnNames)
         {
+            columnNames.Add("YearID");
             columnNames.Add("Нематериальные активы");
             columnNames.Add("Основные средства");
             columnNames.Add("Незавершенное строительство");
