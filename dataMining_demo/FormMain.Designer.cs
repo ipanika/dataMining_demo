@@ -50,15 +50,20 @@ namespace dataMining_demo
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.задачаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.кластеризацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.прогнозированияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(21, 267);
+            this.button1.Location = new System.Drawing.Point(21, 292);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 37);
             this.button1.TabIndex = 1;
@@ -161,7 +166,7 @@ namespace dataMining_demo
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.comboBox2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 37);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(134, 197);
             this.groupBox1.TabIndex = 6;
@@ -194,7 +199,7 @@ namespace dataMining_demo
             this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button2);
             this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Location = new System.Drawing.Point(171, 12);
+            this.groupBox2.Location = new System.Drawing.Point(171, 37);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(110, 256);
             this.groupBox2.TabIndex = 7;
@@ -224,7 +229,7 @@ namespace dataMining_demo
             // button5
             // 
             this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(177, 274);
+            this.button5.Location = new System.Drawing.Point(177, 299);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(93, 36);
             this.button5.TabIndex = 9;
@@ -260,23 +265,58 @@ namespace dataMining_demo
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.button7);
             this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 310);
+            this.groupBox3.Location = new System.Drawing.Point(12, 335);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(269, 71);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Результат";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.задачаToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(296, 24);
+            this.menuStrip1.TabIndex = 13;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // задачаToolStripMenuItem
+            // 
+            this.задачаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.кластеризацииToolStripMenuItem,
+            this.прогнозированияToolStripMenuItem});
+            this.задачаToolStripMenuItem.Name = "задачаToolStripMenuItem";
+            this.задачаToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
+            this.задачаToolStripMenuItem.Text = "Задача...";
+            // 
+            // кластеризацииToolStripMenuItem
+            // 
+            this.кластеризацииToolStripMenuItem.Name = "кластеризацииToolStripMenuItem";
+            this.кластеризацииToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.кластеризацииToolStripMenuItem.Text = "Кластеризации";
+            this.кластеризацииToolStripMenuItem.Click += new System.EventHandler(this.кластеризацииToolStripMenuItem_Click);
+            // 
+            // прогнозированияToolStripMenuItem
+            // 
+            this.прогнозированияToolStripMenuItem.Name = "прогнозированияToolStripMenuItem";
+            this.прогнозированияToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.прогнозированияToolStripMenuItem.Text = "Прогнозирования";
+            this.прогнозированияToolStripMenuItem.Click += new System.EventHandler(this.прогнозированияToolStripMenuItem_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 388);
+            this.ClientSize = new System.Drawing.Size(296, 413);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMain";
@@ -287,7 +327,10 @@ namespace dataMining_demo
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -313,6 +356,10 @@ namespace dataMining_demo
         private ComboBox comboBox4;
         private Label label4;
         private Button button9;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem задачаToolStripMenuItem;
+        private ToolStripMenuItem кластеризацииToolStripMenuItem;
+        private ToolStripMenuItem прогнозированияToolStripMenuItem;
 
 
     }

@@ -99,9 +99,14 @@ namespace dataMining_demo
             SqlCommand sqlCmd2 = new SqlCommand("INSERT INTO [data_source_views]  VALUES ('" + dsvName + "')", cnToDSV);
             sqlCmd2.ExecuteNonQuery();
 
+
             // получение id созданного представления для связи с таблицей dsv_columns
             sqlCmd2 = new SqlCommand("SELECT [id_dsv] FROM [data_source_views]  WHERE [name] = ('" + dsvName + "')", cnToDSV);
             string dsvID = sqlCmd2.ExecuteScalar().ToString();
+
+            // заполнение таблицы relations для связи задачи с представлением данных
+            sqlCmd2 = new SqlCommand("INSERT INTO [relations]  VALUES ('"+ FormMain.taskType + "', '" + dsvID + "')", cnToDSV);
+            sqlCmd2.ExecuteNonQuery();
 
             // заполнение таблицы [dsv_columns] данными представлений
             for (i = 0; i < columnNames.Count; i++)
@@ -110,15 +115,6 @@ namespace dataMining_demo
                 sqlCmd2.ExecuteNonQuery();
             }
 
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-
-            checkedListBox1.DataSource = null;
-
-            List<string> columnNames = new List<string>();
-            fillListBox(columnNames);
         }
 
         // заполнение списка элементов в зависимости от значения элемента checkedBox
@@ -130,9 +126,8 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
-            // если флаг checkedBox1 установлен, то создается представление для прогнозирования
-            // и необходимо выбрать прогнозируемое предприятие
-            if (checkBox1.Checked)
+            // если тип решаемой задачи - прогнозирование, то создается представление для прогнозирования
+            if (FormMain.taskType == 2)
             {
 
                 fillColumnNames(columnNames);

@@ -43,6 +43,7 @@ namespace dataMining_demo
             string filter = textBox1.Text;
             dataGridView1.AllowUserToAddRows = false;
 
+            // заполнение dataGridView
             fillDataGridView(dsvName, filter);
             
         }
@@ -53,7 +54,6 @@ namespace dataMining_demo
             dataGridView1.DataSource = null;
 
             // получение списка доступных представлений:
-            //string strQuery = "";
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
             cn.Open();
 

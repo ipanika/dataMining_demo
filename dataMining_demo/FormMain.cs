@@ -15,10 +15,11 @@ namespace dataMining_demo
 {
     public partial class FormMain : Form
     {
-        // member variable -- the Analysis Services server connection
         public static Server svr;
         public static Database db;
         public static string modelName;
+
+        public static int taskType; // тип задачи по умолчанию: кластеризация
                 
         public FormMain()
         {
@@ -28,14 +29,16 @@ namespace dataMining_demo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-            // Create SSAS-server object and connect
             svr = new Server();
             svr.Connect("localhost");
 
             db = CreateDatabase();
 
             selectDataSourceViews();
+
+            taskType = 1;
+            кластеризацииToolStripMenuItem.Checked = true;
+            прогнозированияToolStripMenuItem.Checked = false;
             
         }
 
@@ -345,6 +348,22 @@ namespace dataMining_demo
                 // Update the database to create the objects on the server
                 db.Update(UpdateOptions.ExpandFull);
             }
+        }
+
+        
+        private void кластеризацииToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            taskType = 1; // кластеризация
+            кластеризацииToolStripMenuItem.Checked = true;
+            прогнозированияToolStripMenuItem.Checked = false;
+        }
+
+        // установка типа решаемой задачи
+        private void прогнозированияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            taskType = 2; // прогнозирование
+            прогнозированияToolStripMenuItem.Checked = true;
+            кластеризацииToolStripMenuItem.Checked = false;
         }
 
     }
