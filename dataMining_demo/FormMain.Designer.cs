@@ -31,9 +31,6 @@ namespace dataMining_demo
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -43,10 +40,6 @@ namespace dataMining_demo
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -54,9 +47,17 @@ namespace dataMining_demo
             this.задачаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кластеризацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.прогнозированияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button10 = new System.Windows.Forms.Button();
+            this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.представлениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выборкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.структуруToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.модельToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.вариантАлгоритмаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.результатыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сервисToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.настройкаСоединенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.схемаОбъектовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -64,43 +65,13 @@ namespace dataMining_demo
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(21, 292);
+            this.button1.Location = new System.Drawing.Point(21, 240);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 37);
+            this.button1.Size = new System.Drawing.Size(92, 37);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Обработка модели ИАД";
+            this.button1.Text = "Обработать модель";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(6, 23);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(97, 38);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Создать представление";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(6, 111);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(97, 38);
-            this.button3.TabIndex = 2;
-            this.button3.Text = "Создать структуру";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(6, 212);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(96, 38);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Создать модель";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // label1
             // 
@@ -192,52 +163,6 @@ namespace dataMining_demo
             this.label4.TabIndex = 4;
             this.label4.Text = "Структура ИАД:";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.button9);
-            this.groupBox2.Controls.Add(this.button8);
-            this.groupBox2.Controls.Add(this.button4);
-            this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.button3);
-            this.groupBox2.Location = new System.Drawing.Point(171, 37);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(110, 256);
-            this.groupBox2.TabIndex = 7;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Конструктор";
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(6, 156);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(96, 50);
-            this.button9.TabIndex = 5;
-            this.button9.Text = "Создать вариант алгоритма";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(7, 68);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(96, 37);
-            this.button8.TabIndex = 4;
-            this.button8.Text = "Создать выборку";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button5
-            // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(177, 299);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(93, 36);
-            this.button5.TabIndex = 9;
-            this.button5.Text = "Дерево объектов";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // button6
             // 
             this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -251,8 +176,8 @@ namespace dataMining_demo
             // 
             // button7
             // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button7.Location = new System.Drawing.Point(167, 19);
+            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button7.Location = new System.Drawing.Point(10, 78);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(93, 39);
             this.button7.TabIndex = 11;
@@ -262,13 +187,12 @@ namespace dataMining_demo
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox3.Controls.Add(this.button7);
             this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 335);
+            this.groupBox3.Location = new System.Drawing.Point(12, 283);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(269, 71);
+            this.groupBox3.Size = new System.Drawing.Size(128, 123);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Результат";
@@ -276,10 +200,13 @@ namespace dataMining_demo
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.задачаToolStripMenuItem});
+            this.задачаToolStripMenuItem,
+            this.создатьToolStripMenuItem,
+            this.результатыToolStripMenuItem,
+            this.сервисToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(296, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(302, 24);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -289,8 +216,8 @@ namespace dataMining_demo
             this.кластеризацииToolStripMenuItem,
             this.прогнозированияToolStripMenuItem});
             this.задачаToolStripMenuItem.Name = "задачаToolStripMenuItem";
-            this.задачаToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
-            this.задачаToolStripMenuItem.Text = "Задача...";
+            this.задачаToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.задачаToolStripMenuItem.Text = "Задача";
             // 
             // кластеризацииToolStripMenuItem
             // 
@@ -306,38 +233,99 @@ namespace dataMining_demo
             this.прогнозированияToolStripMenuItem.Text = "Прогнозирования";
             this.прогнозированияToolStripMenuItem.Click += new System.EventHandler(this.прогнозированияToolStripMenuItem_Click);
             // 
-            // button10
+            // создатьToolStripMenuItem
             // 
-            this.button10.Location = new System.Drawing.Point(21, 249);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 14;
-            this.button10.Text = "best Button";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.создатьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.представлениеToolStripMenuItem,
+            this.выборкуToolStripMenuItem,
+            this.структуруToolStripMenuItem1,
+            this.модельToolStripMenuItem,
+            this.вариантАлгоритмаToolStripMenuItem});
+            this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
+            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.создатьToolStripMenuItem.Text = "Создать";
+            // 
+            // представлениеToolStripMenuItem
+            // 
+            this.представлениеToolStripMenuItem.Name = "представлениеToolStripMenuItem";
+            this.представлениеToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.представлениеToolStripMenuItem.Text = "Представление";
+            this.представлениеToolStripMenuItem.Click += new System.EventHandler(this.представлениеToolStripMenuItem_Click);
+            // 
+            // выборкуToolStripMenuItem
+            // 
+            this.выборкуToolStripMenuItem.Name = "выборкуToolStripMenuItem";
+            this.выборкуToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.выборкуToolStripMenuItem.Text = "Выборку данных";
+            this.выборкуToolStripMenuItem.Click += new System.EventHandler(this.выборкуToolStripMenuItem_Click);
+            // 
+            // структуруToolStripMenuItem1
+            // 
+            this.структуруToolStripMenuItem1.Name = "структуруToolStripMenuItem1";
+            this.структуруToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
+            this.структуруToolStripMenuItem1.Text = "Структуру DM";
+            this.структуруToolStripMenuItem1.Click += new System.EventHandler(this.структуруToolStripMenuItem1_Click);
+            // 
+            // модельToolStripMenuItem
+            // 
+            this.модельToolStripMenuItem.Name = "модельToolStripMenuItem";
+            this.модельToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.модельToolStripMenuItem.Text = "Модель DM";
+            this.модельToolStripMenuItem.Click += new System.EventHandler(this.модельToolStripMenuItem_Click);
+            // 
+            // вариантАлгоритмаToolStripMenuItem
+            // 
+            this.вариантАлгоритмаToolStripMenuItem.Name = "вариантАлгоритмаToolStripMenuItem";
+            this.вариантАлгоритмаToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.вариантАлгоритмаToolStripMenuItem.Text = "Вариант алгоритма";
+            this.вариантАлгоритмаToolStripMenuItem.Click += new System.EventHandler(this.вариантАлгоритмаToolStripMenuItem_Click);
+            // 
+            // результатыToolStripMenuItem
+            // 
+            this.результатыToolStripMenuItem.Name = "результатыToolStripMenuItem";
+            this.результатыToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.результатыToolStripMenuItem.Text = "Результаты";
+            this.результатыToolStripMenuItem.Click += new System.EventHandler(this.результатыToolStripMenuItem_Click);
+            // 
+            // сервисToolStripMenuItem
+            // 
+            this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.настройкаСоединенияToolStripMenuItem,
+            this.схемаОбъектовToolStripMenuItem});
+            this.сервисToolStripMenuItem.Name = "сервисToolStripMenuItem";
+            this.сервисToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.сервисToolStripMenuItem.Text = "Сервис";
+            // 
+            // настройкаСоединенияToolStripMenuItem
+            // 
+            this.настройкаСоединенияToolStripMenuItem.Name = "настройкаСоединенияToolStripMenuItem";
+            this.настройкаСоединенияToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.настройкаСоединенияToolStripMenuItem.Text = "Настройка соединения";
+            // 
+            // схемаОбъектовToolStripMenuItem
+            // 
+            this.схемаОбъектовToolStripMenuItem.Name = "схемаОбъектовToolStripMenuItem";
+            this.схемаОбъектовToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.схемаОбъектовToolStripMenuItem.Text = "Схема объектов";
+            this.схемаОбъектовToolStripMenuItem.Click += new System.EventHandler(this.схемаОбъектовToolStripMenuItem_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 413);
-            this.Controls.Add(this.button10);
+            this.ClientSize = new System.Drawing.Size(302, 413);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMain";
-            this.Text = "dataMining_demo";
-            this.Activated += new System.EventHandler(this.MainForm_Activated);
+            this.Text = "dataMining";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -349,30 +337,32 @@ namespace dataMining_demo
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ComboBox comboBox3;
-        private Button button8;
         private ComboBox comboBox4;
         private Label label4;
-        private Button button9;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem задачаToolStripMenuItem;
         private ToolStripMenuItem кластеризацииToolStripMenuItem;
         private ToolStripMenuItem прогнозированияToolStripMenuItem;
-        private Button button10;
+        private ToolStripMenuItem создатьToolStripMenuItem;
+        private ToolStripMenuItem представлениеToolStripMenuItem;
+        private ToolStripMenuItem выборкуToolStripMenuItem;
+        private ToolStripMenuItem структуруToolStripMenuItem1;
+        private ToolStripMenuItem модельToolStripMenuItem;
+        private ToolStripMenuItem вариантАлгоритмаToolStripMenuItem;
+        private ToolStripMenuItem результатыToolStripMenuItem;
+        private ToolStripMenuItem сервисToolStripMenuItem;
+        private ToolStripMenuItem настройкаСоединенияToolStripMenuItem;
+        private ToolStripMenuItem схемаОбъектовToolStripMenuItem;
 
 
     }

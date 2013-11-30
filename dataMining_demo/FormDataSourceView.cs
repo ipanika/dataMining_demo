@@ -53,6 +53,7 @@ namespace dataMining_demo
             CreateDataAccessObjects(db, colForDSV);
 
             this.Close();
+            
         }
 
         void CreateDataAccessObjects(Database db, List<string> columnNames )

@@ -222,19 +222,24 @@ namespace dataMining_demo
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            selectSelections();
+        }
+
+        private void selectSelections()
+        {
             comboBox2.DataSource = null;
             comboBox2.Text = null;
 
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             DataTable dt = new DataTable();
-            
+
             String dsvName = comboBox1.Text;
 
             if (dsvName != "")
             {
                 string strSel = "SELECT dbo.selections.name FROM [dbo].selections JOIN dbo.data_source_views" +
                                     " ON dbo.data_source_views.id_dsv = dbo.selections.id_dsv" +
-                                    " and dbo.data_source_views.name = '" + dsvName +"'";
+                                    " and dbo.data_source_views.name = '" + dsvName + "'";
 
                 SqlDataAdapter sqlDA = new SqlDataAdapter(strSel, cn);
                 sqlDA.Fill(dt);
@@ -248,6 +253,11 @@ namespace dataMining_demo
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectStructures();
+        }
+
+        private void selectStructures()
         {
             comboBox3.DataSource = null;
             comboBox3.Text = null;
@@ -278,13 +288,7 @@ namespace dataMining_demo
             f5.Show();
         }
 
-        private void MainForm_Activated(object sender, EventArgs e)
-        {
-
-            //comboBox1.Text = null;
-            //selectDataSourceViews();
-        }
-
+        
         private void button6_Click(object sender, EventArgs e)
         {
             FormMetaData f6 = new FormMetaData();
@@ -314,6 +318,11 @@ namespace dataMining_demo
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectModels();
+        }
+
+        private void selectModels()
         {
             comboBox4.DataSource = null;
             comboBox4.Text = null;
@@ -383,5 +392,58 @@ namespace dataMining_demo
             f.Show();
         }
 
+        private void представлениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormDataSourceView f = new FormDataSourceView();
+            f.ShowDialog();
+            selectDataSourceViews();
+        }
+
+        private void выборкуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSelection f = new FormSelection();
+            f.ShowDialog();
+            selectSelections();
+            
+        }
+
+       
+        private void структуруToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FormMiningStructure f = new FormMiningStructure();
+            f.ShowDialog();
+            selectStructures();
+        }
+
+        private void модельToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormMiningModel f = new FormMiningModel();
+            f.ShowDialog();
+            selectModels();
+        }
+
+        private void вариантАлгоритмаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAlgorithmVariants f = new FormAlgorithmVariants();
+            f.Show();
+        }
+
+        private void результатыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormViewer f = new FormViewer();
+            f.Show();
+        }
+
+        private void схемаОбъектовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormTreeView f = new FormTreeView();
+            f.Show();
+        }
+
+        
+
+        
+
+      
     }
 }
