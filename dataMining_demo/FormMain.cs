@@ -19,7 +19,7 @@ namespace dataMining_demo
         public static Database db;
         public static string modelName;
 
-        public static int taskType; // тип задачи по умолчанию: кластеризация
+        public static int taskType = 1; // тип задачи по умолчанию: кластеризация
                 
         public FormMain()
         {
@@ -44,11 +44,18 @@ namespace dataMining_demo
 
         private void selectDataSourceViews()
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+
+            comboBox1.DataSource = null;
+
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             DataTable dt = new DataTable();
 
+            string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " + 
+                                " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
+                                " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+
             // Create data adapters from database tables and load schemas
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT [name] FROM [data_source_views]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
             
             int rowsConunt = dt.Rows.Count;
@@ -68,16 +75,18 @@ namespace dataMining_demo
             // проверка существования источника данных demo_dm
             checkDataSource();
 
+            string strName = comboBox3.Text;
+
             try
             {
                 string dmxQuery = "";
 
-                dmxQuery += "INSERT INTO [" + modelName + "] (";
+                dmxQuery += "INSERT INTO [" + strName + "] (";
 
                 // получение списка столбцов текущей структуры
 
                 AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
                 cn.Open();
                 AdomdCommand cmd = cn.CreateCommand();
                 //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
@@ -156,7 +165,7 @@ namespace dataMining_demo
 
                 // создание соединения с сервером и команды для отправки dmx-запроса
                 AdomdConnection adomdCn = new AdomdConnection();
-                adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
                 adomdCn.Open();
 
                 AdomdCommand adomdCmd = adomdCn.CreateCommand();
@@ -187,15 +196,14 @@ namespace dataMining_demo
             Database db = null; 
             if ((svr != null) && (svr.Connected))
             {
-                db = svr.Databases.FindByName("demo_DM");
+                db = svr.Databases.FindByName("SSAS_DM");
                 if (db == null)
                 {
-                    db = svr.Databases.Add("demo_DM");
+                    db = svr.Databases.Add("SSAS_DM");
                     db.Update();
                 }
 
             }
-
 
             return db;
         }
@@ -217,7 +225,7 @@ namespace dataMining_demo
             comboBox2.DataSource = null;
             comboBox2.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             DataTable dt = new DataTable();
             
             String dsvName = comboBox1.Text;
@@ -244,7 +252,7 @@ namespace dataMining_demo
             comboBox3.DataSource = null;
             comboBox3.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             DataTable dt = new DataTable();
 
             String selName = comboBox2.Text;
@@ -310,7 +318,7 @@ namespace dataMining_demo
             comboBox4.DataSource = null;
             comboBox4.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             DataTable dt = new DataTable();
 
             string strName = comboBox3.Text;
@@ -341,7 +349,7 @@ namespace dataMining_demo
             if (ds == null)
             {
                 ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Database)));
-                ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=demo_dm";
+                ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DW";
 
                 db.DataSources.Add(ds);
 
@@ -356,6 +364,7 @@ namespace dataMining_demo
             taskType = 1; // кластеризация
             кластеризацииToolStripMenuItem.Checked = true;
             прогнозированияToolStripMenuItem.Checked = false;
+            selectDataSourceViews();
         }
 
         // установка типа решаемой задачи
@@ -364,6 +373,7 @@ namespace dataMining_demo
             taskType = 2; // прогнозирование
             прогнозированияToolStripMenuItem.Checked = true;
             кластеризацииToolStripMenuItem.Checked = false;
+            selectDataSourceViews();
         }
 
     }

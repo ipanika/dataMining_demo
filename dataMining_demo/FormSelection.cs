@@ -30,14 +30,15 @@ namespace dataMining_demo
         private void FormSelection_Load(object sender, EventArgs e)
         {
             // получение списка доступных представлений:
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             cn.Open();
 
             DataTable dt = new DataTable();
 
             string strQuery = "SELECT [data_source_views].[name] FROM [data_source_views]"+
                                 " INNER JOIN relations ON [data_source_views].[id_dsv] = " +
-                                " relations.id_dsv WHERE relations.id_task = " + FormMain.taskType.ToString(); 
+                                " relations.id_dsv INNER JOIN tasks ON relations.id_task =  tasks.id_task " + 
+                                " WHERE tasks.task_type = "+FormMain.taskType.ToString(); 
             SqlDataAdapter sqlDA = new SqlDataAdapter(strQuery, cn);
             sqlDA.Fill(dt);
 
@@ -55,6 +56,10 @@ namespace dataMining_demo
             }
             // заполнение dataGridView
             fillDataGridView(dsvName);
+
+            // если решается задача прогнозирования, то скрыть кнопку "Переразметить"
+            if (FormMain.taskType == 2)
+                button3.Visible = false; 
             
         }
 
@@ -67,7 +72,7 @@ namespace dataMining_demo
             // обращаемся к методу заполнения в зависимости от решаемой задачи
             if (FormMain.taskType == 1)
             {
-                filter = textBox2.Text;
+                filter = textBox1.Text;
             }
             else
             {
@@ -111,7 +116,7 @@ namespace dataMining_demo
             try
             {
                 // получение списка доступных представлений:
-                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
                 cn.Open();
 
                 // получение имен столбцов для текущего представления
@@ -262,7 +267,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 

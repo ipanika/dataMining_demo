@@ -1,4 +1,4 @@
-USE [demo_dm]
+USE DM
 GO
 
 -- clear demo_dm database
@@ -15,6 +15,6 @@ delete from selections
 
 delete from dsv_columns
 
-delete from data_source_views
-
 delete from relations
+
+delete from data_source_views

@@ -19,7 +19,7 @@ namespace dataMining_demo
 
         private void FormAlgorithmVariants_Load(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -95,7 +95,7 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 

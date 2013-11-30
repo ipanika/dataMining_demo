@@ -41,7 +41,7 @@ namespace dataMining_demo
         {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
@@ -77,7 +77,7 @@ namespace dataMining_demo
 
                 // запрос к метаданным модели, выбранной на главной форме
                 AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+                cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
                 cn.Open();
 
                 AdomdCommand cmd = cn.CreateCommand();
@@ -110,7 +110,7 @@ namespace dataMining_demo
         {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();

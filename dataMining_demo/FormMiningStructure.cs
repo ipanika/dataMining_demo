@@ -42,13 +42,18 @@ namespace dataMining_demo
         {
             
             // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
+            string sqlQuery = "SELECT selections.name FROM selections INNER JOIN " +
+                                " data_source_views ON selections.id_dsv = data_source_views.id_dsv INNER JOIN " +
+                                " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
+                                " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+
             DataTable dt = new DataTable();
             // загрузка имеющихся представлений ИАД
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select [name] FROM [selections]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
 
             comboBox1.DataSource = dt;
@@ -63,6 +68,9 @@ namespace dataMining_demo
 
             dataGridView1.EditMode = DataGridViewEditMode.EditOnEnter;
 
+            if (FormMain.taskType == 2)
+                textBox2.Enabled = false;
+
         }
                 
 
@@ -75,7 +83,7 @@ namespace dataMining_demo
             string test_ratio = textBox2.Text;
 
             // запись в таблицу structures информации о создаваемой структуре
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
             SqlCommand sqlCmd = new SqlCommand();
@@ -90,7 +98,7 @@ namespace dataMining_demo
             svr.Connect("localhost");
 
             if ((svr != null) && (svr.Connected))
-                db = svr.Databases.FindByName("demo_DM");
+                db = svr.Databases.FindByName("SSAS_DM");
 
             string dmxQuery;
             dmxQuery = "CREATE MINING STRUCTURE ["+strName+"] (";
@@ -160,7 +168,7 @@ namespace dataMining_demo
 
             // создание соединения с сервером и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
-            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
             adomdCn.Open();
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();
@@ -191,7 +199,7 @@ namespace dataMining_demo
 
         private void fillDataGridView(string selName)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             cn.Open();
 
             try

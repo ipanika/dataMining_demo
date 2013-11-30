@@ -29,8 +29,7 @@ namespace dataMining_demo
 
             if ((svr != null) && (svr.Connected))
             {
-                db = svr.Databases.FindByName("demo_DM");
-                
+                db = svr.Databases.FindByName("SSAS_DM");
             }
 
             List<string> columnNames = new List<string>();
@@ -72,8 +71,7 @@ namespace dataMining_demo
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
 
             string argsForQuery = " ";
-            string strQuery = "";
-
+            
             int i;
             for (i = 0; i < columnNames.Count-1; i++){
                 argsForQuery += "'"+columnNames[i] + "', ";
@@ -81,14 +79,13 @@ namespace dataMining_demo
 
             argsForQuery += "'" + columnNames[i] + "' ";
 
-            strQuery = "SELECT "+ argsForQuery + " FROM SourceData$";
 
             // определение имени представления данных
             string dsvName = textBox1.Text;
 
             // сохранение в БД приложения информации о созданных источниках и
             // представлениях данных
-            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cnToDSV.State == ConnectionState.Closed)
                 cnToDSV.Open();
 

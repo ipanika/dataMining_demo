@@ -27,10 +27,10 @@ namespace dataMining_demo
             //svr.Connect("localhost");
 
             //if ((svr != null) && (svr.Connected))
-            //    db = svr.Databases.FindByName("demo_DM");
+            //    db = svr.Databases.FindByName("SSAS_DM");
 
             // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -62,7 +62,7 @@ namespace dataMining_demo
             string sqlQuery = "";
 
             
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=demo_dm; Integrated Security=true");
+            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -85,15 +85,66 @@ namespace dataMining_demo
             sqlCmd.CommandText = sqlQuery;
             string nameAlg = sqlCmd.ExecuteScalar().ToString();
 
-            
+
 
             dmxQuery = "ALTER MINING STRUCTURE [" + strName + "]" +
-                        " ADD MINING MODEL [" + modelName + "]" +
-                        " USING " + nameAlg;
+                        " ADD MINING MODEL [" + modelName + "]";
+
+            // если проводится кластеризация, то прогнозируемый столбец не требуется:
+            if (FormMain.taskType == 2)     
+            {
+                // вид DMX - запроса: 
+                //ADD MINING MODEL <model>
+                //( <structure column name>  [AS <model column name>]  [<modeling flags>]    [<prediction>]
+                //  [(<nested column definition list>) [WITH FILTER (<nested filter criteria>)]] )
+                //USING <algorithm> [(<parameter list>)] 
+
+                // запроса столбцов структуры:
+
+                SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+                cn2.Open();
+
+                // получение списка столбцов из выборки данных
+                string strSelect = "SELECT column_name FROM dsv_columns JOIN selections " + 
+                            " ON dsv_columns.id_dsv = selections.id_dsv INNER JOIN structures "+
+                            " ON structures.id_selection = selections.id_selection WHERE structures.name = '" + strName + "'";
+
+                SqlDataAdapter sqlDA = new SqlDataAdapter(strSelect, cn2);
+                DataTable dtColumns = new DataTable();
+                sqlDA.Fill(dtColumns);
+
+                List<string> colNames = new List<string>();
+
+
+                for (int i = 0; i < dtColumns.Rows.Count; i++)
+                    colNames.Add(dtColumns.Rows[i][0].ToString());
+                
+                dmxQuery += "(";
+
+                for (int i = 0; i < colNames.Count; i++)
+                {
+                    string curName = colNames[i];
+
+                    // для колонки YearID пропускаем ключ PREDICT 
+                    if (curName.Contains("Year"))
+                    {
+                        dmxQuery += " [" + curName + "],";
+                    }
+                    else
+                    {
+                        dmxQuery += " [" + curName +  "] PREDICT,";
+                    }
+                }
+                dmxQuery = dmxQuery.Substring(0, dmxQuery.Length -1);
+
+                dmxQuery += ")";
+            }
+
+            dmxQuery += " USING " + nameAlg + " WITH DRILLTHROUGH ";
 
             // создание объекта соединения с БД SSAS и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
-            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = demo_DM";
+            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
             adomdCn.Open();
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();
