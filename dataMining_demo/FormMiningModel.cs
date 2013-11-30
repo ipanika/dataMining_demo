@@ -34,16 +34,25 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
+            string sqlQuery = "SELECT [structures].[name] FROM [structures] INNER JOIN " + 
+                               " selections ON structures.id_selection = selections.id_selection INNER JOIN " +
+                               " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" + 
+                               " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
+                               " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType;
+
             DataTable dt1 = new DataTable();
             // загрузка имеющихся представлений ИАД
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select [name] FROM [structures]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt1);
 
             comboBox1.DataSource = dt1;
             comboBox1.DisplayMember = "name";
 
+            sqlQuery = "SELECT algorithm_variants.name FROM algorithm_variants " +
+                        " INNER JOIN algorithms ON algorithm_variants.id_algorithm = algorithms.id_algorithm" +
+                        " INNER JOIN tasks ON tasks.id_task = algorithms.id_task WHERE tasks.task_type = " + FormMain.taskType;
             DataTable dt = new DataTable();
-            sqlDA = new SqlDataAdapter("select [name] FROM [algorithm_variants]", cn);
+            sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
 
             comboBox2.DataSource = dt;

@@ -54,6 +54,7 @@ namespace dataMining_demo
             this.задачаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кластеризацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.прогнозированияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button10 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -305,11 +306,22 @@ namespace dataMining_demo
             this.прогнозированияToolStripMenuItem.Text = "Прогнозирования";
             this.прогнозированияToolStripMenuItem.Click += new System.EventHandler(this.прогнозированияToolStripMenuItem_Click);
             // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(21, 249);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 14;
+            this.button10.Text = "best Button";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(296, 413);
+            this.Controls.Add(this.button10);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button1);
@@ -360,6 +372,7 @@ namespace dataMining_demo
         private ToolStripMenuItem задачаToolStripMenuItem;
         private ToolStripMenuItem кластеризацииToolStripMenuItem;
         private ToolStripMenuItem прогнозированияToolStripMenuItem;
+        private Button button10;
 
 
     }

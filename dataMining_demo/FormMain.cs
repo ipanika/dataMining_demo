@@ -376,5 +376,12 @@ namespace dataMining_demo
             selectDataSourceViews();
         }
 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            FormViewer f = new FormViewer();
+
+            f.Show();
+        }
+
     }
 }
