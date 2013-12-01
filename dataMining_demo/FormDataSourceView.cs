@@ -13,8 +13,6 @@ namespace dataMining_demo
 {
     public partial class FormDataSourceView : Form
     {
-        //Database db = dataMining_demo.Form1.db;
-        //Server svr = dataMining_demo.Form1.svr;
          Server svr = new Server();
          Database db = new Database();
 
@@ -29,7 +27,7 @@ namespace dataMining_demo
 
             if ((svr != null) && (svr.Connected))
             {
-                db = svr.Databases.FindByName("SSAS_DM");
+                db = svr.Databases.FindByName(FormMain.as_dataSourceName);
             }
 
             List<string> columnNames = new List<string>();
@@ -44,8 +42,6 @@ namespace dataMining_demo
             // создание массива с именами столбцов, выбранных для представления
             foreach (object obj in checkedListBox1.CheckedItems)
             {
-                //DataRowView drv;
-                //drv = (System.Data.DataRowView) obj;
                 colForDSV.Add(obj.ToString());
                 i += 1;
             }
@@ -58,19 +54,6 @@ namespace dataMining_demo
 
         void CreateDataAccessObjects(Database db, List<string> columnNames )
         {
-            // Create a relational data source
-            // by specifying the name and the id
-            string dsName = "demo_ds";
-            RelationalDataSource ds = new RelationalDataSource(dsName, Utils.GetSyntacticallyValidID(dsName, typeof(Database)));
-            ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DW";
-
-            if (db.DataSources.FindByName(dsName) == null)
-                db.DataSources.Add(ds);
-
-            // Create connection to datasource cto extract schema to a dataset
-            DataSet dset = new DataSet();
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
-
             string argsForQuery = " ";
             
             int i;
@@ -115,12 +98,6 @@ namespace dataMining_demo
         // заполнение списка элементов в зависимости от значения элемента checkedBox
         private void fillListBox(List<string> columnNames)
         {
-
-            // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
-            if (cn.State == ConnectionState.Closed)
-                cn.Open();
-
             // если тип решаемой задачи - прогнозирование, то создается представление для прогнозирования
             if (FormMain.taskType == 2)
             {

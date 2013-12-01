@@ -95,7 +95,7 @@ namespace dataMining_demo
             cmb.SelectedIndexChanged += new System.EventHandler(this.cmb_SelectedIndexChanged);
 
             // получение списка доступных предприятий:
-            SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+            SqlConnection cn2 = new SqlConnection(FormMain.dw_connectionString);
             cn2.Open();
             SqlCommand sqlCmd = new SqlCommand();
             // получение списка предприятий
@@ -142,7 +142,7 @@ namespace dataMining_demo
                         colNames.Add(colNm);
                         glob_columnNames.Add(colNm);
 
-                        SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+                        SqlConnection cn2 = new SqlConnection(FormMain.dw_connectionString);
                         cn2.Open();
                         SqlCommand sqlCmd = new SqlCommand();
 
@@ -178,7 +178,7 @@ namespace dataMining_demo
                 //if (strQuery != "")
                 if (colNames.Count > 0)
                 {
-                    cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
+                    cn = new SqlConnection(FormMain.dw_connectionString);
                     cn.Open();
 
                     // формирование pivot-запроса:

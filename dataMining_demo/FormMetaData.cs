@@ -23,7 +23,7 @@ namespace dataMining_demo
             {
                 // запрос к метаданным модели, выбранной на главной форме
                 AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+                cn.ConnectionString = FormMain.as_connectionString;
                 cn.Open();
 
                 AdomdCommand cmd = cn.CreateCommand();

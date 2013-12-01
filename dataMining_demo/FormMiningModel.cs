@@ -24,11 +24,6 @@ namespace dataMining_demo
 
         private void MiningModelForm_Load(object sender, EventArgs e)
         {
-            //svr.Connect("localhost");
-
-            //if ((svr != null) && (svr.Connected))
-            //    db = svr.Databases.FindByName("SSAS_DM");
-
             // создать соединение с БД
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
             if (cn.State == ConnectionState.Closed)
@@ -153,7 +148,7 @@ namespace dataMining_demo
 
             // создание объекта соединения с БД SSAS и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
-            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+            adomdCn.ConnectionString = FormMain.as_connectionString;
             adomdCn.Open();
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();

@@ -26,7 +26,7 @@ namespace dataMining_demo
             MiningService service = null;
 
             AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+            cn.ConnectionString = FormMain.as_connectionString;
             cn.Open();
 
             
@@ -42,7 +42,7 @@ namespace dataMining_demo
             else throw new System.Exception("Custom Viewers not supported");
 
             // Set up and load the viewer
-            viewer.ConnectionString = "Provider=MSOLAP; Integrated Security=SSPI; Data Source = localhost; Initial Catalog = SSAS_DM";
+            viewer.ConnectionString = FormMain.as_connectionString; //"Provider=MSOLAP; Integrated Security=SSPI; Data Source = localhost; Initial Catalog = SSAS_DM";
             viewer.MiningModelName = modelName;
             viewer.Dock = DockStyle.Fill;
             panel1.Controls.Add(viewer);

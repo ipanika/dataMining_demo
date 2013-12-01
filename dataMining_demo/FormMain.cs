@@ -20,6 +20,21 @@ namespace dataMining_demo
         public static string modelName;
 
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
+
+        public static string app_dataSource = "localhost"; // сервер БД приложения
+        public static string app_initCatalog = "DM"; // имя БД приложения
+        public static string app_connectionString = "Data Source=" + app_dataSource + "; Initial Catalog=" + app_initCatalog +
+                                      "; Integrated Security=SSPI";
+
+        public static string as_dataSource = "localhost"; // сервер службы SSAS
+        public static string as_initCatalog = "SSAS_DM"; // имя БД службы SSAS
+        public static string as_dataSourceName = "dataSource_DM"; // имя источника данных
+        public static string as_connectionString = "Provider=MSOLAP; Integrated Security=SSPI; Data Source = " + as_dataSource + "; Initial Catalog = " + as_initCatalog;
+
+        public static string dw_dataSource = "localhost"; // сервер ХД
+        public static string dw_initCatalog = "DW"; // имя ХД
+        public static string dw_connectionString = "Data Source="+ dw_dataSource +"; Initial Catalog="+dw_initCatalog +"; Integrated Security=SSPI";
+
                 
         public FormMain()
         {
@@ -47,7 +62,7 @@ namespace dataMining_demo
 
             comboBox1.DataSource = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(app_connectionString);
             DataTable dt = new DataTable();
 
             string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " + 
@@ -86,7 +101,7 @@ namespace dataMining_demo
                 // получение списка столбцов текущей структуры
 
                 AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+                cn.ConnectionString = FormMain.as_connectionString;
                 cn.Open();
                 AdomdCommand cmd = cn.CreateCommand();
                 //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
@@ -165,7 +180,7 @@ namespace dataMining_demo
 
                 // создание соединения с сервером и команды для отправки dmx-запроса
                 AdomdConnection adomdCn = new AdomdConnection();
-                adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+                adomdCn.ConnectionString = FormMain.as_connectionString;
                 adomdCn.Open();
 
                 AdomdCommand adomdCmd = adomdCn.CreateCommand();
@@ -196,10 +211,10 @@ namespace dataMining_demo
             Database db = null; 
             if ((svr != null) && (svr.Connected))
             {
-                db = svr.Databases.FindByName("SSAS_DM");
+                db = svr.Databases.FindByName(FormMain.as_dataSourceName);
                 if (db == null)
                 {
-                    db = svr.Databases.Add("SSAS_DM");
+                    db = svr.Databases.Add(FormMain.as_dataSourceName);
                     db.Update();
                 }
 
@@ -358,7 +373,7 @@ namespace dataMining_demo
             if (ds == null)
             {
                 ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Database)));
-                ds.ConnectionString = "Provider=SQLNCLI11.1;Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DW";
+                ds.ConnectionString = "Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DM";
 
                 db.DataSources.Add(ds);
 

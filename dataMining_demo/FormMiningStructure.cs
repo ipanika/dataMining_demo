@@ -98,7 +98,7 @@ namespace dataMining_demo
             svr.Connect("localhost");
 
             if ((svr != null) && (svr.Connected))
-                db = svr.Databases.FindByName("SSAS_DM");
+                db = svr.Databases.FindByName(FormMain.as_dataSourceName);
 
             string dmxQuery;
             dmxQuery = "CREATE MINING STRUCTURE ["+strName+"] (";
@@ -168,7 +168,7 @@ namespace dataMining_demo
 
             // создание соединения с сервером и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
-            adomdCn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+            adomdCn.ConnectionString = FormMain.as_connectionString;
             adomdCn.Open();
 
             AdomdCommand adomdCmd = adomdCn.CreateCommand();
@@ -186,17 +186,7 @@ namespace dataMining_demo
 
         }
         
-        private void getColumnType(string colName, DataTable dt, SqlConnection cn)
-        {
-            cn = new SqlConnection("Data Source=localhost; Initial Catalog=DW; Integrated Security=true");
-            cn.Open();
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT t.name AS type_name FROM sys.columns AS c  " +
-                                               " JOIN sys.types AS t ON c.user_type_id=t.user_type_id " +
-                                               " WHERE c.object_id = OBJECT_ID('dbo.SourceData$') AND c.name = '" +
-                                               colName + "'" + " ORDER BY c.column_id;", cn);
-            sqlDA.Fill(dt);
-        }
-
+        
         private void fillDataGridView(string selName)
         {
             SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");

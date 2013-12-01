@@ -41,7 +41,7 @@ namespace dataMining_demo
         {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+            cn.ConnectionString = FormMain.as_connectionString;
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
@@ -77,7 +77,7 @@ namespace dataMining_demo
 
                 // запрос к метаданным модели, выбранной на главной форме
                 AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+                cn.ConnectionString = FormMain.as_connectionString;
                 cn.Open();
 
                 AdomdCommand cmd = cn.CreateCommand();
@@ -110,7 +110,7 @@ namespace dataMining_demo
         {
             // запрос к метаданным модели, выбранной на главной форме
             AdomdConnection cn = new AdomdConnection();
-            cn.ConnectionString = "Data Source = localhost; Initial Catalog = SSAS_DM";
+            cn.ConnectionString = FormMain.as_connectionString;
             cn.Open();
 
             AdomdCommand cmd = cn.CreateCommand();
@@ -138,19 +138,16 @@ namespace dataMining_demo
                             attr_label.Add(reader.GetValue(i).ToString());
                         else
                             attr_value.Add(reader.GetValue(i).ToString());
-
                     }
-
                 }
                 chart1.ChartAreas.Add("Default");
                 series = chart1.Series.Add("Default");
 
                 for (int i = 0; i < attr_value.Count; i++)
                 {
-                    double pnt = Convert.ToDouble(attr_value[i]);
+                    double pnt = Math.Round(Convert.ToDouble(attr_value[i]), 0);
                     series.Points.AddY(pnt);
                     chart1.ChartAreas[0].AxisX.CustomLabels.Add(i, i + 2, attr_label[i], 0, LabelMarkStyle.LineSideMark);
-
                 }
 
                 chart1.ChartAreas[0].AxisX.MaximumAutoSize = 100;
