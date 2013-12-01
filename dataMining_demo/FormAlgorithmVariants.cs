@@ -155,6 +155,7 @@ namespace dataMining_demo
             // сохранение параметров варианта алгоритма в БД
             string strQuery = "INSERT INTO [parameters] VALUES";
 
+            int countPars = 0; // счетчик параметров, если он = 0 , то сохранять данные в БД не надо.
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 // выбор значения параметра из ячейки dataGridView
@@ -162,13 +163,16 @@ namespace dataMining_demo
                 {
                     strQuery += " ('" + idVarAlg + "', '" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "',";
                     strQuery += " '" + dataGridView1.Rows[i].Cells[1].Value.ToString() + "'),";
+
+                    countPars += 1;
                 }
             }
 
             strQuery = strQuery.Substring(0, strQuery.Length - 1);
             
             sqlCmd.CommandText = strQuery;
-            sqlCmd.ExecuteNonQuery();
+            if (countPars > 0)
+                sqlCmd.ExecuteNonQuery();
             
             this.Close();
         }

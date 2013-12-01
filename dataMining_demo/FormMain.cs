@@ -10,13 +10,15 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.AnalysisServices.AdomdClient;
 using Microsoft.AnalysisServices;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace dataMining_demo
 {
     public partial class FormMain : Form
     {
-        public static Server svr;
-        public static Database db;
+        public static Microsoft.AnalysisServices.Server svr;
+        public static Microsoft.AnalysisServices.Database db;
         public static string modelName;
 
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
@@ -44,10 +46,12 @@ namespace dataMining_demo
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            svr = new Server();
-            svr.Connect("localhost");
+            svr = new Microsoft.AnalysisServices.Server();
+            svr.Connect(as_dataSource);
 
             db = CreateDatabase();
+
+            checkAppDB();
 
             selectDataSourceViews();
 
@@ -55,6 +59,30 @@ namespace dataMining_demo
             кластеризацииToolStripMenuItem.Checked = true;
             прогнозированияToolStripMenuItem.Checked = false;
             
+        }
+
+        // функция проверки существования базы данных приложения
+        private void checkAppDB()
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(app_connectionString);
+                cn.Open();
+            }
+            // в случае провала - запустить скрипт создания БД
+            catch
+            {
+                string sqlConnectionString = "Data Source="+ app_dataSource + "; Initial Catalog = master; Integrated Security=SSPI";
+                FileInfo file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\create_db.sql");
+                string script = file.OpenText().ReadToEnd();
+                SqlConnection conn = new SqlConnection(sqlConnectionString);
+                Microsoft.SqlServer.Management.Smo.Server sqlServer = new Microsoft.SqlServer.Management.Smo.Server(new ServerConnection(conn));
+                sqlServer.ConnectionContext.ExecuteNonQuery(script);
+
+                file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\fill_db.sql");
+                script = file.OpenText().ReadToEnd();
+                sqlServer.ConnectionContext.ExecuteNonQuery(script);
+            }
         }
 
         private void selectDataSourceViews()
@@ -210,10 +238,10 @@ namespace dataMining_demo
             f2.ShowDialog();
         }
 
-        Database CreateDatabase()
+        Microsoft.AnalysisServices.Database CreateDatabase()
         {
             // Create a database and set the properties
-            Database db = null; 
+            Microsoft.AnalysisServices.Database db = null; 
             if ((svr != null) && (svr.Connected))
             {
                 db = svr.Databases.FindByName(FormMain.as_dataSourceName);
@@ -377,7 +405,7 @@ namespace dataMining_demo
 
             if (ds == null)
             {
-                ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Database)));
+                ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Microsoft.AnalysisServices.Database)));
                 ds.ConnectionString = "Data Source=localhost;Integrated Security=SSPI;Initial Catalog=DM";
 
                 db.DataSources.Add(ds);

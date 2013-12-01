@@ -332,6 +332,9 @@ namespace dataMining_demo
             int rowCount = dataGridView1.RowCount;
             int colCount = dataGridView1.ColumnCount;
 
+            if (FormMain.taskType == 2)
+                rowCount -= 1;
+
             string strInsert = "";
             
             int i;
