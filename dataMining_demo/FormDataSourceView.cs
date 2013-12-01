@@ -27,7 +27,8 @@ namespace dataMining_demo
 
             if ((svr != null) && (svr.Connected))
             {
-                db = svr.Databases.FindByName(FormMain.as_dataSourceName);
+                db = svr.Databases.FindByName(FormMain.as_initCatalog);
+
             }
 
             List<string> columnNames = new List<string>();
@@ -46,13 +47,13 @@ namespace dataMining_demo
                 i += 1;
             }
 
-            CreateDataAccessObjects(db, colForDSV);
+            CreateDataAccessObjects(colForDSV);
 
             this.Close();
             
         }
 
-        void CreateDataAccessObjects(Database db, List<string> columnNames )
+        void CreateDataAccessObjects(List<string> columnNames )
         {
             string argsForQuery = " ";
             

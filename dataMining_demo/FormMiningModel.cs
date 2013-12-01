@@ -45,7 +45,7 @@ namespace dataMining_demo
 
             sqlQuery = "SELECT algorithm_variants.name FROM algorithm_variants " +
                         " INNER JOIN algorithms ON algorithm_variants.id_algorithm = algorithms.id_algorithm" +
-                        " INNER JOIN tasks ON tasks.id_task = algorithms.id_task WHERE tasks.task_type = " + FormMain.taskType;
+                        " INNER JOIN tasks ON tasks.task_type = algorithms.task_type WHERE tasks.task_type = " + FormMain.taskType;
             DataTable dt = new DataTable();
             sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
@@ -144,24 +144,31 @@ namespace dataMining_demo
                 dmxQuery += ")";
             }
 
-            dmxQuery += " USING " + nameAlg + "(";
+            dmxQuery += " USING " + nameAlg + " ";
             
             // получение параметров модели:
             strSelect = "SELECT parameters.name, parameters.value FROM parameters INNER JOIN algorithm_variants " +
                                 " ON algorithm_variants.id_algorithm_variant = parameters.id_algorithm_variant " +
-                                " where algorithm_variants.name = '" + algVarName + "'";
+                                " where algorithm_variants.name = '" + algVarName + "' ";
 
             sqlDA = new SqlDataAdapter(strSelect, cn2);
             dtColumns = new DataTable();
             sqlDA.Fill(dtColumns);
 
+            // если есть параметры для добавления
+            if (dtColumns.Rows.Count > 0)
+                dmxQuery += " (";
+
             for (int i = 0; i < dtColumns.Rows.Count; i++)
-                dmxQuery += " " + dtColumns.Rows[i][0].ToString() + " = " + dtColumns.Rows[i][1].ToString() + ",";
+                dmxQuery += " " + dtColumns.Rows[i][0].ToString() + " = " + dtColumns.Rows[i][1].ToString() + ",";   
 
             dmxQuery = dmxQuery.Substring(0, dmxQuery.Length - 1);
 
+            if (dtColumns.Rows.Count > 0)
+                dmxQuery += ") ";
+
             // возможность детализации модели:
-            dmxQuery += ") WITH DRILLTHROUGH ";
+            dmxQuery += " WITH DRILLTHROUGH ";
 
             // создание объекта соединения с БД SSAS и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
