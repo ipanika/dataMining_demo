@@ -42,7 +42,7 @@ namespace dataMining_demo
         {
             
             // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -83,7 +83,7 @@ namespace dataMining_demo
             string test_ratio = textBox2.Text;
 
             // запись в таблицу structures информации о создаваемой структуре
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
             SqlCommand sqlCmd = new SqlCommand();
@@ -189,7 +189,7 @@ namespace dataMining_demo
         
         private void fillDataGridView(string selName)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             cn.Open();
 
             try

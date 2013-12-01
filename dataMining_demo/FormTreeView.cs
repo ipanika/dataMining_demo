@@ -13,10 +13,6 @@ namespace dataMining_demo
 {
     public partial class FormTreeView : Form
     {
-
-        //Server svr = new Server();
-        //Database db = new Database();
-
         public FormTreeView()
         {
             InitializeComponent();
@@ -26,7 +22,7 @@ namespace dataMining_demo
         {
             DataTable dtDsv = new DataTable();
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -89,7 +85,6 @@ namespace dataMining_demo
                                         if (dtAlgVar != null)
                                             for (int m = 0; m < dtAlgVar.Rows.Count; m++)
                                             {
-                                                //string algVarID = dtMod.Rows[m][0].ToString();
                                                 string algVarName = dtAlgVar.Rows[m][0].ToString();
                                                 TreeNode algVarNode = new TreeNode(algVarName);
 

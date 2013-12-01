@@ -30,7 +30,7 @@ namespace dataMining_demo
         private void FormSelection_Load(object sender, EventArgs e)
         {
             // получение списка доступных представлений:
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             cn.Open();
 
             DataTable dt = new DataTable();
@@ -77,6 +77,8 @@ namespace dataMining_demo
             else
             {
                 filter = cmb.Text;
+                dataGridView1.AllowUserToAddRows = true;
+                dataGridView1.EditMode = DataGridViewEditMode.EditOnKeystrokeOrF2;
             }
 
             // запрос данных из хранилища и заполнение ими dataGridView
@@ -116,7 +118,7 @@ namespace dataMining_demo
             try
             {
                 // получение списка доступных представлений:
-                SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+                SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
                 cn.Open();
 
                 // получение имен столбцов для текущего представления
@@ -267,7 +269,7 @@ namespace dataMining_demo
 
         private void button2_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 

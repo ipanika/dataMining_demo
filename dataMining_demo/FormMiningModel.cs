@@ -25,7 +25,7 @@ namespace dataMining_demo
         private void MiningModelForm_Load(object sender, EventArgs e)
         {
             // создать соединение с БД
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -66,7 +66,7 @@ namespace dataMining_demo
             string sqlQuery = "";
 
             
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
@@ -94,6 +94,11 @@ namespace dataMining_demo
             dmxQuery = "ALTER MINING STRUCTURE [" + strName + "]" +
                         " ADD MINING MODEL [" + modelName + "]";
 
+            string strSelect;
+            SqlConnection cn2 = new SqlConnection(FormMain.app_connectionString);
+                cn2.Open();
+            SqlDataAdapter sqlDA;
+            DataTable dtColumns;
             // если проводится кластеризация, то прогнозируемый столбец не требуется:
             if (FormMain.taskType == 2)     
             {
@@ -105,16 +110,15 @@ namespace dataMining_demo
 
                 // запроса столбцов структуры:
 
-                SqlConnection cn2 = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
-                cn2.Open();
+                
 
                 // получение списка столбцов из выборки данных
-                string strSelect = "SELECT column_name FROM dsv_columns JOIN selections " + 
+                strSelect = "SELECT column_name FROM dsv_columns JOIN selections " + 
                             " ON dsv_columns.id_dsv = selections.id_dsv INNER JOIN structures "+
                             " ON structures.id_selection = selections.id_selection WHERE structures.name = '" + strName + "'";
 
-                SqlDataAdapter sqlDA = new SqlDataAdapter(strSelect, cn2);
-                DataTable dtColumns = new DataTable();
+                sqlDA = new SqlDataAdapter(strSelect, cn2);
+                dtColumns = new DataTable();
                 sqlDA.Fill(dtColumns);
 
                 List<string> colNames = new List<string>();
@@ -131,20 +135,33 @@ namespace dataMining_demo
 
                     // для колонки YearID пропускаем ключ PREDICT 
                     if (curName.Contains("Year"))
-                    {
                         dmxQuery += " [" + curName + "],";
-                    }
                     else
-                    {
                         dmxQuery += " [" + curName +  "] PREDICT,";
-                    }
                 }
                 dmxQuery = dmxQuery.Substring(0, dmxQuery.Length -1);
 
                 dmxQuery += ")";
             }
 
-            dmxQuery += " USING " + nameAlg + " WITH DRILLTHROUGH ";
+            dmxQuery += " USING " + nameAlg + "(";
+            
+            // получение параметров модели:
+            strSelect = "SELECT parameters.name, parameters.value FROM parameters INNER JOIN algorithm_variants " +
+                                " ON algorithm_variants.id_algorithm_variant = parameters.id_algorithm_variant " +
+                                " where algorithm_variants.name = '" + algVarName + "'";
+
+            sqlDA = new SqlDataAdapter(strSelect, cn2);
+            dtColumns = new DataTable();
+            sqlDA.Fill(dtColumns);
+
+            for (int i = 0; i < dtColumns.Rows.Count; i++)
+                dmxQuery += " " + dtColumns.Rows[i][0].ToString() + " = " + dtColumns.Rows[i][1].ToString() + ",";
+
+            dmxQuery = dmxQuery.Substring(0, dmxQuery.Length - 1);
+
+            // возможность детализации модели:
+            dmxQuery += ") WITH DRILLTHROUGH ";
 
             // создание объекта соединения с БД SSAS и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();

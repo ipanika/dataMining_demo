@@ -69,7 +69,7 @@ namespace dataMining_demo
 
             // сохранение в БД приложения информации о созданных источниках и
             // представлениях данных
-            SqlConnection cnToDSV = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cnToDSV = new SqlConnection(FormMain.app_connectionString);
             if (cnToDSV.State == ConnectionState.Closed)
                 cnToDSV.Open();
 

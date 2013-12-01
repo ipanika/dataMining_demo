@@ -96,6 +96,18 @@ namespace dataMining_demo
             {
                 string dmxQuery = "";
 
+
+                // создание соединения с сервером и команды для отправки dmx-запроса
+                AdomdConnection adomdCn = new AdomdConnection();
+                adomdCn.ConnectionString = FormMain.as_connectionString;
+                adomdCn.Open();
+                AdomdCommand adomdCmd = adomdCn.CreateCommand();
+
+                // удаление данных ранее обработанной структуры
+                adomdCmd.CommandText = "DELETE FROM [" + strName + "]";
+
+                adomdCmd.Execute();
+
                 dmxQuery += "INSERT INTO [" + strName + "] (";
 
                 // получение списка столбцов текущей структуры
@@ -176,14 +188,7 @@ namespace dataMining_demo
 		                " INNER JOIN models ON models.id_structure = structures.id_structure "+
                         " AND models.name =  ''" + modelName + "'') p" +
                         " PIVOT ( max(column_value) FOR column_name IN (" + colNames + ") ) AS pvt')";
-
-
-                // создание соединения с сервером и команды для отправки dmx-запроса
-                AdomdConnection adomdCn = new AdomdConnection();
-                adomdCn.ConnectionString = FormMain.as_connectionString;
-                adomdCn.Open();
-
-                AdomdCommand adomdCmd = adomdCn.CreateCommand();
+                
                 adomdCmd.CommandText = dmxQuery;
             
                 adomdCmd.Execute();
@@ -245,7 +250,7 @@ namespace dataMining_demo
             comboBox2.DataSource = null;
             comboBox2.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             DataTable dt = new DataTable();
 
             String dsvName = comboBox1.Text;
@@ -277,7 +282,7 @@ namespace dataMining_demo
             comboBox3.DataSource = null;
             comboBox3.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             DataTable dt = new DataTable();
 
             String selName = comboBox2.Text;
@@ -342,7 +347,7 @@ namespace dataMining_demo
             comboBox4.DataSource = null;
             comboBox4.Text = null;
 
-            SqlConnection cn = new SqlConnection("Data Source=localhost; Initial Catalog=DM; Integrated Security=true");
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             DataTable dt = new DataTable();
 
             string strName = comboBox3.Text;
