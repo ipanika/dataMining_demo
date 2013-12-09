@@ -125,9 +125,9 @@ namespace dataMining_demo
                 SqlCommand cmd = cn.CreateCommand();
                 cmd.Connection = cn;
                 cmd.CommandText = "SELECT [column_name] " +
-                      "FROM [dbo].[dsv_columns] INNER JOIN [dbo].[data_source_views] " +
-                      "ON [dbo].[data_source_views].name = '" + dsvName + "' " +
-                      "AND [dbo].[dsv_columns].id_dsv = dbo.data_source_views.id_dsv";
+                      " FROM [dbo].[dsv_columns] INNER JOIN [dbo].[data_source_views] " +
+                      " ON [dbo].[data_source_views].name = '" + dsvName + "' " +
+                      " AND [dbo].[dsv_columns].id_dsv = dbo.data_source_views.id_dsv";
 
                 List<string> colNames = new List<string>();
                 List<string> colNumbers = new List<string>();
@@ -149,7 +149,7 @@ namespace dataMining_demo
                         SqlCommand sqlCmd = new SqlCommand();
 
                         // получение номеров строк баланса 
-                        sqlCmd.CommandText = "SELECT numLine FROM BalanceLine WHERE description = '" + colNm + "'";
+                        sqlCmd.CommandText = " SELECT numLine FROM BalanceLine WHERE description = '" + colNm + "'";
                         sqlCmd.Connection = cn2;
                         string numLine = "";
                         object obj = sqlCmd.ExecuteScalar();
@@ -184,7 +184,7 @@ namespace dataMining_demo
                     cn.Open();
 
                     // формирование pivot-запроса:
-                    string strSelect = "SELECT ";
+                    string strSelect = " SELECT ";
                     // выбор заголовков столбцов
                     for (int i = 0; i < colNames.Count; i++)
                     {
@@ -196,13 +196,13 @@ namespace dataMining_demo
 
                     strSelect = strSelect.Substring(0, strSelect.Length - 1);
 
-                    strSelect += "FROM " +
-                                    "(SELECT     BalanceReport.companyID, Company.Name, BalanceReport.YearID,  " +
-                                    "BalanceLine.numLine, cast(BalanceReport.PeriodEnd as nvarchar) as PeriodEnd FROM BalanceReport " +
-                                    "INNER JOIN BalanceLine ON BalanceReport.balanceLineID = BalanceLine.lineID " +
-                                    "INNER JOIN Company ON BalanceReport.CompanyID = Company.CompanyID " +
-                                    "INNER JOIN Year ON BalanceReport.YearID = Year.YearID ) p " +
-                                    "PIVOT (max(PeriodEnd) FOR numline IN (";
+                    strSelect += " FROM " +
+                                    "( SELECT     BalanceReport.companyID, Company.companyName, BalanceReport.YearID,  " +
+                                    " BalanceLine.numLine, cast(BalanceReport.PeriodEnd as nvarchar) as PeriodEnd FROM BalanceReport " +
+                                    " INNER JOIN BalanceLine ON BalanceReport.balanceLineID = BalanceLine.lineID " +
+                                    " INNER JOIN Company ON BalanceReport.CompanyID = Company.CompanyID " +
+                                    " INNER JOIN Year ON BalanceReport.YearID = Year.YearID ) p " +
+                                    " PIVOT (max(PeriodEnd) FOR numline IN (";
                     for (int i = 0; i < colNumbers.Count; i++)
                     {
                         if (colNumbers[i] != " ")

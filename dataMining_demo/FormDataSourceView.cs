@@ -116,7 +116,7 @@ namespace dataMining_demo
             else
             {
                 columnNames.Add("CompanyID");
-                columnNames.Add("Name");
+                columnNames.Add("CompanyName");
                 
                 fillColumnNames(columnNames);
 
