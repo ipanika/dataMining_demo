@@ -101,13 +101,13 @@ namespace dataMining_demo
             cn2.Open();
             SqlCommand sqlCmd = new SqlCommand();
             // получение списка предприятий
-            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT name FROM Company", cn2);
+            SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT CompanyName FROM Company", cn2);
 
             DataTable dt = new DataTable();
             sqlDA.Fill(dt);
 
             cmb.DataSource = dt;
-            cmb.DisplayMember = "name";
+            cmb.DisplayMember = "CompanyName";
             
             Controls.Add(cmb);
             
@@ -224,7 +224,7 @@ namespace dataMining_demo
                         }
                         // модификация запроса для прогнозирования
                         else
-                            strSelect += " name = '" + filter + "'";
+                            strSelect += " CompanyName = '" + filter + "'";
                     }
 
 
