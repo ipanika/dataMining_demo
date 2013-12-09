@@ -40,9 +40,6 @@ namespace dataMining_demo
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.задачаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кластеризацииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,17 +51,17 @@ namespace dataMining_demo
             this.модельToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.вариантАлгоритмаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.результатыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.обозревательAnalysisServicesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.метаданныеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сервисToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкаСоединенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.схемаОбъектовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.button1.Location = new System.Drawing.Point(21, 240);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 37);
@@ -129,7 +126,6 @@ namespace dataMining_demo
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox4);
@@ -138,7 +134,7 @@ namespace dataMining_demo
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.comboBox2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 37);
+            this.groupBox1.Location = new System.Drawing.Point(12, 33);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(134, 197);
             this.groupBox1.TabIndex = 6;
@@ -163,40 +159,6 @@ namespace dataMining_demo
             this.label4.TabIndex = 4;
             this.label4.Text = "Структура ИАД:";
             // 
-            // button6
-            // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button6.Location = new System.Drawing.Point(6, 19);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(95, 39);
-            this.button6.TabIndex = 10;
-            this.button6.Text = "Метаданные";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button7.Location = new System.Drawing.Point(10, 78);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(93, 39);
-            this.button7.TabIndex = 11;
-            this.button7.Text = "Детализация";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.groupBox3.Controls.Add(this.button7);
-            this.groupBox3.Controls.Add(this.button6);
-            this.groupBox3.Location = new System.Drawing.Point(12, 283);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(128, 123);
-            this.groupBox3.TabIndex = 12;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Результат";
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -206,7 +168,7 @@ namespace dataMining_demo
             this.сервисToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(302, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(282, 24);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -282,10 +244,26 @@ namespace dataMining_demo
             // 
             // результатыToolStripMenuItem
             // 
+            this.результатыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.обозревательAnalysisServicesToolStripMenuItem,
+            this.метаданныеToolStripMenuItem});
             this.результатыToolStripMenuItem.Name = "результатыToolStripMenuItem";
             this.результатыToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.результатыToolStripMenuItem.Text = "Результаты";
-            this.результатыToolStripMenuItem.Click += new System.EventHandler(this.результатыToolStripMenuItem_Click);
+            // 
+            // обозревательAnalysisServicesToolStripMenuItem
+            // 
+            this.обозревательAnalysisServicesToolStripMenuItem.Name = "обозревательAnalysisServicesToolStripMenuItem";
+            this.обозревательAnalysisServicesToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.обозревательAnalysisServicesToolStripMenuItem.Text = "Обозреватель  Analysis Services";
+            this.обозревательAnalysisServicesToolStripMenuItem.Click += new System.EventHandler(this.обозревательAnalysisServicesToolStripMenuItem_Click);
+            // 
+            // метаданныеToolStripMenuItem
+            // 
+            this.метаданныеToolStripMenuItem.Name = "метаданныеToolStripMenuItem";
+            this.метаданныеToolStripMenuItem.Size = new System.Drawing.Size(245, 22);
+            this.метаданныеToolStripMenuItem.Text = "Метаданные";
+            this.метаданныеToolStripMenuItem.Click += new System.EventHandler(this.метаданныеToolStripMenuItem_Click);
             // 
             // сервисToolStripMenuItem
             // 
@@ -313,8 +291,7 @@ namespace dataMining_demo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(302, 413);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(282, 289);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
@@ -326,7 +303,6 @@ namespace dataMining_demo
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -343,9 +319,6 @@ namespace dataMining_demo
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ComboBox comboBox3;
         private ComboBox comboBox4;
         private Label label4;
@@ -363,6 +336,8 @@ namespace dataMining_demo
         private ToolStripMenuItem сервисToolStripMenuItem;
         private ToolStripMenuItem настройкаСоединенияToolStripMenuItem;
         private ToolStripMenuItem схемаОбъектовToolStripMenuItem;
+        private ToolStripMenuItem обозревательAnalysisServicesToolStripMenuItem;
+        private ToolStripMenuItem метаданныеToolStripMenuItem;
 
 
     }

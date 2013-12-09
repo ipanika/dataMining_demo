@@ -335,15 +335,7 @@ namespace dataMining_demo
             FormTreeView f5 = new FormTreeView();
             f5.Show();
         }
-
         
-        private void button6_Click(object sender, EventArgs e)
-        {
-            FormMetaData f6 = new FormMetaData();
-            f6.Show();
-
-        }
-
         private void button7_Click(object sender, EventArgs e)
         {
             FormDrillThrough f7 = new FormDrillThrough();
@@ -475,18 +467,25 @@ namespace dataMining_demo
             FormAlgorithmVariants f = new FormAlgorithmVariants();
             f.Show();
         }
-
-        private void результатыToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FormViewer f = new FormViewer();
-            f.Show();
-        }
-
+        
         private void схемаОбъектовToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormTreeView f = new FormTreeView();
             f.Show();
         }
+
+        private void обозревательAnalysisServicesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormViewer f = new FormViewer();
+            f.Show();
+        }
+
+        private void метаданныеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormMetaData f6 = new FormMetaData();
+            f6.Show();
+        }
+
 
         
 
