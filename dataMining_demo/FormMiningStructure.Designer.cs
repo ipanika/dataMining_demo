@@ -34,13 +34,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,9 +74,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(9, 60);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(163, 13);
+            this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Выбор представления данных:";
+            this.label2.Text = "Выборка данных:";
             // 
             // button1
             // 
@@ -107,6 +107,27 @@
             this.dataGridView1.TabIndex = 9;
             this.dataGridView1.CurrentCellDirtyStateChanged += new System.EventHandler(this.dataGridView1_CurrentCellDirtyStateChanged);
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Имя столбца";
+            this.Column1.Name = "Column1";
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Ключевой столбец";
+            this.Column2.Name = "Column2";
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Тип данных";
+            this.Column3.Name = "Column3";
+            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "Тип содержимого";
+            this.Column4.Name = "Column4";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -131,27 +152,6 @@
             this.label3.Size = new System.Drawing.Size(127, 13);
             this.label3.TabIndex = 1;
             this.label3.Text = "Доля тестовых данных:";
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Имя столбца";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Ключевой столбец";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Тип данных";
-            this.Column3.Name = "Column3";
-            this.Column3.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Тип содержимого";
-            this.Column4.Name = "Column4";
             // 
             // FormMiningStructure
             // 

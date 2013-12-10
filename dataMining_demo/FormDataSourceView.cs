@@ -102,7 +102,8 @@ namespace dataMining_demo
             // если тип решаемой задачи - прогнозирование, то создается представление для прогнозирования
             if (FormMain.taskType == 2)
             {
-
+                columnNames.Add("CompanyID");
+                columnNames.Add("CompanyName");
                 fillColumnNames(columnNames);
                 
                 checkedListBox1.DataSource = columnNames;

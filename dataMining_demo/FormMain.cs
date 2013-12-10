@@ -24,7 +24,7 @@ namespace dataMining_demo
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
 
         public static string app_dataSource = "localhost"; // сервер БД приложения
-        public static string app_initCatalog = "demo_dm"; // имя БД приложения
+        public static string app_initCatalog = "!DM"; // имя БД приложения
         public static string app_connectionString = "Data Source=" + app_dataSource + "; Initial Catalog=" + app_initCatalog +
                                       "; Integrated Security=SSPI";
 
