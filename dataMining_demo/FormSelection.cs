@@ -365,6 +365,7 @@ namespace dataMining_demo
                 }
 
 
+                strInsert = "insert into [selection_content] values ";
                 // формируется строка значений одной записи
                 int j;
                 for (j = 0; j < colCount; j++)
@@ -372,24 +373,26 @@ namespace dataMining_demo
                     strInsert += " (" + idRow.ToString() + ","; //id_row
                     strInsert += " " + dt.Rows[j][0].ToString() + ","; // id_column
                     //if (dataGridView1.Rows[i].Cells[j].Value != null)
-                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
+                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "')"; // column_value
                     //else
                         //strInsert += " null'),"; // column_value
                 }
+
+                try
+                {
+                    sqlCmd.ExecuteNonQuery();
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
             }
 
-            strInsert = strInsert.Substring(0, strInsert.Length - 1);
+           // strInsert = strInsert.Substring(0, strInsert.Length - 1);
 
-            sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
-            sqlCmd.Connection = cn;
-            try
-            {
-                sqlCmd.ExecuteNonQuery();
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
+            //sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
+            //sqlCmd.Connection = cn;
+            
 
             this.Close();
 
