@@ -96,7 +96,7 @@ namespace dataMining_demo
             sqlCmd.CommandText = "INSERT INTO [structures] VALUES ('" + idSel + "', '" + strName + "', '" + test_ratio + "')";
             sqlCmd.ExecuteNonQuery();
 
-            svr.Connect("localhost");
+            svr.Connect(FormMain.app_dataSource);
 
             if ((svr != null) && (svr.Connected))
                 db = svr.Databases.FindByName(FormMain.as_dataSourceName);

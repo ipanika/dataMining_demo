@@ -23,7 +23,7 @@ namespace dataMining_demo
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            svr.Connect("localhost");
+            svr.Connect(FormMain.as_dataSource);
 
             if ((svr != null) && (svr.Connected))
             {

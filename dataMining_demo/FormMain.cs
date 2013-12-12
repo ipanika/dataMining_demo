@@ -408,7 +408,7 @@ namespace dataMining_demo
             if (ds == null)
             {
                 ds = new RelationalDataSource(as_dataSourceName, Utils.GetSyntacticallyValidID(as_dataSourceName, typeof(Microsoft.AnalysisServices.Database)));
-                ds.ConnectionString = "Data Source=localhost;Integrated Security=SSPI;Initial Catalog=" + app_initCatalog;
+                ds.ConnectionString = "Data Source="+ app_dataSource +";Integrated Security=SSPI;Initial Catalog=" + app_initCatalog;
 
                 db.DataSources.Add(ds);
 

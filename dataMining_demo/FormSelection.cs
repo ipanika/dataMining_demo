@@ -373,10 +373,15 @@ namespace dataMining_demo
                     strInsert += " (" + idRow.ToString() + ","; //id_row
                     strInsert += " " + dt.Rows[j][0].ToString() + ","; // id_column
                     //if (dataGridView1.Rows[i].Cells[j].Value != null)
-                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "')"; // column_value
+                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
                     //else
                         //strInsert += " null'),"; // column_value
                 }
+
+                strInsert = strInsert.Substring(0, strInsert.Length - 1);
+
+                sqlCmd.CommandText = strInsert;
+                sqlCmd.Connection = cn;
 
                 try
                 {
