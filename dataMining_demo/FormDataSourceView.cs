@@ -101,8 +101,6 @@ namespace dataMining_demo
             // если тип решаемой задачи - прогнозирование, то создается представление для прогнозирования
             if (FormMain.taskType == 2)
             {
-                columnNames.Add("CompanyID");
-                columnNames.Add("CompanyName");
                 fillColumnNames(columnNames);
                 
                 checkedListBox1.DataSource = columnNames;
@@ -116,8 +114,6 @@ namespace dataMining_demo
             else
             {
                 columnNames.Add("CompanyID");
-                columnNames.Add("CompanyName");
-                
                 fillColumnNames(columnNames);
 
                 checkedListBox1.DataSource = columnNames;
@@ -131,15 +127,69 @@ namespace dataMining_demo
 
         private void fillColumnNames(List<string> columnNames)
         {
+            //SqlConnection cn = new SqlConnection(FormMain.dw_connectionString);
+            //if (cn.State == ConnectionState.Closed)
+            //    cn.Open();
+
+            //string sqlQuery = "SELECT [description] FROM [BalanceLine] ";
+
+            //DataTable dt1 = new DataTable();
+            //// загрузка имеющихся представлений ИАД
+            //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+            //sqlDA.Fill(dt1);
+
+            //for (int i = 0; i < dt1.Rows.Count; i++)
+            //{
+            //    string parName = dt1.Rows[i][0].ToString();
+                //// замена недопустимых символов
+                //parName = parName.Replace(".", "_");
+                //parName = parName.Replace(",", "_");
+
+                //parName = parName.Replace(";", "_");
+                //parName = parName.Replace("'", "_");
+
+                //parName = parName.Replace("`", "_");
+                //parName = parName.Replace(":", "_");
+
+                //parName = parName.Replace("/", "_");
+                //parName = parName.Replace("\\", "_");
+                //parName = parName.Replace("*", "_");
+                //parName = parName.Replace("|", "_");
+
+                //parName = parName.Replace("?", "_");
+                //parName = parName.Replace("\"", "_");
+                //parName = parName.Replace("&", "_");
+                //parName = parName.Replace("%", "_");
+
+                //parName = parName.Replace("$", "_");
+                //parName = parName.Replace("!", "_");
+                //parName = parName.Replace("+", "_");
+                //parName = parName.Replace("=", "_");
+
+                //parName = parName.Replace("(", "_");
+                //parName = parName.Replace(")", "_");
+                //parName = parName.Replace("{", "_");
+                //parName = parName.Replace("}", "_");
+
+                //parName = parName.Replace("<", "_");
+                //parName = parName.Replace(">", "_");
+
+            //    if (parName.Length > 128)
+            //        parName = parName.Substring(0, 128);
+
+            //    columnNames.Add(parName);
+            //}
+
+            columnNames.Add("CompanyName");
             columnNames.Add("YearID");
             columnNames.Add("Нематериальные активы");
             columnNames.Add("Основные средства");
             columnNames.Add("Незавершенное строительство");
-            columnNames.Add("Доходные вложения в материал.ценности");
+            //columnNames.Add("Доходные вложения в материал.ценности");
             columnNames.Add("Отложенные налоговые активы");
             columnNames.Add("Прочие внеоборотные активы");
             columnNames.Add("Запасы");
-            columnNames.Add("в т.ч. сырье и материалы");
+            //columnNames.Add("в т.ч. сырье и материалы");
             columnNames.Add("животные на выращивание и откорме");
             columnNames.Add("затраты в НЗП");
             columnNames.Add("готовая продукция и товары");
@@ -149,7 +199,17 @@ namespace dataMining_demo
             columnNames.Add("НДС");
             columnNames.Add("ДЗ долгосрочная");
             columnNames.Add("ДЗ краткосрочная");
-            columnNames.Add("покупатели и заказчики");
+            columnNames.Add("Краткосрочные финансовые вложения");
+            columnNames.Add("Денежные средства");
+            columnNames.Add("Прочие оборотные активы");
+            columnNames.Add("Итого по разделу 2");
+            columnNames.Add("Уставный капитал");
+            columnNames.Add("Добавочный капитал");
+            columnNames.Add("Резервный капитал");
+            columnNames.Add("Итого по разделу 3");
+            columnNames.Add("Займы и кредиты долгосрочные");
+            columnNames.Add("Итого по разделу 4");
+            
         }
 
         

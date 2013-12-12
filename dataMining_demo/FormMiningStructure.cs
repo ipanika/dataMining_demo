@@ -112,39 +112,6 @@ namespace dataMining_demo
                     // получение имени столбца
                     string parName = drv.Cells[0].Value.ToString();
 
-                    // замена недопустимых символов
-                    parName = parName.Replace(".", "_");
-                    parName = parName.Replace(",", "_");
-
-                    parName = parName.Replace(";", "_");
-                    parName = parName.Replace("'", "_");
-
-                    parName = parName.Replace("`", "_");
-                    parName = parName.Replace(":", "_");
-
-                    parName = parName.Replace("/", "_");
-                    parName = parName.Replace("\\", "_");
-                    parName = parName.Replace("*", "_");
-                    parName = parName.Replace("|", "_");
-
-                    parName = parName.Replace("?", "_");
-                    parName = parName.Replace("\"", "_");
-                    parName = parName.Replace("&", "_");
-                    parName = parName.Replace("%", "_");
-
-                    parName = parName.Replace("$", "_");
-                    parName = parName.Replace("!", "_");
-                    parName = parName.Replace("+", "_");
-                    parName = parName.Replace("=", "_");
-
-                    parName = parName.Replace("(", "_");
-                    parName = parName.Replace(")", "_");
-                    parName = parName.Replace("{", "_");
-                    parName = parName.Replace("}", "_");
-
-                    parName = parName.Replace("<", "_");
-                    parName = parName.Replace(">", "_");
-
                     if (parName.Length > 99)
                         parName = parName.Substring(0, 99);
 
