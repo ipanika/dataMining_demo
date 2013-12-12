@@ -62,7 +62,7 @@ namespace dataMining_demo
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(21, 240);
+            this.button1.Location = new System.Drawing.Point(172, 240);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 37);
             this.button1.TabIndex = 1;
@@ -84,7 +84,7 @@ namespace dataMining_demo
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(6, 40);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(246, 21);
             this.comboBox1.TabIndex = 5;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -102,7 +102,7 @@ namespace dataMining_demo
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(7, 84);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
+            this.comboBox2.Size = new System.Drawing.Size(245, 21);
             this.comboBox2.TabIndex = 5;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -120,7 +120,7 @@ namespace dataMining_demo
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Location = new System.Drawing.Point(7, 127);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(121, 21);
+            this.comboBox3.Size = new System.Drawing.Size(245, 21);
             this.comboBox3.TabIndex = 5;
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
@@ -136,7 +136,7 @@ namespace dataMining_demo
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Location = new System.Drawing.Point(12, 33);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(134, 197);
+            this.groupBox1.Size = new System.Drawing.Size(258, 197);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Выбор объектов ИАД";
@@ -146,7 +146,7 @@ namespace dataMining_demo
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Location = new System.Drawing.Point(9, 170);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(121, 21);
+            this.comboBox4.Size = new System.Drawing.Size(243, 21);
             this.comboBox4.TabIndex = 5;
             this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
             // 
@@ -279,6 +279,7 @@ namespace dataMining_demo
             this.настройкаСоединенияToolStripMenuItem.Name = "настройкаСоединенияToolStripMenuItem";
             this.настройкаСоединенияToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.настройкаСоединенияToolStripMenuItem.Text = "Настройка соединения";
+            this.настройкаСоединенияToolStripMenuItem.Click += new System.EventHandler(this.настройкаСоединенияToolStripMenuItem_Click);
             // 
             // схемаОбъектовToolStripMenuItem
             // 
@@ -299,7 +300,7 @@ namespace dataMining_demo
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMain";
-            this.Text = "dataMining";
+            this.Text = "Система анализа данных предприятий";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

@@ -24,7 +24,7 @@ namespace dataMining_demo
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
 
         public static string app_dataSource = "localhost"; // сервер БД приложения
-        public static string app_initCatalog = "!DM"; // имя БД приложения
+        public static string app_initCatalog = "demo_dm"; // имя БД приложения
         public static string app_connectionString = "Data Source=" + app_dataSource + "; Initial Catalog=" + app_initCatalog +
                                       "; Integrated Security=SSPI";
 
@@ -50,10 +50,21 @@ namespace dataMining_demo
             svr.Connect(as_dataSource);
 
             db = CreateDatabase();
+            try
+            {
+                checkAppDB();
 
-            checkAppDB();
+                selectDataSourceViews();
+            }
+            catch(Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+                FormConnection f = new FormConnection();
+                f.ShowDialog();
+                checkAppDB();
 
-            selectDataSourceViews();
+                selectDataSourceViews();
+            }
 
             taskType = 1;
             кластеризацииToolStripMenuItem.Checked = true;
@@ -64,50 +75,57 @@ namespace dataMining_demo
         // функция проверки существования базы данных приложения
         private void checkAppDB()
         {
-            try
+            //try
             {
                 SqlConnection cn = new SqlConnection(app_connectionString);
                 cn.Open();
             }
             // в случае провала - запустить скрипт создания БД
-            catch
+          //  catch
             {
-                string sqlConnectionString = "Data Source="+ app_dataSource + "; Initial Catalog = master; Integrated Security=SSPI";
-                FileInfo file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\create_db.sql");
-                string script = file.OpenText().ReadToEnd();
-                SqlConnection conn = new SqlConnection(sqlConnectionString);
-                Microsoft.SqlServer.Management.Smo.Server sqlServer = new Microsoft.SqlServer.Management.Smo.Server(new ServerConnection(conn));
-                sqlServer.ConnectionContext.ExecuteNonQuery(script);
+             //   MessageBox.Show("Ошибка соединения с БД приложения.");
+                //string sqlConnectionString = "Data Source="+ app_dataSource + "; Initial Catalog = master; Integrated Security=SSPI";
+                //FileInfo file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\create_db.sql");
+                //string script = file.OpenText().ReadToEnd();
+                //SqlConnection conn = new SqlConnection(sqlConnectionString);
+                //Microsoft.SqlServer.Management.Smo.Server sqlServer = new Microsoft.SqlServer.Management.Smo.Server(new ServerConnection(conn));
+                //sql1Server.ConnectionContext.ExecuteNonQuery(script);
 
-                file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\fill_db.sql");
-                script = file.OpenText().ReadToEnd();
-                sqlServer.ConnectionContext.ExecuteNonQuery(script);
+                //file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\fill_db.sql");
+                //script = file.OpenText().ReadToEnd();
+                //sqlServer.ConnectionContext.ExecuteNonQuery(script);
             }
         }
 
         private void selectDataSourceViews()
         {
-
-            comboBox1.DataSource = null;
-
-            SqlConnection cn = new SqlConnection(app_connectionString);
-            DataTable dt = new DataTable();
-
-            string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " + 
-                                " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
-                                " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
-
-            // Create data adapters from database tables and load schemas
-            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-            sqlDA.Fill(dt);
-            
-            int rowsConunt = dt.Rows.Count;
-            int itemsCount = comboBox1.Items.Count;
-            // если появились новые данные - обновить список представлений
-            if ( rowsConunt != itemsCount)
+            try
             {
-                comboBox1.DataSource = dt;
-                comboBox1.DisplayMember = "name";
+                comboBox1.DataSource = null;
+
+                SqlConnection cn = new SqlConnection(app_connectionString);
+                DataTable dt = new DataTable();
+
+                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " +
+                                    " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
+                                    " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+                sqlDA.Fill(dt);
+
+                int rowsConunt = dt.Rows.Count;
+                int itemsCount = comboBox1.Items.Count;
+                // если появились новые данные - обновить список представлений
+                if (rowsConunt != itemsCount)
+                {
+                    comboBox1.DataSource = dt;
+                    comboBox1.DisplayMember = "name";
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -486,6 +504,12 @@ namespace dataMining_demo
         {
             FormMetaData f6 = new FormMetaData();
             f6.Show();
+        }
+
+        private void настройкаСоединенияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormConnection f = new FormConnection();
+            f.Show();
         }
 
 

@@ -47,13 +47,13 @@ namespace dataMining_demo
                 i += 1;
             }
 
-            CreateDataAccessObjects(colForDSV);
+            CreateDataSourceView(colForDSV);
 
             this.Close();
             
         }
 
-        void CreateDataAccessObjects(List<string> columnNames )
+        void CreateDataSourceView(List<string> columnNames )
         {
             string argsForQuery = " ";
             
