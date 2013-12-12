@@ -24,7 +24,7 @@ namespace dataMining_demo
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
 
         public static string app_dataSource = "localhost"; // сервер БД приложения
-        public static string app_initCatalog = "demo_dm"; // имя БД приложения
+        public static string app_initCatalog = "DM"; // имя БД приложения
         public static string app_connectionString = "Data Source=" + app_dataSource + "; Initial Catalog=" + app_initCatalog +
                                       "; Integrated Security=SSPI";
 
@@ -106,9 +106,8 @@ namespace dataMining_demo
                 SqlConnection cn = new SqlConnection(app_connectionString);
                 DataTable dt = new DataTable();
 
-                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " +
-                                    " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
-                                    " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN tasks " +
+                                    " ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
 
                 // Create data adapters from database tables and load schemas
                 SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);

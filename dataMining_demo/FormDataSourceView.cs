@@ -74,18 +74,17 @@ namespace dataMining_demo
             if (cnToDSV.State == ConnectionState.Closed)
                 cnToDSV.Open();
 
-            // заполнение таблицы data_source_views
-            SqlCommand sqlCmd2 = new SqlCommand("INSERT INTO [data_source_views]  VALUES ('" + dsvName + "')", cnToDSV);
-            sqlCmd2.ExecuteNonQuery();
+            // получение id задачи 
+            SqlCommand sqlCmd2 = new SqlCommand("SELECT [id_task] FROM [tasks]  WHERE [task_type] = '" + FormMain.taskType.ToString() + "'", cnToDSV);
+            string taskID = sqlCmd2.ExecuteScalar().ToString();
 
+            // заполнение таблицы data_source_views
+            sqlCmd2 = new SqlCommand("INSERT INTO [data_source_views]  VALUES ('" + dsvName + "', '" + taskID + "')", cnToDSV);
+            sqlCmd2.ExecuteNonQuery();
 
             // получение id созданного представления для связи с таблицей dsv_columns
             sqlCmd2 = new SqlCommand("SELECT [id_dsv] FROM [data_source_views]  WHERE [name] = ('" + dsvName + "')", cnToDSV);
             string dsvID = sqlCmd2.ExecuteScalar().ToString();
-
-            // заполнение таблицы relations для связи задачи с представлением данных
-            sqlCmd2 = new SqlCommand("INSERT INTO [relations]  VALUES ('"+ FormMain.taskType + "', '" + dsvID + "')", cnToDSV);
-            sqlCmd2.ExecuteNonQuery();
 
             // заполнение таблицы [dsv_columns] данными представлений
             for (i = 0; i < columnNames.Count; i++)

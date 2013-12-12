@@ -31,9 +31,8 @@ namespace dataMining_demo
 
             string sqlQuery = "SELECT [structures].[name] FROM [structures] INNER JOIN " + 
                                " selections ON structures.id_selection = selections.id_selection INNER JOIN " +
-                               " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" + 
-                               " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
-                               " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType;
+                               " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" +
+                               " tasks ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType;
 
             DataTable dt1 = new DataTable();
             // загрузка имеющихся представлений ИАД

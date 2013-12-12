@@ -36,8 +36,7 @@ namespace dataMining_demo
             DataTable dt = new DataTable();
 
             string strQuery = "SELECT [data_source_views].[name] FROM [data_source_views]" +
-                                " INNER JOIN relations ON [data_source_views].[id_dsv] = " +
-                                " relations.id_dsv INNER JOIN tasks ON relations.id_task =  tasks.id_task ";// + 
+                                " INNER JOIN tasks ON data_source_views.id_task =  tasks.id_task ";// + 
                                 //" WHERE tasks.task_type = "+FormMain.taskType.ToString(); 
             SqlDataAdapter sqlDA = new SqlDataAdapter(strQuery, cn);
             sqlDA.Fill(dt);

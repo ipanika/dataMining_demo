@@ -48,8 +48,7 @@ namespace dataMining_demo
 
             string sqlQuery = "SELECT selections.name FROM selections INNER JOIN " +
                                 " data_source_views ON selections.id_dsv = data_source_views.id_dsv INNER JOIN " +
-                                " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
-                                " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+                                " tasks ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
 
             DataTable dt = new DataTable();
             // загрузка имеющихся представлений ИАД
@@ -62,6 +61,8 @@ namespace dataMining_demo
             string selName = comboBox1.Text;
 
             dataGridView1.Rows.Clear();
+
+            dataGridView1.Columns[1].Visible = false;
 
             // функция заполняет DataGridView
             fillDataGridView(selName);
