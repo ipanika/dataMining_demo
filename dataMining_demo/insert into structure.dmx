@@ -1,7 +1,0 @@
-insert into [mod_process]
-(
-	[ID], [Gender], [Cars], [Age]
-)
-
-
-openquery ([demo_ds], 'select [ID], [Gender], [Cars], [Age] FROM SourceData$')
