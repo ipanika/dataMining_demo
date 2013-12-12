@@ -53,7 +53,7 @@ namespace dataMining_demo
             try
             {
                 checkAppDB();
-
+                checkDataSource();
                 selectDataSourceViews();
             }
             catch(Exception e1)
@@ -62,7 +62,7 @@ namespace dataMining_demo
                 FormConnection f = new FormConnection();
                 f.ShowDialog();
                 checkAppDB();
-
+                checkDataSource();
                 selectDataSourceViews();
             }
 
