@@ -414,6 +414,7 @@ namespace dataMining_demo
             кластеризацииToolStripMenuItem.Checked = true;
             прогнозированияToolStripMenuItem.Checked = false;
             selectDataSourceViews();
+            метаданныеToolStripMenuItem.Enabled = true;
         }
 
         // установка типа решаемой задачи
@@ -423,6 +424,7 @@ namespace dataMining_demo
             прогнозированияToolStripMenuItem.Checked = true;
             кластеризацииToolStripMenuItem.Checked = false;
             selectDataSourceViews();
+            метаданныеToolStripMenuItem.Enabled = false;
         }
 
         private void button10_Click(object sender, EventArgs e)
