@@ -1,7 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="dataMining_demo.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="app_dataSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="dw_initialCatalog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DW</Value>
+    </Setting>
+    <Setting Name="dw_dataSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="as_initialCatalog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">SSAS_DM</Value>
+    </Setting>
+    <Setting Name="as_dataSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="as_dataSourceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dataSource_DM</Value>
+    </Setting>
+    <Setting Name="app_initialCatalog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DM</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

@@ -22,5 +22,89 @@ namespace dataMining_demo.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string app_dataSource {
+            get {
+                return ((string)(this["app_dataSource"]));
+            }
+            set {
+                this["app_dataSource"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DW")]
+        public string dw_initialCatalog {
+            get {
+                return ((string)(this["dw_initialCatalog"]));
+            }
+            set {
+                this["dw_initialCatalog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string dw_dataSource {
+            get {
+                return ((string)(this["dw_dataSource"]));
+            }
+            set {
+                this["dw_dataSource"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SSAS_DM")]
+        public string as_initialCatalog {
+            get {
+                return ((string)(this["as_initialCatalog"]));
+            }
+            set {
+                this["as_initialCatalog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string as_dataSource {
+            get {
+                return ((string)(this["as_dataSource"]));
+            }
+            set {
+                this["as_dataSource"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dataSource_DM")]
+        public string as_dataSourceName {
+            get {
+                return ((string)(this["as_dataSourceName"]));
+            }
+            set {
+                this["as_dataSourceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DM")]
+        public string app_initialCatalog {
+            get {
+                return ((string)(this["app_initialCatalog"]));
+            }
+            set {
+                this["app_initialCatalog"] = value;
+            }
+        }
     }
 }

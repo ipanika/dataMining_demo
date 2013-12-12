@@ -90,6 +90,12 @@
     <Compile Include="FormAlgorithmVariants.Designer.cs">
       <DependentUpon>FormAlgorithmVariants.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormConnection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormConnection.Designer.cs">
+      <DependentUpon>FormConnection.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormDrillThrough.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +166,9 @@
     </Compile>
     <EmbeddedResource Include="FormAlgorithmVariants.resx">
       <DependentUpon>FormAlgorithmVariants.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormConnection.resx">
+      <DependentUpon>FormConnection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDrillThrough.resx">
       <DependentUpon>FormDrillThrough.cs</DependentUpon>
