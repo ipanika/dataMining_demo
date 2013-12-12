@@ -354,14 +354,7 @@ namespace dataMining_demo
             f5.Show();
         }
         
-        private void button7_Click(object sender, EventArgs e)
-        {
-            FormDrillThrough f7 = new FormDrillThrough();
-            f7.Show();
-        }
-
         
-
         private void button8_Click(object sender, EventArgs e)
         {
             FormSelection f8 = new FormSelection();
