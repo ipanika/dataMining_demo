@@ -15,6 +15,4 @@ delete from selections
 
 delete from dsv_columns
 
-delete from relations
-
 delete from data_source_views

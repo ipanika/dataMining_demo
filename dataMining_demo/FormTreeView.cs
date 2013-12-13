@@ -42,9 +42,8 @@ namespace dataMining_demo
 
 
                 DataTable dtDsv = new DataTable();
-                string sqlQuery = "SELECT  [data_source_views].[id_dsv],  [data_source_views].[name] FROM [data_source_views] INNER JOIN [relations]" +
-                                " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " + 
-                                " ON relations.id_task = tasks.id_task WHERE tasks.id_task = " + tskID;
+                string sqlQuery = "SELECT [data_source_views].[id_dsv], [data_source_views].[name] FROM [data_source_views] INNER JOIN tasks " +
+                                " ON data_source_views.id_task = tasks.id_task WHERE tasks.id_task = " + tskID;
                 sqlDA = new SqlDataAdapter(sqlQuery, cn);
                 sqlDA.Fill(dtDsv);
 

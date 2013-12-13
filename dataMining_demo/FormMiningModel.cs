@@ -28,6 +28,7 @@ namespace dataMining_demo
             selectDataSourceViews();
             selectAlg();
 
+
             //// создать соединение с БД
             //SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             //if (cn.State == ConnectionState.Closed)
@@ -300,5 +301,8 @@ namespace dataMining_demo
                 }
             }
         }
+
     }
+
+
 }

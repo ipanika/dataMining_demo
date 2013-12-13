@@ -51,8 +51,7 @@ namespace dataMining_demo
 
             string sqlQuery = "SELECT selections.name FROM selections INNER JOIN " +
                                 " data_source_views ON selections.id_dsv = data_source_views.id_dsv INNER JOIN " +
-                                " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
-                                " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+                                " tasks ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
 
             DataTable dt = new DataTable();
             // загрузка имеющихся представлений ИАД
@@ -66,6 +65,8 @@ namespace dataMining_demo
             string selName = comboBox1.Text;
 
             dataGridView1.Rows.Clear();
+
+            dataGridView1.Columns[1].Visible = false;
 
             // функция заполняет DataGridView
             fillDataGridView(selName);
@@ -131,7 +132,7 @@ namespace dataMining_demo
             sqlCmd.CommandText = "INSERT INTO [structures] VALUES ('" + idSel + "', '" + strName + "', '" + test_ratio + "')";
             sqlCmd.ExecuteNonQuery();
 
-            svr.Connect("localhost");
+            svr.Connect(FormMain.app_dataSource);
 
             if ((svr != null) && (svr.Connected))
                 db = svr.Databases.FindByName(FormMain.as_dataSourceName);
@@ -146,39 +147,6 @@ namespace dataMining_demo
                 {
                     // получение имени столбца
                     string parName = drv.Cells[0].Value.ToString();
-
-                    // замена недопустимых символов
-                    parName = parName.Replace(".", "_");
-                    parName = parName.Replace(",", "_");
-
-                    parName = parName.Replace(";", "_");
-                    parName = parName.Replace("'", "_");
-
-                    parName = parName.Replace("`", "_");
-                    parName = parName.Replace(":", "_");
-
-                    parName = parName.Replace("/", "_");
-                    parName = parName.Replace("\\", "_");
-                    parName = parName.Replace("*", "_");
-                    parName = parName.Replace("|", "_");
-
-                    parName = parName.Replace("?", "_");
-                    parName = parName.Replace("\"", "_");
-                    parName = parName.Replace("&", "_");
-                    parName = parName.Replace("%", "_");
-
-                    parName = parName.Replace("$", "_");
-                    parName = parName.Replace("!", "_");
-                    parName = parName.Replace("+", "_");
-                    parName = parName.Replace("=", "_");
-
-                    parName = parName.Replace("(", "_");
-                    parName = parName.Replace(")", "_");
-                    parName = parName.Replace("{", "_");
-                    parName = parName.Replace("}", "_");
-
-                    parName = parName.Replace("<", "_");
-                    parName = parName.Replace(">", "_");
 
                     if (parName.Length > 99)
                         parName = parName.Substring(0, 99);
@@ -383,6 +351,7 @@ namespace dataMining_demo
 
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             DataTable dt = new DataTable();
+
 
             String dsvName = comboBox2.Text;
 

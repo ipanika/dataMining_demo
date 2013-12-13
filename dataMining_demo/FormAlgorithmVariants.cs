@@ -24,9 +24,9 @@ namespace dataMining_demo
                 cn.Open();
 
             DataTable dt = new DataTable();
-            
+            string sqlQuery = "select [name] FROM [algorithms] where task_type = " + FormMain.taskType;
             // загрузка имеющихся методов ИАД
-            SqlDataAdapter sqlDA = new SqlDataAdapter("select [name] FROM [algorithms]", cn);
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
 
             comboBox1.DataSource = dt;
@@ -116,65 +116,108 @@ namespace dataMining_demo
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
-            if (cn.State == ConnectionState.Closed)
-                cn.Open();
-
-            string algName = comboBox1.Text;
-            string algVarName = textBox1.Text;
-
-            SqlCommand sqlCmd = new SqlCommand();
-            sqlCmd.CommandText = "SELECT id_algorithm FROM algorithms WHERE name = '" + algName + "'";
-            sqlCmd.Connection = cn;
-
-            string idAlg = "";
             try
             {
+                SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
+
+                string algName = comboBox1.Text;
+                string algVarName = textBox1.Text;
+
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.CommandText = "SELECT id_algorithm FROM algorithms WHERE name = '" + algName + "'";
+                sqlCmd.Connection = cn;
+
+                string idAlg = "";
                 idAlg = sqlCmd.ExecuteScalar().ToString();
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
 
-            sqlCmd.CommandText = "INSERT INTO [algorithm_variants] VALUES ('" + idAlg + "', '" + algVarName + "')";
-            try
-            {
+                sqlCmd.CommandText = "INSERT INTO [algorithm_variants] VALUES ('" + idAlg + "', '" + algVarName + "')";
                 sqlCmd.ExecuteNonQuery();
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
 
-            sqlCmd.CommandText = "SELECT id_algorithm_variant FROM algorithm_variants WHERE name = '" + algVarName + "'";
-            sqlCmd.Connection = cn;
+                sqlCmd.CommandText = "SELECT id_algorithm_variant FROM algorithm_variants WHERE name = '" + algVarName + "'"; 
+                string idVarAlg = sqlCmd.ExecuteScalar().ToString();
 
-            string idVarAlg = sqlCmd.ExecuteScalar().ToString();
+                // сохранение параметров варианта алгоритма в БД
+                string strQuery = "INSERT INTO [parameters] VALUES";
 
-            // сохранение параметров варианта алгоритма в БД
-            string strQuery = "INSERT INTO [parameters] VALUES";
-
-            int countPars = 0; // счетчик параметров, если он = 0 , то сохранять данные в БД не надо.
-            for (int i = 0; i < dataGridView1.Rows.Count; i++)
-            {
-                // выбор значения параметра из ячейки dataGridView
-                if (dataGridView1.Rows[i].Cells[1].Value != null)
+                int countPars = 0; // счетчик параметров, если он = 0 , то сохранять данные в БД не надо.
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
                 {
-                    strQuery += " ('" + idVarAlg + "', '" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "',";
-                    strQuery += " '" + dataGridView1.Rows[i].Cells[1].Value.ToString() + "'),";
+                    // выбор значения параметра из ячейки dataGridView
+                    if (dataGridView1.Rows[i].Cells[1].Value != null)
+                    {
+                        strQuery += " ('" + idVarAlg + "', '" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "',";
+                        strQuery += " '" + dataGridView1.Rows[i].Cells[1].Value.ToString() + "'),";
 
-                    countPars += 1;
+                        countPars += 1;
+                    }
                 }
-            }
 
-            strQuery = strQuery.Substring(0, strQuery.Length - 1);
+                strQuery = strQuery.Substring(0, strQuery.Length - 1);
             
-            sqlCmd.CommandText = strQuery;
-            if (countPars > 0)
-                sqlCmd.ExecuteNonQuery();
+                sqlCmd.CommandText = strQuery;
+                if (countPars > 0)
+                    sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
             
             this.Close();
+        }
+
+        private void processAlgorithmVariants(string cnString)
+        {
+            try
+            {
+                SqlConnection cn = new SqlConnection(cnString);
+                if (cn.State == ConnectionState.Closed)
+                    cn.Open();
+
+                string algName = comboBox1.Text;
+                string algVarName = textBox1.Text;
+
+                SqlCommand sqlCmd = new SqlCommand();
+                sqlCmd.CommandText = "SELECT id_algorithm FROM algorithms WHERE name = '" + algName + "'";
+                sqlCmd.Connection = cn;
+
+                string idAlg = "";
+                idAlg = sqlCmd.ExecuteScalar().ToString();
+
+                sqlCmd.CommandText = "INSERT INTO [algorithm_variants] VALUES ('" + idAlg + "', '" + algVarName + "')";
+                sqlCmd.ExecuteNonQuery();
+
+                sqlCmd.CommandText = "SELECT id_algorithm_variant FROM algorithm_variants WHERE name = '" + algVarName + "'";
+                string idVarAlg = sqlCmd.ExecuteScalar().ToString();
+
+                // сохранение параметров варианта алгоритма в БД
+                string strQuery = "INSERT INTO [parameters] VALUES";
+
+                int countPars = 0; // счетчик параметров, если он = 0 , то сохранять данные в БД не надо.
+                for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                {
+                    // выбор значения параметра из ячейки dataGridView
+                    if (dataGridView1.Rows[i].Cells[1].Value != null)
+                    {
+                        strQuery += " ('" + idVarAlg + "', '" + dataGridView1.Rows[i].Cells[0].Value.ToString() + "',";
+                        strQuery += " '" + dataGridView1.Rows[i].Cells[1].Value.ToString() + "'),";
+
+                        countPars += 1;
+                    }
+                }
+
+                strQuery = strQuery.Substring(0, strQuery.Length - 1);
+
+                sqlCmd.CommandText = strQuery;
+                if (countPars > 0)
+                    sqlCmd.ExecuteNonQuery();
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
         }
     }
 }

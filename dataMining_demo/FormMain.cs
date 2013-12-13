@@ -53,7 +53,7 @@ namespace dataMining_demo
             try
             {
                 checkAppDB();
-
+                checkDataSource();
                 selectDataSourceViews();
             }
             catch(Exception e1)
@@ -62,7 +62,7 @@ namespace dataMining_demo
                 FormConnection f = new FormConnection();
                 f.ShowDialog();
                 checkAppDB();
-
+                checkDataSource();
                 selectDataSourceViews();
             }
 
@@ -106,9 +106,8 @@ namespace dataMining_demo
                 SqlConnection cn = new SqlConnection(app_connectionString);
                 DataTable dt = new DataTable();
 
-                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " +
-                                    " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
-                                    " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN tasks " +
+                                    " ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
 
                 // Create data adapters from database tables and load schemas
                 SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
@@ -224,7 +223,7 @@ namespace dataMining_demo
                 
                // string mName = comboBox4.Text;
                 dmxQuery += colNames + ")" +
-                        " openquery ([demo_ds_origin], ' SELECT " + colNames2 +
+                        " openquery ([" + as_dataSourceName + "], ' SELECT " + colNames2 +
                         " FROM (select selection_content.id_row, column_value, " + 
                         " dsv_columns.column_name from selection_content INNER JOIN " + 
 	                    " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
@@ -353,7 +352,6 @@ namespace dataMining_demo
             FormTreeView f5 = new FormTreeView();
             f5.Show();
         }
-                
 
         private void button8_Click(object sender, EventArgs e)
         {
@@ -404,12 +402,12 @@ namespace dataMining_demo
 
         private void checkDataSource()
         {
-            DataSource ds = db.DataSources.FindByName("demo_ds_origin");
+            DataSource ds = db.DataSources.FindByName(as_dataSourceName);
 
             if (ds == null)
             {
-                ds = new RelationalDataSource("demo_ds_origin", Utils.GetSyntacticallyValidID("demo_ds_origin", typeof(Microsoft.AnalysisServices.Database)));
-                ds.ConnectionString = "Data Source=localhost;Integrated Security=SSPI;Initial Catalog=" + app_initCatalog;
+                ds = new RelationalDataSource(as_dataSourceName, Utils.GetSyntacticallyValidID(as_dataSourceName, typeof(Microsoft.AnalysisServices.Database)));
+                ds.ConnectionString = "Data Source="+ app_dataSource +";Integrated Security=SSPI;Initial Catalog=" + app_initCatalog;
 
                 db.DataSources.Add(ds);
 
@@ -425,6 +423,7 @@ namespace dataMining_demo
             кластеризацииToolStripMenuItem.Checked = true;
             прогнозированияToolStripMenuItem.Checked = false;
             selectDataSourceViews();
+            метаданныеToolStripMenuItem.Enabled = true;
         }
 
         // установка типа решаемой задачи
@@ -434,6 +433,7 @@ namespace dataMining_demo
             прогнозированияToolStripMenuItem.Checked = true;
             кластеризацииToolStripMenuItem.Checked = false;
             selectDataSourceViews();
+            метаданныеToolStripMenuItem.Enabled = false;
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -504,8 +504,79 @@ namespace dataMining_demo
         }
 
 
-        
 
+        private void processMiningStructure()
+        {
+            string strName = comboBox3.Text;
+
+            try
+            {
+                string dmxQuery = "";
+
+                // создание соединения с сервером и команды для отправки dmx-запроса
+                AdomdConnection adomdCn = new AdomdConnection();
+                adomdCn.ConnectionString = FormMain.as_connectionString;
+                adomdCn.Open();
+                AdomdCommand adomdCmd = adomdCn.CreateCommand();
+
+                dmxQuery += "INSERT INTO [" + strName + "] (";
+
+                // получение списка столбцов текущей структуры
+
+                AdomdConnection cn = new AdomdConnection();
+                cn.ConnectionString = FormMain.as_connectionString;
+                cn.Open();
+                AdomdCommand cmd = cn.CreateCommand();
+                //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+                cmd.CommandText = "SELECT COLUMN_NAM FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
+
+                List<string> _sideList = new List<string>();
+                try
+                {
+                    AdomdDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                           _sideList.Add(reader.GetValue(i).ToString());
+                    }
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
+
+                // строка, содержащая имена столбцов структуры (модели)
+                string colNames = "";
+                for (int i = 0; i < _sideList.Count; i++)
+                    colNames += " [" + _sideList[i] + "],";
+
+                colNames = colNames.Substring(0, colNames.Length - 1);
+
+                // string mName = comboBox4.Text;
+                dmxQuery += colNames + ")" +
+                        " openquery ([" + as_dataSourceName + "], ' SELECT " + colNames +
+                        " FROM (select selection_content.id_row, column_value, " +
+                        " dsv_columns.column_name from selection_content INNER JOIN " +
+                        " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
+                        " selections ON selection_rows.id_selection = selections.id_selection INNER JOIN " +
+                        " dsv_columns ON dsv_columns.id_column = selection_content.id_column " +
+                        " INNER JOIN structures ON structures.id_selection = selections.id_selection " +
+                        " INNER JOIN models ON models.id_structure = structures.id_structure " +
+                        " AND models.name =  ''" + modelName + "'') p" +
+                        " PIVOT ( max(column_value) FOR column_name IN (" + colNames + ") ) AS pvt')";
+
+                adomdCmd.CommandText = dmxQuery;
+
+                adomdCmd.Execute();
+
+                MessageBox.Show("Анализ данных успешно завершен.");
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message);
+            }
+        }
         
 
       

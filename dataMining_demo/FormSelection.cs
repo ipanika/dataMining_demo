@@ -36,8 +36,7 @@ namespace dataMining_demo
             DataTable dt = new DataTable();
 
             string strQuery = "SELECT [data_source_views].[name] FROM [data_source_views]" +
-                                " INNER JOIN relations ON [data_source_views].[id_dsv] = " +
-                                " relations.id_dsv INNER JOIN tasks ON relations.id_task =  tasks.id_task ";// + 
+                                " INNER JOIN tasks ON data_source_views.id_task =  tasks.id_task ";// + 
                                 //" WHERE tasks.task_type = "+FormMain.taskType.ToString(); 
             SqlDataAdapter sqlDA = new SqlDataAdapter(strQuery, cn);
             sqlDA.Fill(dt);
@@ -366,6 +365,7 @@ namespace dataMining_demo
                 }
 
 
+                strInsert = "insert into [selection_content] values ";
                 // формируется строка значений одной записи
                 int j;
                 for (j = 0; j < colCount; j++)
@@ -377,20 +377,27 @@ namespace dataMining_demo
                     //else
                         //strInsert += " null'),"; // column_value
                 }
+
+                strInsert = strInsert.Substring(0, strInsert.Length - 1);
+
+                sqlCmd.CommandText = strInsert;
+                sqlCmd.Connection = cn;
+
+                try
+                {
+                    sqlCmd.ExecuteNonQuery();
+                }
+                catch (Exception e1)
+                {
+                    MessageBox.Show(e1.Message);
+                }
             }
 
-            strInsert = strInsert.Substring(0, strInsert.Length - 1);
+           // strInsert = strInsert.Substring(0, strInsert.Length - 1);
 
-            sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
-            sqlCmd.Connection = cn;
-            try
-            {
-                sqlCmd.ExecuteNonQuery();
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
+            //sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
+            //sqlCmd.Connection = cn;
+            
 
             this.Close();
 

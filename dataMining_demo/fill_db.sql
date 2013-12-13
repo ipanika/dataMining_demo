@@ -11,12 +11,8 @@ GO
 
 INSERT INTO [dbo].[tasks]
            ([task_type]
-           ,[name]
-           ,[start]
-           ,[finish]
-           ,[status]
-           ,[best_model])
+           ,[name])
      VALUES
-           (1, 'Кластеризация', null, null, null, null), 
-		   (2, 'Прогнозирование', null, null, null, null)
+           (1, 'Кластеризация'), 
+		   (2, 'Прогнозирование')
 GO
