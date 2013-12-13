@@ -62,7 +62,8 @@ namespace dataMining_demo
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(172, 240);
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(197, 240);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 37);
             this.button1.TabIndex = 1;
@@ -81,10 +82,12 @@ namespace dataMining_demo
             // 
             // comboBox1
             // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(6, 40);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(246, 21);
+            this.comboBox1.Size = new System.Drawing.Size(271, 21);
             this.comboBox1.TabIndex = 5;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -99,10 +102,12 @@ namespace dataMining_demo
             // 
             // comboBox2
             // 
+            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(7, 84);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(245, 21);
+            this.comboBox2.Size = new System.Drawing.Size(270, 21);
             this.comboBox2.TabIndex = 5;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -117,15 +122,20 @@ namespace dataMining_demo
             // 
             // comboBox3
             // 
+            this.comboBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Location = new System.Drawing.Point(7, 127);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(245, 21);
+            this.comboBox3.Size = new System.Drawing.Size(270, 21);
             this.comboBox3.TabIndex = 5;
             this.comboBox3.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox4);
@@ -136,17 +146,19 @@ namespace dataMining_demo
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Location = new System.Drawing.Point(12, 33);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(258, 197);
+            this.groupBox1.Size = new System.Drawing.Size(283, 197);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Выбор объектов ИАД";
             // 
             // comboBox4
             // 
+            this.comboBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Location = new System.Drawing.Point(9, 170);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(243, 21);
+            this.comboBox4.Size = new System.Drawing.Size(268, 21);
             this.comboBox4.TabIndex = 5;
             this.comboBox4.SelectedIndexChanged += new System.EventHandler(this.comboBox4_SelectedIndexChanged);
             // 
@@ -168,7 +180,7 @@ namespace dataMining_demo
             this.сервисToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(282, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(307, 24);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -204,28 +216,28 @@ namespace dataMining_demo
             this.модельToolStripMenuItem,
             this.вариантАлгоритмаToolStripMenuItem});
             this.создатьToolStripMenuItem.Name = "создатьToolStripMenuItem";
-            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.создатьToolStripMenuItem.Text = "Создать";
+            this.создатьToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
+            this.создатьToolStripMenuItem.Text = "Конструктор";
             // 
             // представлениеToolStripMenuItem
             // 
             this.представлениеToolStripMenuItem.Name = "представлениеToolStripMenuItem";
-            this.представлениеToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.представлениеToolStripMenuItem.Text = "Представление";
+            this.представлениеToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.представлениеToolStripMenuItem.Text = "Представление данных";
             this.представлениеToolStripMenuItem.Click += new System.EventHandler(this.представлениеToolStripMenuItem_Click);
             // 
             // выборкуToolStripMenuItem
             // 
             this.выборкуToolStripMenuItem.Name = "выборкуToolStripMenuItem";
-            this.выборкуToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.выборкуToolStripMenuItem.Text = "Выборку данных";
+            this.выборкуToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.выборкуToolStripMenuItem.Text = "Выборка данных";
             this.выборкуToolStripMenuItem.Click += new System.EventHandler(this.выборкуToolStripMenuItem_Click);
             // 
             // структуруToolStripMenuItem1
             // 
             this.структуруToolStripMenuItem1.Name = "структуруToolStripMenuItem1";
-            this.структуруToolStripMenuItem1.Size = new System.Drawing.Size(181, 22);
-            this.структуруToolStripMenuItem1.Text = "Структуру DM";
+            this.структуруToolStripMenuItem1.Size = new System.Drawing.Size(201, 22);
+            this.структуруToolStripMenuItem1.Text = "Структура DM";
             this.структуруToolStripMenuItem1.Click += new System.EventHandler(this.структуруToolStripMenuItem1_Click);
             // 
             // модельToolStripMenuItem
@@ -284,15 +296,15 @@ namespace dataMining_demo
             // схемаОбъектовToolStripMenuItem
             // 
             this.схемаОбъектовToolStripMenuItem.Name = "схемаОбъектовToolStripMenuItem";
-            this.схемаОбъектовToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.схемаОбъектовToolStripMenuItem.Text = "Схема объектов";
+            this.схемаОбъектовToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.схемаОбъектовToolStripMenuItem.Text = "Структура объектов DM";
             this.схемаОбъектовToolStripMenuItem.Click += new System.EventHandler(this.схемаОбъектовToolStripMenuItem_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 289);
+            this.ClientSize = new System.Drawing.Size(307, 289);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);

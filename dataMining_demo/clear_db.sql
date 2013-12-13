@@ -1,4 +1,4 @@
-USE DM
+USE demo_dm
 GO
 
 -- clear demo_dm database

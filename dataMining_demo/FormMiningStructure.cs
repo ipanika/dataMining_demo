@@ -46,6 +46,9 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
+            selectDataSourceViews();
+
+
             string sqlQuery = "SELECT selections.name FROM selections INNER JOIN " +
                                 " data_source_views ON selections.id_dsv = data_source_views.id_dsv INNER JOIN " +
                                 " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
@@ -56,6 +59,7 @@ namespace dataMining_demo
             SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
 
+            
             comboBox1.DataSource = dt;
             comboBox1.DisplayMember = "name";
 
@@ -71,6 +75,38 @@ namespace dataMining_demo
             if (FormMain.taskType == 2)
                 textBox2.Enabled = false;
 
+        }
+
+        private void selectDataSourceViews()
+        {
+            try
+            {
+                comboBox2.DataSource = null;
+
+                SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+                DataTable dt = new DataTable();
+
+                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " +
+                                    " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
+                                    " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+                sqlDA.Fill(dt);
+
+                int rowsConunt = dt.Rows.Count;
+                int itemsCount = comboBox2.Items.Count;
+                // если появились новые данные - обновить список представлений
+                if (rowsConunt != itemsCount)
+                {
+                    comboBox2.DataSource = dt;
+                    comboBox2.DisplayMember = "name";
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
                 
 
@@ -334,8 +370,38 @@ namespace dataMining_demo
             }
         }
 
-       
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectSelections();
+        }
 
+
+        private void selectSelections()
+        {
+            comboBox1.DataSource = null;
+            comboBox1.Text = null;
+
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+            DataTable dt = new DataTable();
+
+            String dsvName = comboBox2.Text;
+
+            if (dsvName != "")
+            {
+                string strSel = "SELECT dbo.selections.name FROM [dbo].selections JOIN dbo.data_source_views" +
+                                    " ON dbo.data_source_views.id_dsv = dbo.selections.id_dsv" +
+                                    " and dbo.data_source_views.name = '" + dsvName + "'";
+
+                SqlDataAdapter sqlDA = new SqlDataAdapter(strSel, cn);
+                sqlDA.Fill(dt);
+
+                if (dt != null)
+                {
+                    comboBox1.DataSource = dt;
+                    comboBox1.DisplayMember = "name";
+                }
+            }
+        }
         
 
     }

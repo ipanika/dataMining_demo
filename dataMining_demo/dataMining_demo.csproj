@@ -96,12 +96,6 @@
     <Compile Include="FormConnection.Designer.cs">
       <DependentUpon>FormConnection.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormDrillThrough.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormDrillThrough.Designer.cs">
-      <DependentUpon>FormDrillThrough.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormRelabel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,12 +138,6 @@
     <Compile Include="FormMiningStructure.Designer.cs">
       <DependentUpon>FormMiningStructure.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTask.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormTask.Designer.cs">
-      <DependentUpon>FormTask.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,9 +157,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormConnection.resx">
       <DependentUpon>FormConnection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormDrillThrough.resx">
-      <DependentUpon>FormDrillThrough.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMetaData.resx">
       <DependentUpon>FormMetaData.cs</DependentUpon>
@@ -194,9 +179,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormSelection.resx">
       <DependentUpon>FormSelection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormTask.resx">
-      <DependentUpon>FormTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormViewer.resx">
       <DependentUpon>FormViewer.cs</DependentUpon>

@@ -24,35 +24,81 @@ namespace dataMining_demo
 
         private void MiningModelForm_Load(object sender, EventArgs e)
         {
-            // создать соединение с БД
+
+            selectDataSourceViews();
+            selectAlg();
+
+            //// создать соединение с БД
+            //SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+            //if (cn.State == ConnectionState.Closed)
+            //    cn.Open();
+
+            //string sqlQuery = "SELECT [structures].[name] FROM [structures] INNER JOIN " + 
+            //                   " selections ON structures.id_selection = selections.id_selection INNER JOIN " +
+            //                   " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" + 
+            //                   " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
+            //                   " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType;
+
+            //DataTable dt1 = new DataTable();
+            //// загрузка имеющихся представлений ИАД
+            //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+            //sqlDA.Fill(dt1);
+
+            //comboBox1.DataSource = dt1;
+            //comboBox1.DisplayMember = "name";
+
+            
+
+        }
+
+        private void selectDataSourceViews()
+        {
+            try
+            {
+                comboBox3.DataSource = null;
+
+                SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+                DataTable dt = new DataTable();
+
+                string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN relations " +
+                                    " ON relations.id_dsv = data_source_views.id_dsv INNER JOIN tasks " +
+                                    " ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
+
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+                sqlDA.Fill(dt);
+
+                int rowsConunt = dt.Rows.Count;
+                int itemsCount = comboBox3.Items.Count;
+                // если появились новые данные - обновить список представлений
+                if (rowsConunt != itemsCount)
+                {
+                    comboBox3.DataSource = dt;
+                    comboBox3.DisplayMember = "name";
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        private void selectAlg()
+        {
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
-
-            string sqlQuery = "SELECT [structures].[name] FROM [structures] INNER JOIN " + 
-                               " selections ON structures.id_selection = selections.id_selection INNER JOIN " +
-                               " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" + 
-                               " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
-                               " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType;
-
-            DataTable dt1 = new DataTable();
-            // загрузка имеющихся представлений ИАД
-            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-            sqlDA.Fill(dt1);
-
-            comboBox1.DataSource = dt1;
-            comboBox1.DisplayMember = "name";
-
-            sqlQuery = "SELECT algorithm_variants.name FROM algorithm_variants " +
+            
+            string sqlQuery = "SELECT algorithm_variants.name FROM algorithm_variants " +
                         " INNER JOIN algorithms ON algorithm_variants.id_algorithm = algorithms.id_algorithm" +
                         " INNER JOIN tasks ON tasks.task_type = algorithms.task_type WHERE tasks.task_type = " + FormMain.taskType;
             DataTable dt = new DataTable();
-            sqlDA = new SqlDataAdapter(sqlQuery, cn);
+            
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
             sqlDA.Fill(dt);
 
             comboBox2.DataSource = dt;
             comboBox2.DisplayMember = "name";
-
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -192,6 +238,67 @@ namespace dataMining_demo
             sqlCmd.ExecuteNonQuery();
             
             this.Close();
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectSelections();
+        }
+
+        private void selectSelections()
+        {
+            comboBox5.DataSource = null;
+            comboBox5.Text = null;
+
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+            DataTable dt = new DataTable();
+
+            String dsvName = comboBox3.Text;
+
+            if (dsvName != "")
+            {
+                string strSel = "SELECT dbo.selections.name FROM [dbo].selections JOIN dbo.data_source_views" +
+                                    " ON dbo.data_source_views.id_dsv = dbo.selections.id_dsv" +
+                                    " and dbo.data_source_views.name = '" + dsvName + "'";
+
+                SqlDataAdapter sqlDA = new SqlDataAdapter(strSel, cn);
+                sqlDA.Fill(dt);
+
+                if (dt != null)
+                {
+                    comboBox5.DataSource = dt;
+                    comboBox5.DisplayMember = "name";
+                }
+            }
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectStructures();
+        }
+
+        private void selectStructures()
+        {
+            comboBox1.DataSource = null;
+            comboBox1.Text = null;
+
+            SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
+            DataTable dt = new DataTable();
+
+            String selName = comboBox5.Text;
+            if (selName != "")
+            {
+                // Create data adapters from database tables and load schemas
+                SqlDataAdapter sqlDA = new SqlDataAdapter("SELECT structures.name FROM [structures] JOIN selections ON " +
+                                                            " selections.name = '" + selName + "' AND " +
+                                                            " selections.id_selection = structures.id_selection", cn);
+                sqlDA.Fill(dt);
+                if (dt != null)
+                {
+                    comboBox1.DataSource = dt;
+                    comboBox1.DisplayMember = "name";
+                }
+            }
         }
     }
 }

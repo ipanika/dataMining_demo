@@ -34,6 +34,7 @@ namespace dataMining_demo
 
             model = cn.MiningModels[modelName];
             service = cn.MiningServices[model.Algorithm];
+            
 
             if (service.ViewerType == "Microsoft_Cluster_Viewer")
                 viewer = new ClusterViewer();
