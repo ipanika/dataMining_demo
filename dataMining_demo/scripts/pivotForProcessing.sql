@@ -1,4 +1,4 @@
-use demo_dm
+use DM
 
 SELECT [CompanyID], [Name], [YearID], [Нематериальные активы]
 FROM 
