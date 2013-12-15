@@ -99,9 +99,6 @@ namespace dataMining_demo
             try
             {
                 comboBox1.DataSource = null;
-                comboBox2.DataSource = null;
-                comboBox3.DataSource = null;
-                comboBox4.DataSource = null;
 
                 SqlConnection cn = new SqlConnection(app_connectionString);
                 DataTable dt = new DataTable();
