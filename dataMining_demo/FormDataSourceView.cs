@@ -106,8 +106,8 @@ namespace dataMining_demo
                 checkedListBox1.DataSource = columnNames;
                 checkedListBox1.CheckOnClick = true;
 
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    checkedListBox1.SetItemChecked(i, true);
+                //for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                //    checkedListBox1.SetItemChecked(i, true);
 
             }
             // если решается задача кластеризации:
@@ -119,8 +119,8 @@ namespace dataMining_demo
                 checkedListBox1.DataSource = columnNames;
                 checkedListBox1.CheckOnClick = true;
 
-                for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                    checkedListBox1.SetItemChecked(i, true);
+                //for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                //    checkedListBox1.SetItemChecked(i, true);
             }
 
         }
