@@ -61,11 +61,19 @@ namespace dataMining_demo
                 MessageBox.Show(e1.Message);
                 FormConnection f = new FormConnection();
                 f.ShowDialog();
-                checkAppDB();
-                checkDataSource();
-                selectDataSourceViews();
+                try
+                {
+                    checkAppDB();
+                    checkDataSource();
+                    selectDataSourceViews();
+                }
+                catch (Exception e2)
+                {
+                    MessageBox.Show(e2.Message);
+                }
             }
 
+            // выставление флага решаемой задачи, по умолчанию - кластеризация
             taskType = 1;
             кластеризацииToolStripMenuItem.Checked = true;
             прогнозированияToolStripMenuItem.Checked = false;
