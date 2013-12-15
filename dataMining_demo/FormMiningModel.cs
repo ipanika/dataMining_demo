@@ -13,9 +13,6 @@ namespace dataMining_demo
 {
     public partial class FormMiningModel : Form
     {
-        //Server svr = new Server();
-        //Database db = new Database();
-        //MiningStructure ms = new MiningStructure();
 
         public FormMiningModel()
         {
@@ -24,34 +21,13 @@ namespace dataMining_demo
 
         private void MiningModelForm_Load(object sender, EventArgs e)
         {
-
+            // выбор доступных представлений и алгоритмов данных
             selectDataSourceViews();
-            selectAlg();
-
-
-            //// создать соединение с БД
-            //SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
-            //if (cn.State == ConnectionState.Closed)
-            //    cn.Open();
-
-            //string sqlQuery = "SELECT [structures].[name] FROM [structures] INNER JOIN " + 
-            //                   " selections ON structures.id_selection = selections.id_selection INNER JOIN " +
-            //                   " data_source_views ON data_source_views.id_dsv = selections.id_dsv INNER JOIN" + 
-            //                   " relations ON relations.id_dsv = data_source_views.id_dsv INNER JOIN " + 
-            //                   " tasks ON tasks.id_task = relations.id_task WHERE tasks.task_type = " + FormMain.taskType;
-
-            //DataTable dt1 = new DataTable();
-            //// загрузка имеющихся представлений ИАД
-            //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-            //sqlDA.Fill(dt1);
-
-            //comboBox1.DataSource = dt1;
-            //comboBox1.DisplayMember = "name";
-
-            
+            selectAlg(); 
 
         }
-
+        
+        // функция получения списка существующих представлений данных
         private void selectDataSourceViews()
         {
             try
@@ -83,6 +59,7 @@ namespace dataMining_demo
             }
         }
 
+        // функция выбора доступных вариантов алгоритмов DM
         private void selectAlg()
         {
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
@@ -101,6 +78,7 @@ namespace dataMining_demo
             comboBox2.DisplayMember = "name";
         }
 
+        // обработка сохранения модели DM
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -135,8 +113,14 @@ namespace dataMining_demo
             sqlCmd.CommandText = sqlQuery;
             string nameAlg = sqlCmd.ExecuteScalar().ToString();
 
+            // вид DMX - запроса: 
+            //ADD MINING MODEL <model>
+            //( <structure column name>  [AS <model column name>]  [<modeling flags>]    [<prediction>]
+            //  [(<nested column definition list>) [WITH FILTER (<nested filter criteria>)]] )
+            //USING <algorithm> [(<parameter list>)] 
 
 
+            // создание модели ИАД на основе структуры ИАД 
             dmxQuery = "ALTER MINING STRUCTURE [" + strName + "]" +
                         " ADD MINING MODEL [" + modelName + "]";
 
@@ -145,19 +129,10 @@ namespace dataMining_demo
                 cn2.Open();
             SqlDataAdapter sqlDA;
             DataTable dtColumns;
-            // если проводится кластеризация, то прогнозируемый столбец не требуется:
+            
+            // если проводится задача прогнозирования, то определяем прогнозируемые столбцы:
             if (FormMain.taskType == 2)     
             {
-                // вид DMX - запроса: 
-                //ADD MINING MODEL <model>
-                //( <structure column name>  [AS <model column name>]  [<modeling flags>]    [<prediction>]
-                //  [(<nested column definition list>) [WITH FILTER (<nested filter criteria>)]] )
-                //USING <algorithm> [(<parameter list>)] 
-
-                // запроса столбцов структуры:
-
-                
-
                 // получение списка столбцов из выборки данных
                 strSelect = "SELECT column_name FROM dsv_columns JOIN selections " + 
                             " ON dsv_columns.id_dsv = selections.id_dsv INNER JOIN structures "+
@@ -168,13 +143,12 @@ namespace dataMining_demo
                 sqlDA.Fill(dtColumns);
 
                 List<string> colNames = new List<string>();
-
-
+                
                 for (int i = 0; i < dtColumns.Rows.Count; i++)
                     colNames.Add(dtColumns.Rows[i][0].ToString());
                 
                 dmxQuery += "(";
-
+                // продолжение DMX-запроса с указанием прогнозирующих столбцов
                 for (int i = 0; i < colNames.Count; i++)
                 {
                     string curName = colNames[i];
@@ -239,12 +213,15 @@ namespace dataMining_demo
             
             this.Close();
         }
-
+        // обработчик события выбора представления источника данных в выпадающем списке:
+        // выбираются доступные выборик данных
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectSelections();
         }
-
+        /*
+         * функция формирования списка доступных выборок данных соответствующего представления данных
+         */
         private void selectSelections()
         {
             comboBox5.DataSource = null;
@@ -271,12 +248,15 @@ namespace dataMining_demo
                 }
             }
         }
-
+        // обработчик события выбора выборки данных в выпадающем списке:
+        // выбираются доступные структуры ИАД
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectStructures();
         }
-
+        /*
+         * функция формирования списка доступных структур ИАД соответствующей выборки данных
+         */
         private void selectStructures()
         {
             comboBox1.DataSource = null;

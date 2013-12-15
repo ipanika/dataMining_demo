@@ -243,14 +243,14 @@ namespace dataMining_demo
             // модельToolStripMenuItem
             // 
             this.модельToolStripMenuItem.Name = "модельToolStripMenuItem";
-            this.модельToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.модельToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.модельToolStripMenuItem.Text = "Модель DM";
             this.модельToolStripMenuItem.Click += new System.EventHandler(this.модельToolStripMenuItem_Click);
             // 
             // вариантАлгоритмаToolStripMenuItem
             // 
             this.вариантАлгоритмаToolStripMenuItem.Name = "вариантАлгоритмаToolStripMenuItem";
-            this.вариантАлгоритмаToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.вариантАлгоритмаToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.вариантАлгоритмаToolStripMenuItem.Text = "Вариант алгоритма";
             this.вариантАлгоритмаToolStripMenuItem.Click += new System.EventHandler(this.вариантАлгоритмаToolStripMenuItem_Click);
             // 
@@ -289,7 +289,7 @@ namespace dataMining_demo
             // настройкаСоединенияToolStripMenuItem
             // 
             this.настройкаСоединенияToolStripMenuItem.Name = "настройкаСоединенияToolStripMenuItem";
-            this.настройкаСоединенияToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.настройкаСоединенияToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.настройкаСоединенияToolStripMenuItem.Text = "Настройка соединения";
             this.настройкаСоединенияToolStripMenuItem.Click += new System.EventHandler(this.настройкаСоединенияToolStripMenuItem_Click);
             // 

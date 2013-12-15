@@ -29,15 +29,15 @@ namespace dataMining_demo
 
         private void FormSelection_Load(object sender, EventArgs e)
         {
-            // получение списка доступных представлений:
+            
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             cn.Open();
 
             DataTable dt = new DataTable();
-
+            // получение списка доступных представлений в соответствии с решаемой задачей:
             string strQuery = "SELECT [data_source_views].[name] FROM [data_source_views]" +
-                                " INNER JOIN tasks ON data_source_views.id_task =  tasks.id_task ";// + 
-                                //" WHERE tasks.task_type = "+FormMain.taskType.ToString(); 
+                                " INNER JOIN tasks ON data_source_views.id_task =  tasks.id_task " + 
+                                " WHERE tasks.task_type = "+FormMain.taskType.ToString(); 
             SqlDataAdapter sqlDA = new SqlDataAdapter(strQuery, cn);
             sqlDA.Fill(dt);
 
@@ -47,6 +47,8 @@ namespace dataMining_demo
             
             dataGridView1.AllowUserToAddRows = false;
             
+            // если решается задача кластеризации, то скрыть текстовое поле
+            // textBox1 и отобразить выпадющий список combobox
             if (FormMain.taskType == 2)
             {
                 textBox1.Visible = false;
@@ -85,7 +87,7 @@ namespace dataMining_demo
 
         }
         
-        // добавление нового выпадающего списка на форму
+        // добавление нового выпадающего списка на форму для задачи прогнозирования
         private void initializeCmb(ComboBox cmb)
         {
             cmb.FormattingEnabled = true;
@@ -112,6 +114,7 @@ namespace dataMining_demo
             
         }
 
+        // функция запроса данных из хранилища и заполнение ими dataGridView
         private void sqlSelect(string dsvName, string filter)
         {
             try
@@ -136,6 +139,7 @@ namespace dataMining_demo
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
 
+                    // обрботка результатов запроса имен столбцов
                     while (reader.Read())
                     {
                         string colNm = reader.GetString(0);
@@ -173,10 +177,7 @@ namespace dataMining_demo
                 {
                     MessageBox.Show(e1.Message);
                 }
-                //if (strQuery != "")
-                //    strQuery = strQuery.Substring(0, strQuery.Length - 1);
 
-                //if (strQuery != "")
                 if (colNames.Count > 0)
                 {
                     cn = new SqlConnection(FormMain.dw_connectionString);
@@ -244,13 +245,15 @@ namespace dataMining_demo
             }  
         }
         
+        // обработчик события выбора представления данных
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string dsvName = comboBox1.Text;
             fillDataGridView(dsvName);
 
         }
-
+        
+        // обработчик события выбора предприятия для выборки данных
         private void cmb_SelectedIndexChanged(object sender, EventArgs e)
         {
             string dsvName = comboBox1.Text;
@@ -259,6 +262,7 @@ namespace dataMining_demo
 
         }
 
+        // обработчик нажатия на кнопку "Обновить", обновляется dataGridView
         private void button1_Click(object sender, EventArgs e)
         {
             string dsvName = comboBox1.Text;
@@ -266,6 +270,7 @@ namespace dataMining_demo
             fillDataGridView(dsvName);
         }
 
+        // обработчик нажатия на кнопку "Сохранить"
         private void button2_Click(object sender, EventArgs e)
         {
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
@@ -285,10 +290,10 @@ namespace dataMining_demo
             {
                 MessageBox.Show(e1.Message);
             }
-            string selName = textBox2.Text;
-            string filter = textBox1.Text;
+            string selName = textBox2.Text; // название выбоорки данных
+            string filter = textBox1.Text; // фильтр данных в SQL-формате
 
-            //проверка вставляемых значений на наличие кавычечк
+            //проверка сохраняемых значений на наличие кавычек,
             selName = checkQuotes(selName);
             filter = checkQuotes(filter);
 
@@ -372,10 +377,7 @@ namespace dataMining_demo
                 {
                     strInsert += " (" + idRow.ToString() + ","; //id_row
                     strInsert += " " + dt.Rows[j][0].ToString() + ","; // id_column
-                    //if (dataGridView1.Rows[i].Cells[j].Value != null)
-                        strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
-                    //else
-                        //strInsert += " null'),"; // column_value
+                    strInsert += " '" + dataGridView1.Rows[i].Cells[j].Value + "'),"; // column_value
                 }
 
                 strInsert = strInsert.Substring(0, strInsert.Length - 1);
@@ -393,16 +395,12 @@ namespace dataMining_demo
                 }
             }
 
-           // strInsert = strInsert.Substring(0, strInsert.Length - 1);
-
-            //sqlCmd.CommandText = "insert into [selection_content] values " + strInsert;
-            //sqlCmd.Connection = cn;
-            
-
-            this.Close();
+          
+          this.Close();
 
         }
 
+        // дублирование кавычек для нормального выполнения SQL-запроса 
         private string checkQuotes(string word)
         {
             string newWord = "";
@@ -430,6 +428,7 @@ namespace dataMining_demo
             form.Show();
         }
 
+        // обработчик события активация формы (необходимо после переразметки)
         private void FormSelection_Activated(object sender, EventArgs e)
         {
             // если в массиве glob_columnNames есть данные для переразметки, то обновить dataGridView
@@ -450,6 +449,7 @@ namespace dataMining_demo
             }
         }
 
+        // функция возвращает новое значение для переданной метки (previous)
         private string relabelString(string previous)
         {
             int index = glob_previousLabels.Count;

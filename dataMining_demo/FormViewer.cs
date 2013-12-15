@@ -30,24 +30,25 @@ namespace dataMining_demo
             cn.Open();
 
             
-            string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+            string modelName = FormMain.modelName;
 
             model = cn.MiningModels[modelName];
             service = cn.MiningServices[model.Algorithm];
             
-
+            // определение типа обозревателя для просматриваемой модели
             if (service.ViewerType == "Microsoft_Cluster_Viewer")
                 viewer = new ClusterViewer();
             else if (service.ViewerType == "Microsoft_TimeSeries_Viewer")
                 viewer = new TimeSeriesViewer();
             else throw new System.Exception("Custom Viewers not supported");
 
-            // Set up and load the viewer
+            // загрузка обозревателя
             viewer.ConnectionString = FormMain.as_connectionString; //"Provider=MSOLAP; Integrated Security=SSPI; Data Source = localhost; Initial Catalog = SSAS_DM";
             viewer.MiningModelName = modelName;
             viewer.Dock = DockStyle.Fill;
             panel1.Controls.Add(viewer);
             viewer.LoadViewerData(null);
         }
+
     }
 }

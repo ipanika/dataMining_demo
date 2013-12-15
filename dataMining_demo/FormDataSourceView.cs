@@ -13,9 +13,6 @@ namespace dataMining_demo
 {
     public partial class FormDataSourceView : Form
     {
-         Server svr = new Server();
-         Database db = new Database();
-
         public FormDataSourceView()
         {
             InitializeComponent();
@@ -23,18 +20,12 @@ namespace dataMining_demo
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            svr.Connect(FormMain.as_dataSource);
-
-            if ((svr != null) && (svr.Connected))
-            {
-                db = svr.Databases.FindByName(FormMain.as_initCatalog);
-
-            }
-
+            // заполнение поля доступных атрибутов для создания представления данных
             List<string> columnNames = new List<string>();
             fillListBox(columnNames);
         }
 
+        // сохранение информации о представлении данных
         private void button1_Click(object sender, EventArgs e)
         {
             var colForDSV = new List<string>();
@@ -53,6 +44,9 @@ namespace dataMining_demo
             
         }
 
+        /*
+         * сохранение списка столбцов представления данных
+         */
         void CreateDataSourceView(List<string> columnNames )
         {
             string argsForQuery = " ";
@@ -100,96 +94,47 @@ namespace dataMining_demo
         {
             // если тип решаемой задачи - прогнозирование, то создается представление для прогнозирования
             if (FormMain.taskType == 2)
-            {
-                fillColumnNames(columnNames);
-                
-                checkedListBox1.DataSource = columnNames;
-                checkedListBox1.CheckOnClick = true;
-
-                //for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                //    checkedListBox1.SetItemChecked(i, true);
-
-            }
-            // если решается задача кластеризации:
+                getColumnNames(columnNames);
+            // если решается задача кластеризации, то добавляется столбец с идентификатором компании:
             else
-            {
                 columnNames.Add("CompanyID");
-                fillColumnNames(columnNames);
+             
+            getColumnNames(columnNames);
 
-                checkedListBox1.DataSource = columnNames;
-                checkedListBox1.CheckOnClick = true;
+            checkedListBox1.DataSource = columnNames;
+            checkedListBox1.CheckOnClick = true;
 
-                //for (int i = 0; i < checkedListBox1.Items.Count; i++)
-                //    checkedListBox1.SetItemChecked(i, true);
-            }
-
+            
         }
 
-        private void fillColumnNames(List<string> columnNames)
+
+        private void getColumnNames(List<string> columnNames)
         {
-            //SqlConnection cn = new SqlConnection(FormMain.dw_connectionString);
-            //if (cn.State == ConnectionState.Closed)
-            //    cn.Open();
+            // SQL-запрос к ХД для получения списка доступных атрибутов
+            // не используется, тк есть атрибуты, использующие знаки пунктуации, не допустимые для 
+            // использования в DMX-запросах
 
-            //string sqlQuery = "SELECT [description] FROM [BalanceLine] ";
+            /*
+            SqlConnection cn = new SqlConnection(FormMain.dw_connectionString);
+            if (cn.State == ConnectionState.Closed)
+                cn.Open();
 
-            //DataTable dt1 = new DataTable();
-            //// загрузка имеющихся представлений ИАД
-            //SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
-            //sqlDA.Fill(dt1);
+            string sqlQuery = "SELECT [description] FROM [BalanceLine] ";
 
-            //for (int i = 0; i < dt1.Rows.Count; i++)
-            //{
-            //    string parName = dt1.Rows[i][0].ToString();
-                //// замена недопустимых символов
-                //parName = parName.Replace(".", "_");
-                //parName = parName.Replace(",", "_");
-
-                //parName = parName.Replace(";", "_");
-                //parName = parName.Replace("'", "_");
-
-                //parName = parName.Replace("`", "_");
-                //parName = parName.Replace(":", "_");
-
-                //parName = parName.Replace("/", "_");
-                //parName = parName.Replace("\\", "_");
-                //parName = parName.Replace("*", "_");
-                //parName = parName.Replace("|", "_");
-
-                //parName = parName.Replace("?", "_");
-                //parName = parName.Replace("\"", "_");
-                //parName = parName.Replace("&", "_");
-                //parName = parName.Replace("%", "_");
-
-                //parName = parName.Replace("$", "_");
-                //parName = parName.Replace("!", "_");
-                //parName = parName.Replace("+", "_");
-                //parName = parName.Replace("=", "_");
-
-                //parName = parName.Replace("(", "_");
-                //parName = parName.Replace(")", "_");
-                //parName = parName.Replace("{", "_");
-                //parName = parName.Replace("}", "_");
-
-                //parName = parName.Replace("<", "_");
-                //parName = parName.Replace(">", "_");
-
-            //    if (parName.Length > 128)
-            //        parName = parName.Substring(0, 128);
-
-            //    columnNames.Add(parName);
-            //}
+            DataTable dt1 = new DataTable();
+            // загрузка имеющихся представлений ИАД
+            SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
+            sqlDA.Fill(dt1);
+            */
 
             columnNames.Add("CompanyName");
             columnNames.Add("YearID");
             columnNames.Add("Нематериальные активы");
             columnNames.Add("Основные средства");
             columnNames.Add("Незавершенное строительство");
-            //columnNames.Add("Доходные вложения в материал.ценности");
             columnNames.Add("Отложенные налоговые активы");
             columnNames.Add("Прочие внеоборотные активы");
             columnNames.Add("Запасы");
-            //columnNames.Add("в т.ч. сырье и материалы");
             columnNames.Add("животные на выращивание и откорме");
             columnNames.Add("затраты в НЗП");
             columnNames.Add("готовая продукция и товары");
@@ -210,6 +155,16 @@ namespace dataMining_demo
             columnNames.Add("Займы и кредиты долгосрочные");
             columnNames.Add("Итого по разделу 4");
             
+        }
+
+        // инвертирование выбранных элементов
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {            
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                if (checkedListBox1.GetItemChecked(i))
+                    checkedListBox1.SetItemChecked(i, false);
+                else 
+                    checkedListBox1.SetItemChecked(i, true);
         }
 
         

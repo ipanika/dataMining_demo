@@ -10,16 +10,15 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.AnalysisServices.AdomdClient;
 using Microsoft.AnalysisServices;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
 
 namespace dataMining_demo
 {
     public partial class FormMain : Form
     {
-        public static Microsoft.AnalysisServices.Server svr;
-        public static Microsoft.AnalysisServices.Database db;
-        public static string modelName;
+        // объявление глобальных переменных:
+        public static Server svr; // сервер SSAS
+        public static Database db; // БД сервера SSAS
+        public static string modelName; // имя выбранной модели (combobox4)
 
         public static int taskType = 1; // тип задачи по умолчанию: кластеризация
 
@@ -43,15 +42,21 @@ namespace dataMining_demo
             InitializeComponent();
             
         }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
-            svr = new Microsoft.AnalysisServices.Server();
-            svr.Connect(as_dataSource);
 
-            db = CreateDatabase();
+            // создание экземпляра сервера SSAS
+            svr = new  Server();
+            svr.Connect(as_dataSource);
+            
+            db = checkAnalysisServicesDB();
             try
             {
+                /*
+                 * проверка соединений с БД приложения и БД SSAS,
+                 * загрузка списка доступных представлений данных
+                 */
                 checkAppDB();
                 checkDataSource();
                 selectDataSourceViews();
@@ -80,36 +85,23 @@ namespace dataMining_demo
             
         }
 
-        // функция проверки существования базы данных приложения
+        // функция подключения к базе данных приложения (DM)
         private void checkAppDB()
         {
-            //try
-            {
-                SqlConnection cn = new SqlConnection(app_connectionString);
-                cn.Open();
-            }
-            // в случае провала - запустить скрипт создания БД
-          //  catch
-            {
-             //   MessageBox.Show("Ошибка соединения с БД приложения.");
-                //string sqlConnectionString = "Data Source="+ app_dataSource + "; Initial Catalog = master; Integrated Security=SSPI";
-                //FileInfo file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\create_db.sql");
-                //string script = file.OpenText().ReadToEnd();
-                //SqlConnection conn = new SqlConnection(sqlConnectionString);
-                //Microsoft.SqlServer.Management.Smo.Server sqlServer = new Microsoft.SqlServer.Management.Smo.Server(new ServerConnection(conn));
-                //sql1Server.ConnectionContext.ExecuteNonQuery(script);
-
-                //file = new FileInfo("C:\\Users\\ipanika\\Documents\\Visual Studio 2010\\Projects\\dataMining_demo\\dataMining_demo\\fill_db.sql");
-                //script = file.OpenText().ReadToEnd();
-                //sqlServer.ConnectionContext.ExecuteNonQuery(script);
-            }
+            SqlConnection cn = new SqlConnection(app_connectionString);
+            cn.Open();
         }
 
+
+        // функция получения списка существующих представлений данных, в результате 
         private void selectDataSourceViews()
         {
             try
             {
                 comboBox1.DataSource = null;
+                comboBox2.DataSource = null;
+                comboBox3.DataSource = null;
+                comboBox4.DataSource = null;
 
                 SqlConnection cn = new SqlConnection(app_connectionString);
                 DataTable dt = new DataTable();
@@ -117,12 +109,12 @@ namespace dataMining_demo
                 string sqlQuery = "SELECT [data_source_views].[name] FROM [data_source_views] INNER JOIN tasks " +
                                     " ON tasks.id_task = data_source_views.id_task WHERE tasks.task_type = " + FormMain.taskType.ToString();
 
-                // Create data adapters from database tables and load schemas
                 SqlDataAdapter sqlDA = new SqlDataAdapter(sqlQuery, cn);
                 sqlDA.Fill(dt);
 
-                int rowsConunt = dt.Rows.Count;
-                int itemsCount = comboBox1.Items.Count;
+                int rowsConunt = dt.Rows.Count; 
+                int itemsCount = comboBox1.Items.Count; 
+                
                 // если появились новые данные - обновить список представлений
                 if (rowsConunt != itemsCount)
                 {
@@ -136,11 +128,10 @@ namespace dataMining_demo
             }
         }
 
-        
-        
+        // обработчик кнопки "Обработать модель"
         private void button1_Click(object sender, EventArgs e)
         {
-            // проверка существования источника данных demo_dm
+            // проверка существования источника данных 
             checkDataSource();
 
             string strName = comboBox3.Text;
@@ -149,68 +140,76 @@ namespace dataMining_demo
             {
                 string dmxQuery = "";
 
-
                 // создание соединения с сервером и команды для отправки dmx-запроса
                 AdomdConnection adomdCn = new AdomdConnection();
                 adomdCn.ConnectionString = FormMain.as_connectionString;
                 adomdCn.Open();
                 AdomdCommand adomdCmd = adomdCn.CreateCommand();
 
-                // удаление данных ранее обработанной структуры
+                // удаление данных ранее обработанной структуры, 
+                // тк иначе не возможо обрботать структуру при уже обработанных моделях
                 adomdCmd.CommandText = "DELETE FROM [" + strName + "]";
 
                 adomdCmd.Execute();
 
+                // dmx-запрос для обучения структуры
                 dmxQuery += "INSERT INTO [" + strName + "] (";
 
-                // получение списка столбцов текущей структуры
-
+                // получение списка столбцов и типов данных текущей структуры 
+                // для последующего формирования pivot-запроса
                 AdomdConnection cn = new AdomdConnection();
                 cn.ConnectionString = FormMain.as_connectionString;
                 cn.Open();
                 AdomdCommand cmd = cn.CreateCommand();
-                //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
+                
                 cmd.CommandText = "SELECT COLUMN_NAME, DATA_TYPE FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
+                /*
+                 * В столбце DATA_TYPE содержится код типа данных
+                 * 5 - real,
+                 * 7 - datetime
+                 * 20 - integer
+                 * 130 - string
+                 */
+                // список названий столбцов структуры
+                List<string> columnNameList = new List<string>(); 
+                // список типов данных структуры
+                List<string> dataTypeList = new List<string>();
 
-                List<string> _sideList = new List<string>();
-                List<string> _typeList = new List<string>();
                 try
                 {
                     AdomdDataReader reader = cmd.ExecuteReader();
                     
-
                     while (reader.Read())
                     {
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
                             if (i % 2 == 0)
-                                _sideList.Add(reader.GetValue(i).ToString());
+                                columnNameList.Add(reader.GetValue(i).ToString());
                             else if (i % 2 == 1)
                             {
+                                // декодирование типов данных структуры, хранящихся в столбце DATA_TYPE
                                 switch (reader.GetValue(i).ToString())
                                 {
                                     case ("5"):
-                                        _typeList.Add("real");
+                                        dataTypeList.Add("real");
                                         break;
                                     case ("7"):
-                                        _typeList.Add("date");
+                                        dataTypeList.Add("date");
                                         break;
                                     case ("20"):
-                                        _typeList.Add("bigint");
+                                        dataTypeList.Add("bigint");
                                         break;
                                     case ("130"):
-                                        _typeList.Add("nchar");
+                                        dataTypeList.Add("nchar");
                                         break;
                                     default:
-                                        _typeList.Add("nchar");
+                                        dataTypeList.Add("nchar");
                                         break;
                                 }
                             }
                         }
 
                     }
-
-                   // comboBox2.DataSource = _sideList;
                 }
                 catch (Exception e1)
                 {
@@ -220,16 +219,20 @@ namespace dataMining_demo
                 // строка, содержащая имена столбцов структуры (модели)
                 string colNames = "";
                 string colNames2 = "";
-                for (int i = 0; i < _sideList.Count; i++)
+                for (int i = 0; i < columnNameList.Count; i++)
                 {
-                    colNames += " [" + _sideList[i] + "],";
-                    colNames2 += " cast([" + _sideList[i] + "] as " + _typeList[i] + ") as [" + _sideList[i] + "],";
+                    colNames += " [" + columnNameList[i] + "],";
+                    /*
+                     * приведение к необходимому типу данных значений для обучения структуры, 
+                     * хранящихся в БД прилоежния (DM)
+                    */
+                    colNames2 += " cast([" + columnNameList[i] + "] as " + dataTypeList[i] + ") as [" + columnNameList[i] + "],";
                 }
 
                 colNames = colNames.Substring(0, colNames.Length - 1);
                 colNames2 = colNames2.Substring(0, colNames2.Length - 1);
                 
-               // string mName = comboBox4.Text;
+                // DMX-запрос с PIVOT-запросом к БД приложения, используемой как истоничк данных для обучения
                 dmxQuery += colNames + ")" +
                         " openquery ([" + as_dataSourceName + "], ' SELECT " + colNames2 +
                         " FROM (select selection_content.id_row, column_value, " + 
@@ -256,17 +259,14 @@ namespace dataMining_demo
              
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            FormDataSourceView f2 = new FormDataSourceView();
-
-            f2.ShowDialog();
-        }
-
-        Microsoft.AnalysisServices.Database CreateDatabase()
+        /*
+         * функция проверки существования БД службе SQL Server Analysis Services
+         * Если БД отсутствует, то она создается.
+        */
+         Database checkAnalysisServicesDB()
         {
             // Create a database and set the properties
-            Microsoft.AnalysisServices.Database db = null; 
+             Database db = null; 
             if ((svr != null) && (svr.Connected))
             {
                 db = svr.Databases.FindByName(FormMain.as_initCatalog);
@@ -281,23 +281,16 @@ namespace dataMining_demo
             return db;
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            FormMiningStructure f3 = new FormMiningStructure();
-            f3.Show();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            FormMiningModel f4 = new FormMiningModel();
-            f4.Show();
-        }
-
+        // обработчик события выбора представления источника данных в выпадающем списке:
+        // выбираются доступные выборик данных
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectSelections();
         }
 
+        /*
+         * функция формирования списка доступных выборок данных соответствующего представления данных
+         */
         private void selectSelections()
         {
             comboBox2.DataSource = null;
@@ -325,11 +318,15 @@ namespace dataMining_demo
             }
         }
 
+        // обработчик события выбора выборки данных в выпадающем списке:
+        // выбираются доступные структуры ИАД
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectStructures();
         }
-
+        /*
+         * функция формирования списка доступных структур ИАД соответствующей выборки данных
+         */
         private void selectStructures()
         {
             comboBox3.DataSource = null;
@@ -354,31 +351,16 @@ namespace dataMining_demo
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-
-            FormTreeView f5 = new FormTreeView();
-            f5.Show();
-        }
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-            FormSelection f8 = new FormSelection();
-            f8.Show();
-        }
-
-        private void button9_Click(object sender, EventArgs e)
-        {
-            FormAlgorithmVariants f9 = new FormAlgorithmVariants();
-            f9.Show();
-
-        }
-
+        // обработчик события выбора сттруктуры данных в выпадающем списке:
+        // выбираются доступные модели ИАД
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectModels();
         }
 
+        /*
+         * функция формирования списка доступных моделей ИАД соответствующей структуры данных
+         */
         private void selectModels()
         {
             comboBox4.DataSource = null;
@@ -403,18 +385,24 @@ namespace dataMining_demo
             }
         }
 
+        // обработчик события выбора модели данных в выпадающем списке:
+        // сохраняется имя выбранной модели
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             modelName = comboBox4.Text;
         }
 
+        /*
+         * функция проверки существования источника данных в БД SSAS 
+         * если источник данных отсутствует, то он создается
+         */
         private void checkDataSource()
         {
             DataSource ds = db.DataSources.FindByName(as_dataSourceName);
 
             if (ds == null)
             {
-                ds = new RelationalDataSource(as_dataSourceName, Utils.GetSyntacticallyValidID(as_dataSourceName, typeof(Microsoft.AnalysisServices.Database)));
+                ds = new RelationalDataSource(as_dataSourceName, Utils.GetSyntacticallyValidID(as_dataSourceName, typeof( Database)));
                 ds.ConnectionString = "Data Source="+ app_dataSource +";Integrated Security=SSPI;Initial Catalog=" + app_initCatalog;
 
                 db.DataSources.Add(ds);
@@ -424,7 +412,7 @@ namespace dataMining_demo
             }
         }
 
-        
+        // установка типа решаемой задачи
         private void кластеризацииToolStripMenuItem_Click(object sender, EventArgs e)
         {
             taskType = 1; // кластеризация
@@ -444,12 +432,8 @@ namespace dataMining_demo
             метаданныеToolStripMenuItem.Enabled = false;
         }
 
-        private void button10_Click(object sender, EventArgs e)
-        {
-            FormViewer f = new FormViewer();
-
-            f.Show();
-        }
+       
+        // ОБРАБОТЧИКИ ЭЛЕМЕНТОВ МЕНЮ:
 
         private void представлениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -512,81 +496,7 @@ namespace dataMining_demo
         }
 
 
-
-        private void processMiningStructure()
-        {
-            string strName = comboBox3.Text;
-
-            try
-            {
-                string dmxQuery = "";
-
-                // создание соединения с сервером и команды для отправки dmx-запроса
-                AdomdConnection adomdCn = new AdomdConnection();
-                adomdCn.ConnectionString = FormMain.as_connectionString;
-                adomdCn.Open();
-                AdomdCommand adomdCmd = adomdCn.CreateCommand();
-
-                dmxQuery += "INSERT INTO [" + strName + "] (";
-
-                // получение списка столбцов текущей структуры
-
-                AdomdConnection cn = new AdomdConnection();
-                cn.ConnectionString = FormMain.as_connectionString;
-                cn.Open();
-                AdomdCommand cmd = cn.CreateCommand();
-                //string modelName = FormMain.modelName;// MainForm.comboBox3.Text;
-                cmd.CommandText = "SELECT COLUMN_NAM FROM [$system].[DMSCHEMA_MINING_COLUMNS] where model_name ='" + modelName + "'";
-
-                List<string> _sideList = new List<string>();
-                try
-                {
-                    AdomdDataReader reader = cmd.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        for (int i = 0; i < reader.FieldCount; i++)
-                           _sideList.Add(reader.GetValue(i).ToString());
-                    }
-                }
-                catch (Exception e1)
-                {
-                    MessageBox.Show(e1.Message);
-                }
-
-                // строка, содержащая имена столбцов структуры (модели)
-                string colNames = "";
-                for (int i = 0; i < _sideList.Count; i++)
-                    colNames += " [" + _sideList[i] + "],";
-
-                colNames = colNames.Substring(0, colNames.Length - 1);
-
-                // string mName = comboBox4.Text;
-                dmxQuery += colNames + ")" +
-                        " openquery ([" + as_dataSourceName + "], ' SELECT " + colNames +
-                        " FROM (select selection_content.id_row, column_value, " +
-                        " dsv_columns.column_name from selection_content INNER JOIN " +
-                        " selection_rows ON selection_content.id_row = selection_rows.id_row INNER JOIN " +
-                        " selections ON selection_rows.id_selection = selections.id_selection INNER JOIN " +
-                        " dsv_columns ON dsv_columns.id_column = selection_content.id_column " +
-                        " INNER JOIN structures ON structures.id_selection = selections.id_selection " +
-                        " INNER JOIN models ON models.id_structure = structures.id_structure " +
-                        " AND models.name =  ''" + modelName + "'') p" +
-                        " PIVOT ( max(column_value) FOR column_name IN (" + colNames + ") ) AS pvt')";
-
-                adomdCmd.CommandText = dmxQuery;
-
-                adomdCmd.Execute();
-
-                MessageBox.Show("Анализ данных успешно завершен.");
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
-        }
         
-
       
     }
 }

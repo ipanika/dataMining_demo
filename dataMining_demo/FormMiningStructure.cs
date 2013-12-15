@@ -14,27 +14,21 @@ namespace dataMining_demo
 {
     public partial class FormMiningStructure : Form
     {
-
-        Server svr = new Server();
-        Database db = new Database();
-
         public FormMiningStructure()
         {
             InitializeComponent();
         }
 
-        
+        // обработка события выбора выборки данных, на основе которой будет формирвоаться структура
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selName = comboBox1.Text;
 
-            //dataGridView1.AllowUserToAddRows = true;
+            dataGridView1.AllowUserToAddRows = true;
             dataGridView1.Rows.Clear();
 
             // функция заполняет DataGridView
             fillDataGridView(selName);
-
-            //dataGridView1.AllowUserToAddRows = false;
 
         }
 
@@ -77,7 +71,7 @@ namespace dataMining_demo
                 textBox2.Enabled = false;
 
         }
-
+        // функция получения списка существующих представлений данных
         private void selectDataSourceViews()
         {
             try
@@ -110,6 +104,7 @@ namespace dataMining_demo
         }
                 
 
+        // обработки нажатия кнопки "сохранить представление данных"
         private void button1_Click(object sender, EventArgs e)
         {
             dataGridView1.AllowUserToAddRows = false;
@@ -131,36 +126,25 @@ namespace dataMining_demo
             sqlCmd.CommandText = "INSERT INTO [structures] VALUES ('" + idSel + "', '" + strName + "', '" + test_ratio + "')";
             sqlCmd.ExecuteNonQuery();
 
-            svr.Connect(FormMain.app_dataSource);
-
-            if ((svr != null) && (svr.Connected))
-                db = svr.Databases.FindByName(FormMain.as_dataSourceName);
-
+            // создание DMX-запроса для создания структуры данных
             string dmxQuery;
             dmxQuery = "CREATE MINING STRUCTURE ["+strName+"] (";
 
             for (int i = 0; i < dataGridView1.Rows.Count; i++)
             {
                 DataGridViewRow drv = dataGridView1.Rows[i];
-                //if (drv.Cells[1].Value.Equals(true))
-                {
-                    // получение имени столбца
-                    string parName = drv.Cells[0].Value.ToString();
 
-                    if (parName.Length > 99)
-                        parName = parName.Substring(0, 99);
+               // получение имени столбца
+               string parName = drv.Cells[0].Value.ToString();
 
-                    dmxQuery += " [" + parName + "]";
+               if (parName.Length > 99)
+                   parName = parName.Substring(0, 99);
 
-                    // получение типа данных столбца
-                    dmxQuery += " " + drv.Cells[2].Value;
+                dmxQuery += " [" + parName + "]";
 
-                    // получение типа содержимого столбца
-                    if (drv.Cells[1].Value.Equals(true))
-                        dmxQuery += " KEY,";
-                    else
-                        dmxQuery += " " + drv.Cells[3].Value.ToString() + ",";
-                }
+               // получение типа данных столбца
+               dmxQuery += " " + drv.Cells[2].Value;
+               dmxQuery += " " + drv.Cells[3].Value.ToString() + ",";
             }
             
             dmxQuery = dmxQuery.Substring(0, dmxQuery.Length - 1);
@@ -169,7 +153,7 @@ namespace dataMining_demo
             if (test_ratio != "")
                 dmxQuery += " WITH HOLDOUT (" + test_ratio + " PERCENT)";
 
-            // создание соединения с сервером и команды для отправки dmx-запроса
+            // создание соединения с сервером SSAS и команды для отправки dmx-запроса
             AdomdConnection adomdCn = new AdomdConnection();
             adomdCn.ConnectionString = FormMain.as_connectionString;
             adomdCn.Open();
@@ -189,11 +173,14 @@ namespace dataMining_demo
 
         }
         
-        
+        // заполнение элемента DataGridView данными о столбцах структуры 
         private void fillDataGridView(string selName)
         {
+            dataGridView1.AllowUserToAddRows = true;
             SqlConnection cn = new SqlConnection(FormMain.app_connectionString);
             cn.Open();
+
+            dataGridView1.Rows.Clear();
 
             try
             {
@@ -223,8 +210,6 @@ namespace dataMining_demo
                         // выбор из схемы БД информации о типе данных столбца
                         DataTable dt = new DataTable();
 
-                        //getColumnType(colName, dt, cn);
-
                         List<string> dataType = new List<string>();
                         DataGridViewComboBoxCell cmbbx = (DataGridViewComboBoxCell)dvr.Cells[2];
 
@@ -252,6 +237,7 @@ namespace dataMining_demo
                     }
                 }
 
+                dataGridView1.AllowUserToAddRows = false;
             }
             catch (Exception e)
             {
@@ -259,14 +245,18 @@ namespace dataMining_demo
             }
         }
 
+        // обработчик события изменения типа данных столбца структуры (колонки №2 в элементе dataGridView)
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
+            // если измененная ячейка находится в колонке №2
             if (dataGridView1.CurrentCell.ColumnIndex == 2 && dataGridView1.CurrentCell.RowIndex >= 0) 
             {
                 List<string> contentType = new List<string>();
 
                 if (dataGridView1.CurrentCell.Value != null)
                 {
+                    // в соответствии с выбранным типом данных создается список 
+                    // для выбора типа содержимого
                     switch(dataGridView1.CurrentCell.Value.ToString())
                     {
                         case "TEXT":
@@ -327,7 +317,6 @@ namespace dataMining_demo
 
                     }
 
-                    //(DataGridViewComboBoxCell) dataGridView1.CurrentCell.Cell[3]
                     int colIndex = dataGridView1.CurrentCell.ColumnIndex;
                     int rowIndex = dataGridView1.CurrentCell.RowIndex;
 
@@ -336,13 +325,17 @@ namespace dataMining_demo
                 }
             }
         }
-
+        
+        // обработчик события выбора представления источника данных в выпадающем списке:
+        // выбираются доступные выборки данных
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectSelections();
         }
 
-
+        /*
+         * функция формирования списка доступных выборок данных соответствующего представления данных
+        */
         private void selectSelections()
         {
             comboBox1.DataSource = null;

@@ -20,6 +20,7 @@ namespace dataMining_demo
 
         private void FormRelabel_Load(object sender, EventArgs e)
         {
+            // заполнение элемента dataGridView переданными данными с формы FormSelection
             comboBox1.DataSource = FormSelection.glob_columnNames;
         }
 
@@ -34,12 +35,11 @@ namespace dataMining_demo
             }
         }
 
-        // редактирование значения ячейки
+        // обработчик события редактирование значения ячейки
         private void dataGridView1_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
 
-            // МАГИЯ СО STACKOVERFLOW: 
-            // если редактируется столбец-combobox
+            // если редактируется столбец ячеек выпадающего списка
             if (dataGridView1.CurrentCell.GetType() == typeof(DataGridViewComboBoxCell))
             {
                 // после проверки добавляем новое значение в список listOfNewLabels
@@ -71,7 +71,7 @@ namespace dataMining_demo
 
         }
         
-        // из всех строк global_dt выделить уникальные значения:
+        // из всех строк старых меток выделить уникальные значения:
         private List<string> drillDataTable()
         {
             FormSelection.glob_relabelColumnIndex = comboBox1.SelectedIndex;
