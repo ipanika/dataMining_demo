@@ -27,6 +27,10 @@ namespace dataMining_demo
             if (cn.State == ConnectionState.Closed)
                 cn.Open();
 
+            TreeNode node_task = new TreeNode("Задачи:");
+
+            treeView1.Nodes.Add(node_task);
+
             SqlDataAdapter sqlDA = new SqlDataAdapter("select [id_task], [name] from [tasks]", cn);
             sqlDA.Fill(dtTsk);
 
@@ -37,7 +41,8 @@ namespace dataMining_demo
                 string tskName = dtTsk.Rows[h][1].ToString();
                 TreeNode tskNode = new TreeNode(tskName);
 
-                treeView1.Nodes.Add(tskNode);
+                //treeView1.Nodes.Add(tskNode);
+                node_task.Nodes.Add(tskNode);
                 //------------
 
 

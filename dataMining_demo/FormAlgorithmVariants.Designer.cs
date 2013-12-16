@@ -149,7 +149,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAlgorithmVariants";
-            this.Text = "FormAlgorithmVariants";
+            this.Text = "Создание варианта алгоритма";
             this.Load += new System.EventHandler(this.FormAlgorithmVariants_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

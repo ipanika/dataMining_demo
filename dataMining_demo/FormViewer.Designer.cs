@@ -50,7 +50,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormViewer";
-            this.Text = "FormViewer";
+            this.Text = "Обозреватель Analysis Services";
             this.Load += new System.EventHandler(this.FormViewer_Load);
             this.ResumeLayout(false);
 

@@ -41,19 +41,19 @@
       <HintPath>.\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.Controls">
-      <HintPath>.\Microsoft.AnalysisServices.Controls.DLL</HintPath>
+      <HintPath>lib\Microsoft.AnalysisServices.Controls.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.Graphing">
-      <HintPath>.\Microsoft.AnalysisServices.Graphing.dll</HintPath>
+      <HintPath>lib\Microsoft.AnalysisServices.Graphing.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.OleDbDM">
-      <HintPath>.\Microsoft.AnalysisServices.OleDbDM.DLL</HintPath>
+      <HintPath>lib\Microsoft.AnalysisServices.OleDbDM.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.Viewers">
-      <HintPath>.\Microsoft.AnalysisServices.Viewers.DLL</HintPath>
+      <HintPath>lib\Microsoft.AnalysisServices.Viewers.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.DataWarehouse">
-      <HintPath>.\Microsoft.DataWarehouse.DLL</HintPath>
+      <HintPath>lib\Microsoft.DataWarehouse.DLL</HintPath>
     </Reference>
     <Reference Include="Microsoft.DataWarehouse.Interfaces, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
