@@ -28,8 +28,9 @@ namespace dataMining_demo
                 cn.Open();
 
             TreeNode node_task = new TreeNode("Задачи:");
-
             treeView1.Nodes.Add(node_task);
+
+            node_task.NodeFont = new Font(treeView1.Font, FontStyle.Italic);
 
             SqlDataAdapter sqlDA = new SqlDataAdapter("select [id_task], [name] from [tasks]", cn);
             sqlDA.Fill(dtTsk);
@@ -43,6 +44,11 @@ namespace dataMining_demo
 
                 //treeView1.Nodes.Add(tskNode);
                 node_task.Nodes.Add(tskNode);
+
+                TreeNode node_dsv = new TreeNode("Представления данных:");
+                tskNode.Nodes.Add(node_dsv);
+
+                node_dsv.NodeFont = new Font(treeView1.Font, FontStyle.Italic);
                 //------------
 
 
@@ -58,7 +64,11 @@ namespace dataMining_demo
                     string dsvName = dtDsv.Rows[i][1].ToString();
                     TreeNode dsvNode = new TreeNode(dsvName);
 
-                    tskNode.Nodes.Add(dsvNode);
+                    node_dsv.Nodes.Add(dsvNode);
+
+                    TreeNode node_selec = new TreeNode("Выборки данных:");
+                    dsvNode.Nodes.Add(node_selec);
+                    node_selec.NodeFont = new Font(treeView1.Font, FontStyle.Italic);
 
                     DataTable dtSel = new DataTable();
                     sqlDA = new SqlDataAdapter("select [id_selection], [name] from [selections] where [id_dsv] = '" + dsvID + "'", cn);
@@ -71,11 +81,15 @@ namespace dataMining_demo
                             string selName = dtSel.Rows[j][1].ToString();
                             TreeNode selNode = new TreeNode(selName);
 
-                            dsvNode.Nodes.Add(selNode);
+                            node_selec.Nodes.Add(selNode);
 
                             DataTable dtStr = new DataTable();
                             sqlDA = new SqlDataAdapter("select [id_structure], [name] from [structures] where [id_selection] = '" + selID + "'", cn);
                             sqlDA.Fill(dtStr);
+
+                            TreeNode node_str = new TreeNode("Структуры данных:");
+                            selNode.Nodes.Add(node_str);
+                            node_str.NodeFont = new Font(treeView1.Font, FontStyle.Italic);
 
                             if (dtStr != null)
                                 for (int k = 0; k < dtStr.Rows.Count; k++)
@@ -84,11 +98,15 @@ namespace dataMining_demo
                                     string strName = dtStr.Rows[k][1].ToString();
                                     TreeNode strNode = new TreeNode(strName);
 
-                                    selNode.Nodes.Add(strNode);
+                                    node_str.Nodes.Add(strNode);
 
                                     DataTable dtMod = new DataTable();
                                     sqlDA = new SqlDataAdapter("select [id_model], [name] from [models] where [id_structure] = '" + strID + "'", cn);
                                     sqlDA.Fill(dtMod);
+
+                                    TreeNode node_model = new TreeNode("Модели данных:");
+                                    strNode.Nodes.Add(node_model);
+                                    node_model.NodeFont = new Font(treeView1.Font, FontStyle.Italic);
 
                                     if (dtMod != null)
                                         for (int l = 0; l < dtMod.Rows.Count; l++)
@@ -97,8 +115,8 @@ namespace dataMining_demo
                                             string modName = dtMod.Rows[l][1].ToString();
                                             TreeNode modNode = new TreeNode(modName);
 
-                                            strNode.Nodes.Add(modNode);
-
+                                            node_model.Nodes.Add(modNode);
+                                            
                                             DataTable dtAlgVar = new DataTable();
                                             sqlDA = new SqlDataAdapter("select [algorithm_variants].[name] from [algorithm_variants] JOIN [models] ON " +
                                                       " models.id_algorithm_variant = algorithm_variants.id_algorithm_variant AND " +
